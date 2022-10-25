@@ -1,0 +1,11 @@
+{
+	"React": {
+		"scope":"javascript",
+		"prefix": "r",
+		"body": ["import React from 'react'",
+		"import theme from 'theme'",
+		"import styled from 'styled-components'",
+		"",
+		"export default function "]
+	}
+}
