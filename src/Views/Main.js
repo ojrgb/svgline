@@ -7,6 +7,9 @@ const Classes = {
     Root: styled.div`
         background-color: ${theme.colors.background};
         height: 100%;
+        font-family: ${theme.fonts.body.family};
+        font-size: ${theme.fonts.body.size};
+        padding: ${theme.scale.space[1]};
     `,
 
 }

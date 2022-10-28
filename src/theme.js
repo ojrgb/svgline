@@ -1,6 +1,6 @@
 const spaceModifier = 1,
 fontModifier = 1,
-radiusModifier=2
+radiusModifier=1
 
 export default {
     colors: {
@@ -18,7 +18,7 @@ export default {
     fonts: {
         body: {
             family: "Lucida Console,Lucida Sans Typewriter,monaco,Bitstream Vera Sans Mono,monospace",
-            size: `${fontModifier*1.5}rem`,
+            size: `${fontModifier*1}rem`,
 
         },
         h1: {
@@ -49,7 +49,7 @@ export default {
         }
     },
     scale: {
-        space: [0,2,4,6,8,10,12,14].map((v,i) => {return v*spaceModifier}),
+        space: [0,2,4,6,8,10,12,14].map((v,i) => {return `${v*spaceModifier}px`}),
         width: ["0%","10%","20%","30%","40%","50%","60%","70%","80%","90%","100%"],
         maxWidth: ["0px","100px","200px","300px","400px","500px"],
         height: ["0%","10%","20%","30%","40%","50%","60%","70%","80%","90%","100%"],
