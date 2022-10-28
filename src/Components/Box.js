@@ -2,9 +2,10 @@ import React from 'react'
 import theme from 'theme'
 import styled from 'styled-components'
 import Divider from './Divider'
-import { convertRemToPixels, modifySize } from 'utils'
+import { convertRemToPixels, deepenColor, modifySize } from 'utils'
 
 const headerSizeModifier = 1.3,
+headerColorModifier = 0.0,
     sideSizeModifier = 1,
     headerSize = modifySize(theme.fonts.body.size,headerSizeModifier),
     headerSizePx = convertRemToPixels(headerSize),
@@ -17,6 +18,7 @@ const Box = styled.div`
         display: flex;
         flex-direction: column;
         align-items: baseline;
+        min-height: ${theme.scale.minHeight[2]};
     `,
     HeaderContainer = styled.div`
         display: flex;
@@ -24,10 +26,11 @@ const Box = styled.div`
     `,
     HeaderText = styled.div`
         background-color: ${theme.colors.primary};
-        color: ${theme.colors.text.primary};
+        color: ${deepenColor(theme.colors.text.primary,headerColorModifier)};
         border-top: ${theme.borders.primary.width} ${theme.borders.primary.style} ${theme.borders.primary.color};
         padding: ${theme.scale.space[1]};
         z-index: ${theme.scale.zIndices[1]};
+        text-shadow: 0.1px 0.1px 5px ${deepenColor(theme.colors.text.primary,0.8)};
     `,
     Content = styled.div`
         width: 100%;
@@ -40,6 +43,12 @@ const Box = styled.div`
         border-bottom-left-radius: ${theme.borders.primary.radius};
         border-bottom-right-radius: ${theme.borders.primary.radius};
         z-index: ${theme.scale.zIndices[0]};
+        flex-grow: 1;
+        box-shadow: 1px 5px 15px -8px ${theme.colors.primary}, -15px -15px 30px -50px ${theme.colors.text.primary} inset;
+        display: flex;
+        flex-direction: column;
+        align-items: baseline;
+        padding: ${theme.scale.space[2]};
     `
 
     function HeaderSide({side}) {

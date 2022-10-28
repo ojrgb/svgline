@@ -1,11 +1,14 @@
+import { deepenColor } from "utils"
+
 const spaceModifier = 1,
 fontModifier = 1,
-radiusModifier=1
+radiusModifier=1,
+colorModifier = 0.2
 
 export default {
     colors: {
         text: {
-            primary: "#ffffff",
+            primary: deepenColor("#ffffff",colorModifier),
             secondary: "#202020",
             accent: "",
             highlight: "",
@@ -49,10 +52,12 @@ export default {
         }
     },
     scale: {
-        space: [0,2,4,6,8,10,12,14].map((v,i) => {return `${v*spaceModifier}px`}),
+        space: [0,2,4,6,8,10,12,14,16,18,20].map((v,i) => {return `${v*spaceModifier}px`}),
         width: ["0%","10%","20%","30%","40%","50%","60%","70%","80%","90%","100%"],
+        minWidth: ["0px","100px","200px","300px","400px","500px"],
         maxWidth: ["0px","100px","200px","300px","400px","500px"],
         height: ["0%","10%","20%","30%","40%","50%","60%","70%","80%","90%","100%"],
+        minHeight: ["0px","100px","200px","300px","400px","500px"],
         maxHeight: ["0px","100px","200px","300px","400px","500px"],
         zIndices: [0,1,2,3,4],
         lineHeight: ["0rem","1.4rem","1.8rem","2.2rem","2.6rem","3rem"]

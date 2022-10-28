@@ -1,7 +1,7 @@
 import React from 'react'
 import theme from 'theme'
 import styled from 'styled-components'
-import ConfigurationEditor from './ConfigurationEditor'
+import ConfigurationEditor from './ConfigurationEditor/ConfigurationEditor'
 
 const Classes = {
     Root: styled.div`

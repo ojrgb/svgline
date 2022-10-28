@@ -10,6 +10,7 @@ const Classes = {
         font-family: ${theme.fonts.body.family};
         font-size: ${theme.fonts.body.size};
         padding: ${theme.scale.space[1]};
+        
     `,
 
 }
