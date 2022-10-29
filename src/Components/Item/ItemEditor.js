@@ -25,7 +25,7 @@ const Classes = {
 
 export default function ItemEditor(props) {
     const {contextState, contextDispatch} = React.useContext(contextStore)
-    const selectedItem = contextState.selectedItems?.[0]
+    const {selectedItems} = contextState
     console.log(contextState)
     return (
         <Box {...props}>    
@@ -36,12 +36,12 @@ export default function ItemEditor(props) {
                             No selection
                         </Classes.PlaceholderText>
                     ) : (
-                        contextState.selectedItems.length>1 ? (
+                        contextState.selectedItems.paths.length>1 ? (
                             <Classes.PlaceholderText>
                                 Multiple selection
                             </Classes.PlaceholderText>
                         ) : (
-                            <EntityForm entity={selectedItem.entity} path={selectedItem.path}/>
+                            <EntityForm entity={selectedItems.entity} path={selectedItems.paths[0]}/>
                         )
                     )
                 }

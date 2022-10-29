@@ -4,7 +4,9 @@ import styled from 'styled-components'
 
 export default function Text(props) {
     return (
-        <input type="text" {...props}>
+        <input type="text" {...props} onChange={(e) => {
+            props.onChange(e.target.value)
+        }}>
             
         </input>
     )

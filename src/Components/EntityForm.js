@@ -10,14 +10,25 @@ export default function EntityForm({entity, path}) {
     const object = getSingle(entity, path) 
     const entityConfig = entities[entity]
     return (
-        <Form {...{object}}>
+        <Form {...{object}}
+            onBlur={(res) => {
+                entitiesDispatch({
+                    type:`SET_${entity.toUpperCase()}`,
+                    [entity]: [res],
+                    paths: [path]
+                })
+            }}
+        >
             {
                 entityConfig.attributes.map((attribute,attributei) => 
-                    <Form.Field key={attributei} w={3}>
+                    <Form.Field 
+                        key={attributei} 
+                        w={3}
+                        attribute={attribute._id}
+                    >
                         <Form.Caption>{attribute.name || attribute._id}</Form.Caption>
                         <Form.Input 
                             type={attribute.type}
-                            attribute={attribute._id}
                             />
                     </Form.Field>
                 )

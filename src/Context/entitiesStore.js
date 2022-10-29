@@ -1,6 +1,6 @@
 import React from 'react'
 import entities from 'ents'
-import { generateNewEntity, trace } from 'utils'
+import { generateNewEntity, getDeep, setDeep, trace } from 'utils'
 import _ from 'lodash'
 
 const initialState = Object.keys(entities).map((v,i) => {
@@ -17,17 +17,20 @@ const reducer = (state,action,override) => {
         const entity=entities[entityi]
         return {
             [`ADD_${entityi.toUpperCase()}`]: () => {
-                console.log([...state[entityi]].concat(
-                    [Object.assign(
-                        {},
-                        generateNewEntity(entityi),
-                        {_id:`New ${entity._id}`}
-                        )]
-                ))
                 return _.merge({},state,{
                     [entityi]: [...state[entityi]].concat(
                         [Object.assign({},{_id:`New ${entity._id} ${state[entityi].length+1}`},action[entity._id])]
                     )
+                })
+                
+            },
+            [`SET_${entityi.toUpperCase()}`]: () => {
+                if(!!!action.paths?.[0]?.[0] || !!!action[entityi]?.[0]) {
+                    console.log(`Must provide ${entityi} and paths in array format!`)
+                }
+                // doesn't support multi update yet. Can't be bothered rn.
+                return _.merge({},state,{
+                  [entityi] : setDeep(state[entityi],action.paths[0],action[entityi][0],true)  
                 })
                 
             },
@@ -47,7 +50,7 @@ const reducer = (state,action,override) => {
 const EntitiesStateProvider = ( { children } ) => {
     const [state, dispatch] = React.useReducer(reducer, initialState)
     const getSingle = (entity, path) => {
-        return state[entity].getDeep(path)
+        return getDeep(state[entity],path)
     }
     return <Provider value={{entitiesState:state, entitiesDispatch: dispatch, getSingle }}>{children}</Provider>;
   };

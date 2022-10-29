@@ -23,10 +23,10 @@ const reducer = (state,action,override) => {
     const actions = {
       'SET_SELECTED': () => {
         return _.merge({},state,{
-          [selectionTypes[action.entity]]: [{
+          [selectionTypes[action.entity]]: {
             entity: action.entity,
             paths: action.paths
-          }]
+          }
         })
       }
     }

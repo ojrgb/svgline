@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Select from './Select'
 import Text from './Text'
 import _ from 'lodash'
+import { entitiesStore } from 'Context/entitiesStore'
 
 const Classes = {
     Root: styled.form`
@@ -24,27 +25,34 @@ const Classes = {
 }
 
 function Form(props) {
+    const {children, entity} = props
     const [object, setObject] = React.useState(props.object || {})
+    const {entitiesState, entitiesDispatch} = React.useContext(entitiesStore)
     return (
         <Classes.Root>
-            {React.Children.map(props.children,(child) => {return React.cloneElement(child,{
+            {React.Children.map(children,(child) => {return React.cloneElement(child,{
                 onChange: (v) => {
-                    setObject(_.merge({},object,{[child.attribute]:v}))
+                    setObject(_.merge({},object,{[child.props.attribute]:v}))
                 },
-                value: object[child.attribute] 
+                onBlur: () => {
+                        props.onBlur(object)
+                    },
+                value: object[child.props.attribute] 
             })})}
         </Classes.Root>
     )
 }
 
-function Field({children, value, attribute, w}) {
+function Field({children, value, attribute, w, onChange, onBlur}) {
     return (
         <Classes.Single {...{w}}>
             {React.Children.map(children,(child) => {
                 return React.cloneElement(child,
                     {
                         value, 
-                        attribute
+                        attribute,
+                        onChange,
+                        onBlur
                     })
             })}
         </Classes.Single>
