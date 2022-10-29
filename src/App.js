@@ -3,6 +3,7 @@ import './App.css';
 import Main from 'Views/Main';
 import { EntitiesStateProvider } from 'Context/entitiesStore'
 import { ContextStateProvider } from 'Context/contextStore'
+import 'globalFunc'
 
 function App() {
   return (

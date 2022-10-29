@@ -28,10 +28,10 @@ export default {
 
         },
         h2: {
-
+            size: `${fontModifier*2.3}rem`,
         },
         h3: {
-
+            size: `${fontModifier*2.0}rem`,
         },
         h4: {
             size: `${fontModifier*1.7}rem`,

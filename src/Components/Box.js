@@ -15,6 +15,7 @@ headerColorModifier = 0.0,
 
 const Box = styled.div`
         ${props => props.w && `width: ${theme.scale.width[props.w]}`};
+        ${props => props.h && `height: ${theme.scale.height[props.h]}`};
         display: flex;
         flex-direction: column;
         align-items: baseline;
@@ -23,6 +24,8 @@ const Box = styled.div`
     HeaderContainer = styled.div`
         display: flex;
         font-size: ${theme.fonts.body.size};
+        cursor: default;
+        user-select: none;
     `,
     HeaderText = styled.div`
         background-color: ${theme.colors.primary};

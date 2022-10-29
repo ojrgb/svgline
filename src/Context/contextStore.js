@@ -2,7 +2,9 @@ import React from 'react'
 import { trace } from 'utils'
 import _ from 'lodash'
 
-const initialState = {}
+const initialState = {
+  selectedItems: undefined
+}
 
 const contextStore = React.createContext(initialState)
 const {Provider} = contextStore
@@ -10,20 +12,32 @@ const {Provider} = contextStore
 const reducer = (state,action,override) => {
     trace(`Executing reducer actions: ${action.type}`)
     
-    const actions = {}
+    const selectionTypes = {
+      configurations: 'selectedItems',
+      calculations: 'selectedItems',
+      datasets: 'selectedItems',
+      components: 'selectedItems',
+      layers: 'selectedUIs'
+    }
 
-    actions[action.type]()
+    const actions = {
+      'SET_SELECTED': () => {
+        return _.merge({},state,{
+          [selectionTypes[action.entity]]: [{
+            entity: action.entity,
+            paths: action.paths
+          }]
+        })
+      }
+    }
+
+    return actions[action.type]()
     
 }
 
 const ContextStateProvider = ( { children } ) => {
-    const [state, dispatch] = React.useReducer((state, action) => {
-      const newState = reducer(state, action)
-      trace('Setting state:')
-      trace(newState)
-      return newState
-    }, initialState);
-    return <Provider value={{state:Object.assign(initialState,state), dispatch }}>{children}</Provider>;
+    const [state, dispatch] = React.useReducer(reducer, initialState);
+    return <Provider value={{contextState: state, contextDispatch: dispatch }}>{children}</Provider>;
   };
   
   export {contextStore, ContextStateProvider}

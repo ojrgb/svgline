@@ -1,6 +1,6 @@
 import React from 'react'
 import entities from 'ents'
-import { trace } from 'utils'
+import { generateNewEntity, trace } from 'utils'
 import _ from 'lodash'
 
 const initialState = Object.keys(entities).map((v,i) => {
@@ -17,13 +17,19 @@ const reducer = (state,action,override) => {
         const entity=entities[entityi]
         return {
             [`ADD_${entityi.toUpperCase()}`]: () => {
-                console.log(state)
-                console.log(entityi)
+                console.log([...state[entityi]].concat(
+                    [Object.assign(
+                        {},
+                        generateNewEntity(entityi),
+                        {_id:`New ${entity._id}`}
+                        )]
+                ))
                 return _.merge({},state,{
                     [entityi]: [...state[entityi]].concat(
-                        [Object.assign({},{_id:`New ${entity._id}`},action[entity._id])]
+                        [Object.assign({},{_id:`New ${entity._id} ${state[entityi].length+1}`},action[entity._id])]
                     )
                 })
+                
             },
             [`REMOVE_${entityi.toUpperCase()}`]: () => {
                 return _.merge(state,{
@@ -39,13 +45,11 @@ const reducer = (state,action,override) => {
 }
 
 const EntitiesStateProvider = ( { children } ) => {
-    const [state, dispatch] = React.useReducer((state, action) => {
-      const newState = reducer(state, action)
-      trace('Setting state:')
-      trace(newState)
-      return newState
-    }, initialState);
-    return <Provider value={{entitiesState:Object.assign(initialState,state), entitiesDispatch: dispatch }}>{children}</Provider>;
+    const [state, dispatch] = React.useReducer(reducer, initialState)
+    const getSingle = (entity, path) => {
+        return state[entity].getDeep(path)
+    }
+    return <Provider value={{entitiesState:state, entitiesDispatch: dispatch, getSingle }}>{children}</Provider>;
   };
   
   export {entitiesStore, EntitiesStateProvider}
