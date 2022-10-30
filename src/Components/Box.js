@@ -19,9 +19,9 @@ const BoxContainer = styled.div`
         display: flex;
         flex-direction: ${props => ({
             top: 'column',
-            bottom: 'column',
+            bottom: 'column-reverse',
             left: 'row',
-            right: 'row'
+            right: 'row-reverse'
         }[props.headerPosition])};
         align-items: baseline;
     `,
@@ -37,7 +37,9 @@ const BoxContainer = styled.div`
             right: 'column'
         }[props.headerPosition])};
         align-self: ${props => ({
-            'left-top': 'flex-start'
+            'left-top': 'flex-start',
+            'bottom-center': 'center',
+            'top-center': 'center'
         }[`${props.headerPosition}-${props.headerAlignment}`])};
     `,
     HeaderText = styled.div`
@@ -52,7 +54,7 @@ const BoxContainer = styled.div`
         
         padding: ${theme.scale.space[1]};
         z-index: ${theme.scale.zIndices[1]};
-        text-shadow: 0.1px 0.1px 5px ${deepenColor(theme.colors.text.primary,0.8)};
+        text-shadow: 0.1px 0.1px 15px ${deepenColor(theme.colors.text.primary,0.8)};
         ${props => ((props.headerPosition === 'left' || props.headerPosition === 'right') && 
         `writing-mode: vertical-lr;
         transform: rotate(180deg);`)}
@@ -121,7 +123,15 @@ const BoxContainer = styled.div`
             left: {
                 left: 'scaleY(1) translate(0.5px, 0px)',
                 right: 'scaleY(-1) translate(0.5px, 2px)'
-            }
+            },
+            bottom: {
+                left: 'scaleX(1) scaleY(-1) translate(0px,-0.5px)',
+                right: 'scaleX(-1) scaleY(-1) translate(2px,-0.5px)'
+            },
+            right: {
+                left: 'scaleX(1) translate(0px,0.5px)',
+                right: 'scaleX(-1) translate(2px,0.5px)'
+            },
         }
 
         return (
@@ -140,7 +150,7 @@ const BoxContainer = styled.div`
                     />
                     <polygon 
                         points={polygonPoints} 
-                        fill={theme.colors.primary}
+                        fill={deepenColor(theme.colors.primary,depth)}
                         />
                 </svg>
         )

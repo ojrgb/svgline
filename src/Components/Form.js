@@ -13,6 +13,7 @@ const Classes = {
     Root: styled.form`
         width: 100%;
         display: flex;
+        flex-direction: column;
         flex-wrap: wrap;
         justify-content: flex-start;
         font-size: ${theme.fonts.code.size};
@@ -21,11 +22,13 @@ const Classes = {
         ${props => props.w && `width: ${theme.scale.width[props.w]};`}
         display: flex;
         flex-direction: column;
+        margin-bottom: ${theme.scale.space[2]};
     `,
     Caption: styled.div`
         font-family: ${theme.fonts.code.family};
         user-select: none;
         font-size: ${modifySize(theme.fonts.code.size,captionSizeModifier)};
+        text-align: left;
     `
 
 }
