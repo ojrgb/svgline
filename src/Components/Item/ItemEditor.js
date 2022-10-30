@@ -20,7 +20,8 @@ const Classes = {
         margin: auto;
         font-size: ${theme.fonts.h3.size};
         text-shadow: 0.1px 0.1px 15px ${deepenColor(theme.colors.text.primary,deepenDelta*noSelectionBlurModifier)};
-    `
+    `,
+    
 }
 
 export default function ItemEditor(props) {
@@ -28,7 +29,10 @@ export default function ItemEditor(props) {
     const {selectedItems} = contextState
     console.log(contextState)
     return (
-        <Box {...props}>    
+        <Box {...props} headerLocation="left-top">
+            <Box.Header>
+                Edit Panel    
+            </Box.Header>    
             <Box.Content>
                 {
                     !!!contextState.selectedItems ? (
@@ -41,7 +45,11 @@ export default function ItemEditor(props) {
                                 Multiple selection
                             </Classes.PlaceholderText>
                         ) : (
-                            <EntityForm entity={selectedItems.entity} path={selectedItems.paths[0]}/>
+                            <EntityForm
+                                key={`${selectedItems.entity}-${selectedItems.paths[0].join('-')}`} 
+                                entity={selectedItems.entity} 
+                                path={selectedItems.paths[0]}
+                            />
                         )
                     )
                 }

@@ -1,6 +1,7 @@
 import interpolate from "color-interpolate";
 import entities from 'ents'
 import _ from "lodash";
+import theme from "theme";
 
 export const modifySize = (value, modifier) => {
     // if(!!!value) {
@@ -16,12 +17,12 @@ export function convertRemToPixels(value) {
 
 export function deepenColor(color,delta) {
     let colormap = interpolate([color,'black']);
-    return colormap(delta)
+    return colormap(delta || 0)
 }
 
 export function relaxColor(color,delta) {
     let colormap = interpolate([color,'white']);
-    return colormap(delta)
+    return colormap(delta || 0)
 }
 
 export function trace(msg) {
@@ -80,4 +81,29 @@ export function setDeep(array,path,value,replace) {
             )
         })
     }
+}
+
+export const applyQuickStyles = (props) => {
+    return `
+        ${props.w && `width: ${theme.scale.width[props.w]};`}
+        ${props.h && `height: ${theme.scale.height[props.h]};`}
+        ${props.p && `padding: ${theme.scale.space[props.p]};`}
+        ${props.px && `padding-left: ${theme.scale.space[props.p]};
+                    padding-right: ${theme.scale.space[props.p]};`}
+        ${props.py && `padding-top: ${theme.scale.space[props.p]};
+                    padding-bottom: ${theme.scale.space[props.p]};`}
+        ${props.pt && `padding-top: ${theme.scale.space[props.p]};`}
+        ${props.pb && `padding-bottom: ${theme.scale.space[props.p]};`}
+        ${props.pl && `padding-left: ${theme.scale.space[props.p]};`}
+        ${props.pr && `padding-right: ${theme.scale.space[props.p]};`}
+        ${props.m && `margin: ${theme.scale.space[props.p]};`}
+        ${props.mx && `margin-left: ${theme.scale.space[props.p]};
+                    margin-right: ${theme.scale.space[props.p]};`}
+        ${props.my && `margin-top: ${theme.scale.space[props.p]};
+                    margin-bottom: ${theme.scale.space[props.p]};`}
+        ${props.mt && `margin-top: ${theme.scale.space[props.p]};`}
+        ${props.mb && `margin-bottom: ${theme.scale.space[props.p]};`}
+        ${props.ml && `margin-left: ${theme.scale.space[props.p]};`}
+        ${props.mr && `margin-right: ${theme.scale.space[props.p]};`}
+    `
 }

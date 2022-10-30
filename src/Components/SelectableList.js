@@ -35,6 +35,7 @@ const Classes = {
         user-select: none;
         padding-top: ${theme.scale.space[2]};
         padding-bottom: ${theme.scale.space[2]};
+        font-family: ${theme.fonts.code.family};
         ${props => props.selected && (
             `
                 background-color: ${relaxColor(theme.colors.primary,relaxDelta)};

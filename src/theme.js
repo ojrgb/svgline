@@ -17,12 +17,17 @@ export default {
         primary: '#3e3e3e',
         secondary: "#cdcdcd",
         background:"#515151",
+        deepen: (new Array(11)).fill().map((v,i) => {return i/10})
     },    
     fonts: {
         body: {
             family: "Lucida Console,Lucida Sans Typewriter,monaco,Bitstream Vera Sans Mono,monospace",
             size: `${fontModifier*1}rem`,
 
+        },
+        code: {
+            family: 'Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New',
+            size: `${fontModifier*0.9}rem`,
         },
         h1: {
 

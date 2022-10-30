@@ -5,6 +5,9 @@ import Select from './Select'
 import Text from './Text'
 import _ from 'lodash'
 import { entitiesStore } from 'Context/entitiesStore'
+import { modifySize } from 'utils'
+
+const captionSizeModifier = 0.9
 
 const Classes = {
     Root: styled.form`
@@ -12,6 +15,7 @@ const Classes = {
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
+        font-size: ${theme.fonts.code.size};
     `,
     Single: styled.div`
         ${props => props.w && `width: ${theme.scale.width[props.w]};`}
@@ -19,7 +23,9 @@ const Classes = {
         flex-direction: column;
     `,
     Caption: styled.div`
-    
+        font-family: ${theme.fonts.code.family};
+        user-select: none;
+        font-size: ${modifySize(theme.fonts.code.size,captionSizeModifier)};
     `
 
 }
