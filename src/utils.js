@@ -84,26 +84,41 @@ export function setDeep(array,path,value,replace) {
 }
 
 export const applyQuickStyles = (props) => {
-    return `
-        ${props.w && `width: ${theme.scale.width[props.w]};`}
-        ${props.h && `height: ${theme.scale.height[props.h]};`}
-        ${props.p && `padding: ${theme.scale.space[props.p]};`}
-        ${props.px && `padding-left: ${theme.scale.space[props.p]};
-                    padding-right: ${theme.scale.space[props.p]};`}
-        ${props.py && `padding-top: ${theme.scale.space[props.p]};
-                    padding-bottom: ${theme.scale.space[props.p]};`}
-        ${props.pt && `padding-top: ${theme.scale.space[props.p]};`}
-        ${props.pb && `padding-bottom: ${theme.scale.space[props.p]};`}
-        ${props.pl && `padding-left: ${theme.scale.space[props.p]};`}
-        ${props.pr && `padding-right: ${theme.scale.space[props.p]};`}
-        ${props.m && `margin: ${theme.scale.space[props.p]};`}
-        ${props.mx && `margin-left: ${theme.scale.space[props.p]};
-                    margin-right: ${theme.scale.space[props.p]};`}
-        ${props.my && `margin-top: ${theme.scale.space[props.p]};
-                    margin-bottom: ${theme.scale.space[props.p]};`}
-        ${props.mt && `margin-top: ${theme.scale.space[props.p]};`}
-        ${props.mb && `margin-bottom: ${theme.scale.space[props.p]};`}
-        ${props.ml && `margin-left: ${theme.scale.space[props.p]};`}
-        ${props.mr && `margin-right: ${theme.scale.space[props.p]};`}
-    `
+    const spaces = {
+        p: 'padding',
+        px: ['padding-left','padding-right'],
+        py: ['padding-top','padding-bottom'],
+        pt: 'padding-top',
+        pb: 'padding-bottom',
+        pl: 'padding-left',
+        pr: 'padding-right',
+        m: 'margin',
+        mx: ['margin-left','margin-right'],
+        my: ['margin-top','margin-bottom'],
+        mt: 'margin-top',
+        mb: 'margin-bottom',
+        ml: 'margin-left',
+        mr: 'margin-right',
+    }
+
+    const spacesCalc = Object.keys(spaces).map((v,i) => {
+        const space = spaces[v]
+        return Array.isArray(space) ? s => space.map((v1,i1) => {
+                return `${v1}: ${theme.scale.space[s]}`
+            })
+         : s => `${space}: ${theme.scale.space[s]}`
+    }).reduce((a,b) => {return Object.assign({},a,b)})
+
+
+    const mapping = Object.assign({},{
+        w: w => `width: ${theme.scale.width[w]}`,
+        h: h => `height: ${theme.scale.height[h]}`,
+    },spacesCalc)
+
+    return Object.keys(props).map((v,i) => {
+        const propVal = props[v]
+        return mapping[v] ? `${mapping[v](propVal)};
+        ` : undefined
+    }).filter(Boolean)
+    
 }

@@ -29,6 +29,7 @@ export default function EntityForm({entity, path}) {
                         <Form.Caption>{attribute.name || attribute._id}</Form.Caption>
                         <Form.Input 
                             type={attribute.type}
+                            options={attribute.options}
                             />
                     </Form.Field>
                 )

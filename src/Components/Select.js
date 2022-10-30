@@ -1,27 +1,52 @@
 import React from 'react'
 import theme from 'theme'
 import styled from 'styled-components'
-import { deepenColor } from 'utils'
+import { applyQuickStyles, deepenColor, modifySize, relaxColor } from 'utils'
 
-const deepenDelta = 0.1
+const relaxDelta = 0.1,
+    relaxTextDelta = 0.6,
+    borderThicknessDelta = 2,
+    relaxBorderDelta = 0.1,
+    deepenBorderDelta = 0.1
 
 const Classes = {
     Root: styled.select`
-        background-color: ${deepenColor(theme.colors.primary,deepenDelta)}; 
+    ${applyQuickStyles}
+    font-family: ${theme.fonts.code.family};
+    font-size: ${theme.fonts.code.size};
+    border: ${modifySize(theme.borders.primary.width,borderThicknessDelta)} inset ${relaxColor(theme.borders.primary.color,relaxBorderDelta)}};
+        background-color: ${relaxColor(theme.colors.primary,relaxDelta)}; 
+        color: ${relaxColor(theme.colors.text.primary,relaxTextDelta)};
+        border-radius: 0px;
+        border: ${modifySize(theme.borders.primary.width,borderThicknessDelta)} inset ${relaxColor(theme.borders.primary.color,relaxBorderDelta)},${deepenColor(theme.borders.primary.color,deepenBorderDelta)};
+        &:focus {
+            border: ${modifySize(theme.borders.primary.width,borderThicknessDelta)} inset ${relaxColor(theme.borders.primary.color,relaxBorderDelta)},${deepenColor(theme.borders.primary.color,deepenBorderDelta)};
+            outline: none;
+        } 
+    `,
+    Option: styled.option`
+        border-radius: 0px;
     `
 }
 
 function Select(props) {
+    
     return (
-        <select>
+        <Classes.Root {...props} onChange={(e) => {
+            props.onChange(e.target.value);
+            }}>
             {props.children}
-        </select>
+            
+            {[{_id:'',name:''}].concat(props.options).filter(Boolean).map((option,optioni) => 
+                <Option key={optioni} value={option._id}>{option.name}</Option>
+            )}
+        </Classes.Root>
     )
 }
 
 function Option(props) {
     return (
-        <option {...props}/>
+        <Classes.Option {...props}/>
     )
 }
 

@@ -56,8 +56,8 @@ export default {
                 type: 'identifier'
             }, 
             {
-                _id: 'name',
-                type: 'string'
+                _id: 'formula',
+                type: 'calculation'
             },
         ]
     },

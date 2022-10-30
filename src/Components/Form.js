@@ -6,6 +6,7 @@ import Text from './Text'
 import _ from 'lodash'
 import { entitiesStore } from 'Context/entitiesStore'
 import { modifySize } from 'utils'
+import Calculation from './Calculation'
 
 const captionSizeModifier = 0.9
 
@@ -46,7 +47,7 @@ function Form(props) {
                 onBlur: () => {
                         props.onBlur(object)
                     },
-                value: object[child.props.attribute] 
+                value: object[child.props.attribute] || ''
             })})}
         </Classes.Root>
     )
@@ -72,14 +73,15 @@ function Input(props) {
     const InputField = {
         select: Select, 
         list: Select,
-        string: Text,
-        identifier: Text
+        'string': Text,
+        'identifier': Text,
+        'calculation': Calculation
     }[props.type]
     if(!!!InputField) {
-        console.log(`Couldn't find field for type: ${props.type}`)
+        return (<div>{`Couldn't find field for type: ${props.type}`}</div>)
     }
     return (
-        <InputField {...props}/>
+        <InputField {...props} w={7}/>
     )
 }
 
