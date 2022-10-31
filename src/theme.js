@@ -5,6 +5,12 @@ fontModifier = 1,
 radiusModifier=1,
 colorModifier = 0.2
 
+const commonSizes = Object.assign(
+    {},
+    (new Array(11)).fill().map((v,i) => `${i*10}%`),
+    {2.5: '25%', 3.3: '33.3333%', 1.25: '12.5%', 6.6: '66.6666%'}
+    )
+
 export default {
     colors: {
         text: {
@@ -58,10 +64,10 @@ export default {
     },
     scale: {
         space: [0,2,4,6,8,10,12,14,16,18,20].map((v,i) => {return `${v*spaceModifier}px`}),
-        width: ["0%","10%","20%","30%","40%","50%","60%","70%","80%","90%","100%"],
+        width: commonSizes,
         minWidth: ["0px","100px","200px","300px","400px","500px"],
         maxWidth: ["0px","100px","200px","300px","400px","500px"],
-        height: ["0%","10%","20%","30%","40%","50%","60%","70%","80%","90%","100%"],
+        height: commonSizes,
         minHeight: ["0px","100px","200px","300px","400px","500px"],
         maxHeight: ["0px","100px","200px","300px","400px","500px"],
         zIndices: [0,1,2,3,4],

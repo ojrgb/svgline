@@ -9,7 +9,7 @@ import EntityToolbar from 'Components/EntityToolbar'
 
 export default function LayersEditor(props) {
     return (
-        <Box {...props}>
+        <Box {...props} headerLocation="right-top">
             <Box.Header>
                 Layers
             </Box.Header>

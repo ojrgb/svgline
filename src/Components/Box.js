@@ -39,7 +39,8 @@ const BoxContainer = styled.div`
         align-self: ${props => ({
             'left-top': 'flex-start',
             'bottom-center': 'center',
-            'top-center': 'center'
+            'top-center': 'center',
+            'right-top': 'flex-start'
         }[`${props.headerPosition}-${props.headerAlignment}`])};
     `,
     HeaderText = styled.div`
@@ -129,8 +130,8 @@ const BoxContainer = styled.div`
                 right: 'scaleX(-1) scaleY(-1) translate(2px,-0.5px)'
             },
             right: {
-                left: 'scaleX(1) translate(0px,0.5px)',
-                right: 'scaleX(-1) translate(2px,0.5px)'
+                left: 'scaleX(-1) translate(1px,1px)',
+                right: 'scaleX(-1) scaleY(-1) translate(1px,0.5px)'
             },
         }
 

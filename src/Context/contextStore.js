@@ -17,7 +17,7 @@ const reducer = (state,action,override) => {
       calculations: 'selectedItems',
       datasets: 'selectedItems',
       components: 'selectedItems',
-      layers: 'selectedUIs'
+      layers: 'selectedItems'
     }
 
     const actions = {

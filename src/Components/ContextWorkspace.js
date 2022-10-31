@@ -7,9 +7,10 @@ import CalculationsEditor from './Calculations/CalculationsEditor'
 import ComponentsEditor from './Components/ComponentsEditor'
 import LayersEditor from './Layers/LayersEditor'
 import ItemEditor from './Item/ItemEditor'
+import ResultEditor from './Result/ResultEditor'
 
-const firstRowHeight = 2,
-secondRowHeight = 3
+const rowHeights = [2,2,6]
+
 
 const Classes = {
     Root: styled.div`
@@ -18,6 +19,13 @@ const Classes = {
         justify-content: space-between;
         height: 100%;
         align-content: baseline;
+        position: relative;
+    `,
+    UIComponents: styled.div`
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        flex-grow: 1;
     `
 }
 
@@ -25,14 +33,21 @@ export default function ContextWorkspace({children}) {
     return (
         <Classes.Root>
             <React.Fragment>
-                <ConfigurationsEditor w={2} h={firstRowHeight}/>
-                <DatasetsEditor w={2} h={firstRowHeight}/>
-                <CalculationsEditor w={2} h={firstRowHeight}/>
-                <ComponentsEditor w={2} h={firstRowHeight}/>
-                <LayersEditor w={2} h={firstRowHeight}/>
+                <ConfigurationsEditor w={2.5} h={rowHeights[0]}/>
+                <DatasetsEditor w={2.5} h={rowHeights[0]}/>
+                <CalculationsEditor w={2.5} h={rowHeights[0]}/>
+                <ComponentsEditor w={2.5} h={rowHeights[0]}/>
             </React.Fragment>
             <React.Fragment>
-                <ItemEditor w={10} h={2}/>
+                <ItemEditor w={10} h={rowHeights[1]}/>
+            </React.Fragment>
+            <React.Fragment>
+                <ResultEditor w={8} h={rowHeights[2]}/>
+                <Classes.UIComponents>
+                    <LayersEditor w={10} h={3}/>
+                    <LayersEditor w={10} h={7}/>
+                </Classes.UIComponents>
+                
             </React.Fragment>
         </Classes.Root>
     )

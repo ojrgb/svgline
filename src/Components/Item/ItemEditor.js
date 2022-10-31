@@ -37,7 +37,7 @@ export default function ItemEditor(props) {
                 Edit Panel    
             </Box.Header>    
             <Box.Content>
-                <Box depth={2} headerLocation="top-center" w={10} h={10}>
+                <Box depth={2} headerLocation="top-left" w={10} h={10}>
                     <Box.Header>
                         {
                             !!!contextState.selectedItems ? ( 

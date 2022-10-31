@@ -28,6 +28,9 @@ const Classes = {
         overflow-y: hidden;
         overflow-x: hidden;
         white-space: nowrap;
+        br {
+            display: none;
+        }
     `
 }
 
@@ -37,7 +40,7 @@ const Leaf = (props) => {
         <span
             {...props.attributes}
             style={{
-                color: props.leaf.type === 'parentheses' && 'yellow'
+                
             }}
             >
                 {props.children}
@@ -50,7 +53,7 @@ export default function Calculation(props) {
     console.log(editor)
     const initialValue = [
         {
-          type: 'paragraph',
+          type: 'block',
           children: [{ text: '' }],
         },
       ]
@@ -60,18 +63,36 @@ export default function Calculation(props) {
       }, [])
 
     const renderElement = React.useCallback(props => {
-        switch (props.element.type) {
-          case 'parentheses':
-            return <EditorElements.ParenthesesElement {...props} />
-          default:
-            return <span {...props} />
-        }
+        const Element = {
+            parentheses : EditorElements.ParenthesesElement,
+            operator: EditorElements.OperatorElement,
+            block: EditorElements.BlockElement
+        }[props.element.type]
+        return Element ? <Element {...props}/> : <span {...props}/>
       }, [])
 
     const EditorElements = {
         ParenthesesElement: (props) => {
             return (
-                <span style={{color:'yellow'}}>
+                <span>
+                    <span style={{color: 'yellow'}}>(</span>
+                    {props.children}
+                    <span style={{color: 'yellow'}}>)</span>
+                </span>
+            )
+        },
+        OperatorElement: (props) => {
+            return (
+                <span 
+                    style={{color: 'pink'}}
+                    >
+                    {props.children}
+                </span>
+            )
+        },
+        BlockElement: (props) => {
+            return (
+                <span>
                     {props.children}
                 </span>
             )
@@ -83,17 +104,64 @@ export default function Calculation(props) {
     }
 
     const handleKeyDown = event => {
+
+        const arithmeticOperators = ['+','-','/','*']
+
+        const singleLetterNodes = [{
+            '(': {
+                node: {
+                    type: 'parentheses',
+                    children: [
+                        {text: ''}
+                    ]
+                },
+                wrap: true,
+                selection: () => {}
+            },
+        }].concat(
+            arithmeticOperators.map(v => ({
+                [v]: {
+                    node: {type: 'operator',
+                    children: [{text: v}]}
+                }
+            }))
+        ).reduce((a,b) => {return Object.assign(a,b)})
+
+        const triggerLetters = Object.keys(singleLetterNodes).map(
+            v => ({
+                [v]: Object.assign({},singleLetterNodes[v],{
+                    selection: singleLetterNodes[v].selection ? singleLetterNodes[v].selection : () => {return []}
+                })
+            })
+        ).reduce((a,b) => {return Object.assign({},a,b)})
+
+        const triggeredAction = triggerLetters[event.key]
+
         
-        if (event.key === '(') {
-            console.log(event.key)
+        if (triggeredAction) {
+          const curSelection = editor.selection
+          console.log(event.key)
           event.preventDefault()
-          Transforms.insertNodes(editor,{
-            type: 'parentheses',
-            children: [{
-                text: '('
-            }]
-          })
+
+            
+
+          Transforms.insertNodes(editor,[triggeredAction.node])
           console.log(editor)
+          if(editor.children[editor.children.length-1].type!=='block') {
+            Transforms.insertNodes(editor, [{
+                type:'block',
+                children: [{
+                    text: ''
+                }]
+              }])
+          }
+          console.log(editor.children[editor.children.length-1])
+          
+          Transforms.select(editor, curSelection)
+          Transforms.move(editor, {
+            distance: 1, unit: 'character'
+          })
+          
         }
       }
     return (
