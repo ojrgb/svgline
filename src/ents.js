@@ -89,6 +89,57 @@ export default {
                 _id: 'name',
                 type: 'string'
             },
+            {
+                _id: 'backgroundColor',
+                type: 'color'
+            },
+            {
+                _id: 'opacity',
+                type: 'number',
+                defaultValue: 100
+            }
+        ]
+    },
+    elements: {
+        _id: 'element',
+        nameSingle: 'Element',
+        namePlural: 'Elements',
+        attributes: [
+            {
+                _id: '_id',
+                type: 'identifier'
+            }, 
+            {
+                _id: 'name',
+                type: 'string'
+            },
+        ]
+    },
+    parameters: {
+        _id: 'parameter',
+        nameSingle: 'Parameter',
+        namePlural: 'Parameters',
+        attributes: [
+            {
+                _id: '_id',
+                type: 'identifier'
+            }, 
+            {
+                _id: 'name',
+                type: 'string'
+            },
+            {
+                _id: 'ratio',
+                type: 'select',
+                options: [{
+                    _id:'1-1',
+                    name: '1:1'
+                },{
+                    _id:'4-3',
+                    name: '4:3'
+                }],
+                
+            }
         ]
     }
 }

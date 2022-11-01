@@ -7,12 +7,14 @@ import _ from 'lodash'
 import { entitiesStore } from 'Context/entitiesStore'
 import { modifySize } from 'utils'
 import Calculation from './Calculation'
+import ColorPicker from './ColorPicker'
 
 const captionSizeModifier = 0.9
 
 const Classes = {
     Root: styled.form`
         width: 100%;
+        max-height: 100%;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
@@ -42,18 +44,22 @@ function Form(props) {
         <Classes.Root>
             {React.Children.map(children,(child) => {return React.cloneElement(child,{
                 onChange: (v) => {
-                    setObject(_.merge({},object,{[child.props.attribute]:v}))
+                    const res = _.merge({},object,{[child.props.attribute]:v})
+                    setObject(res)
+                    if(!!child.props.immediate) {
+                        props.onBlur(res)
+                    }
                 },
                 onBlur: () => {
                         props.onBlur(object)
-                    },
+                    },  
                 value: object[child.props.attribute] || ''
             })})}
         </Classes.Root>
     )
 }
 
-function Field({children, value, attribute, w, onChange, onBlur}) {
+function Field({children, value, attribute, w, onChange, onBlur, immediate}) {
     return (
         <Classes.Single {...{w}}>
             {React.Children.map(children,(child) => {
@@ -62,7 +68,8 @@ function Field({children, value, attribute, w, onChange, onBlur}) {
                         value, 
                         attribute,
                         onChange,
-                        onBlur
+                        onBlur,
+                        immediate
                     })
             })}
         </Classes.Single>
@@ -74,8 +81,10 @@ function Input(props) {
         select: Select, 
         list: Select,
         'string': Text,
+        'number': Text,
         'identifier': Text,
-        'calculation': Calculation
+        'calculation': Calculation,
+        color: ColorPicker,
     }[props.type]
     if(!!!InputField) {
         return (<div>{`Couldn't find field for type: ${props.type}`}</div>)

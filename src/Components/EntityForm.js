@@ -9,6 +9,7 @@ export default function EntityForm({entity, path}) {
     const {entitiesState, entitiesDispatch, getSingle} = React.useContext(entitiesStore)
     const object = getSingle(entity, path) 
     const entityConfig = entities[entity]
+    
     return (
         <Form {...{object}}
             onBlur={(res) => {
@@ -25,6 +26,7 @@ export default function EntityForm({entity, path}) {
                         key={attributei} 
                         w={3}
                         attribute={attribute._id}
+                        immediate={attribute.type==='color'}
                     >
                         <Form.Caption>{attribute.name || attribute._id}</Form.Caption>
                         <Form.Input 

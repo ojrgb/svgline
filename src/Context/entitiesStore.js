@@ -3,9 +3,15 @@ import entities from 'ents'
 import { generateNewEntity, getDeep, setDeep, trace } from 'utils'
 import _ from 'lodash'
 
-const initialState = Object.keys(entities).map((v,i) => {
+const initialResultParameters = {
+    _id: 'New graphic',
+    name: 'New graphic',
+    ratio: '1-1'
+}
+
+const initialState = Object.assign({},Object.keys(entities).map((v,i) => {
     return {[v]:[]}
-}).reduce((a,b) => {return Object.assign({},a,b)})
+}).reduce((a,b) => {return Object.assign({},a,b)}),{parameters: [initialResultParameters]})
 
 const entitiesStore = React.createContext(initialState)
 const {Provider} = entitiesStore
@@ -19,7 +25,13 @@ const reducer = (state,action,override) => {
             [`ADD_${entityi.toUpperCase()}`]: () => {
                 return _.merge({},state,{
                     [entityi]: [...state[entityi]].concat(
-                        [Object.assign({},{_id:`New ${entity._id} ${state[entityi].length+1}`},action[entity._id])]
+                        [Object.assign(
+                            {},
+                            entity.attributes.filter(v => !!v.defaultValue)?.map(
+                                v => ({[v._id]: v.defaultValue})
+                            )?.reduce((a,b) => (Object.assign({},a,b))) || {},
+                            {_id:`New ${entity._id} ${state[entityi].length+1}`},
+                            action[entity._id])]
                     )
                 })
                 

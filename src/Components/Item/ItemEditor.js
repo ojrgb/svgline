@@ -32,7 +32,7 @@ export default function ItemEditor(props) {
     const object = selectedItems?.paths?.[0] && getSingle(selectedItems.entity, selectedItems?.paths?.[0])
     console.log(contextState)
     return (
-        <Box {...props} headerLocation="left-top">
+        <Box {...props} headerLocation="left-top" z={9}>
             <Box.Header>
                 Edit Panel    
             </Box.Header>    

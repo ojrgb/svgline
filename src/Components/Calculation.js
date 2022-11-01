@@ -50,7 +50,7 @@ const Leaf = (props) => {
 
 export default function Calculation(props) {
     const [editor] = useState(() => withReact(createEditor()))
-    console.log(editor)
+    
     const initialValue = [
         {
           type: 'block',
@@ -58,7 +58,7 @@ export default function Calculation(props) {
         },
       ]
     const renderLeaf = React.useCallback(props => {
-        console.log(props)
+        
         return <Leaf {...props} />
       }, [])
 
@@ -140,13 +140,13 @@ export default function Calculation(props) {
         
         if (triggeredAction) {
           const curSelection = editor.selection
-          console.log(event.key)
+          
           event.preventDefault()
 
             
 
           Transforms.insertNodes(editor,[triggeredAction.node])
-          console.log(editor)
+          
           if(editor.children[editor.children.length-1].type!=='block') {
             Transforms.insertNodes(editor, [{
                 type:'block',
@@ -155,7 +155,7 @@ export default function Calculation(props) {
                 }]
               }])
           }
-          console.log(editor.children[editor.children.length-1])
+          
           
           Transforms.select(editor, curSelection)
           Transforms.move(editor, {

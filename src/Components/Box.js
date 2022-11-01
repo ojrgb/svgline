@@ -3,13 +3,15 @@ import theme from 'theme'
 import styled from 'styled-components'
 import Divider from './Divider'
 import { convertRemToPixels, deepenColor, modifySize } from 'utils'
+import _ from 'lodash'
 
 const headerSizeModifier = 1.3,
 headerColorModifier = 0.0,
     sideSizeModifier = 1,
     headerSize = modifySize(theme.fonts.body.size,headerSizeModifier),
     headerSizePx = convertRemToPixels(headerSize),
-    sideSizePx = headerSizePx * sideSizeModifier
+    sideSizePx = headerSizePx * sideSizeModifier,
+    inactiveHeaderOpacity = 0.6
     
 
 
@@ -26,9 +28,10 @@ const BoxContainer = styled.div`
         align-items: baseline;
     `,
     HeaderContainer = styled.div`
+        
         display: flex;
         font-size: ${theme.fonts.body.size};
-        cursor: default;
+        cursor: ${props => (props.onClick ? 'pointer' : 'default')};
         user-select: none;
         flex-direction: ${props => ({
             top: 'row',
@@ -42,6 +45,9 @@ const BoxContainer = styled.div`
             'top-center': 'center',
             'right-top': 'flex-start'
         }[`${props.headerPosition}-${props.headerAlignment}`])};
+        transform: ${props => (props.tabId>0 ? 'translate(0px,-40px)' : '')};
+        z-index: ${props => props.z ? props.z : ''}${props => (props.active===false ? theme.scale.zIndices[0] : theme.scale.zIndices[2])};
+        opacity: ${props => (props.active===false ? inactiveHeaderOpacity : 1)};
     `,
     HeaderText = styled.div`
         background-color: ${props => deepenColor(theme.colors.primary,props.depth || 0)};
@@ -54,7 +60,7 @@ const BoxContainer = styled.div`
         }[props.headerPosition]}: ${theme.borders.primary.width} ${theme.borders.primary.style} ${theme.borders.primary.color}`)};   
         
         padding: ${theme.scale.space[1]};
-        z-index: ${theme.scale.zIndices[1]};
+        z-index: ${props => props.z ? props.z : ''}${theme.scale.zIndices[1]};
         text-shadow: 0.1px 0.1px 15px ${deepenColor(theme.colors.text.primary,0.8)};
         ${props => ((props.headerPosition === 'left' || props.headerPosition === 'right') && 
         `writing-mode: vertical-lr;
@@ -63,8 +69,9 @@ const BoxContainer = styled.div`
     Content = styled.div`
         width: 100%;
         height: 100%;
+        max-height: calc(100%);
         ${props => `margin-${props.headerPosition}: -1px`};
-        
+        ${props => (props.active===false ? `display: none;` : ``)}
         background-color: ${props => deepenColor(theme.colors.primary,props.depth || 0)};
         color: ${theme.colors.text.primary};
         border: ${theme.borders.primary.width} ${theme.borders.primary.style} ${theme.borders.primary.color};
@@ -72,13 +79,24 @@ const BoxContainer = styled.div`
         border-top-right-radius: ${theme.borders.primary.radius};
         border-bottom-left-radius: ${theme.borders.primary.radius};
         border-bottom-right-radius: ${theme.borders.primary.radius};
-        z-index: ${theme.scale.zIndices[0]};
+        z-index: ${props => props.z ? props.z : ''}${theme.scale.zIndices[0]};
         flex-grow: 1;
         box-shadow: 1px 5px 15px -8px ${theme.colors.primary}, -15px -15px 30px -50px ${theme.colors.text.primary} inset;
         display: flex;
         flex-direction: column;
         align-items: baseline;
         padding: ${theme.scale.space[2]};
+        ${props => (props.active===false ? 'display: none;' : '')}
+    `,
+    HeaderTabsContainer = styled.div`
+        display: flex;
+        align-self: flex-start;
+        flex-direction: column;
+        
+    `,
+    ContentTabsContainer = styled.div`
+        height: 100%;
+        width: 100%;
     `
 
     function HeaderSide({side, depth, headerPosition}) {
@@ -157,10 +175,10 @@ const BoxContainer = styled.div`
         )
     }
 
-    function Header({children, depth, headerPosition, headerAlignment}) {
+    function Header({children, depth, headerPosition, headerAlignment, onClick, tabId, active, z}) {
         // This splits top-right into [top,right] etc
         return (
-            <HeaderContainer {...{headerPosition, headerAlignment}}>
+            <HeaderContainer {...{headerPosition, headerAlignment, onClick, tabId, active, z}}>
                 <HeaderSide side="left" {...{depth, headerPosition}}/>
                 <HeaderText {...{depth, headerPosition}}>
                     {children}
@@ -171,10 +189,11 @@ const BoxContainer = styled.div`
     }
 
     function Box(props) {
-        const {children} = props
+        const {children, z} = props
         const depth = theme.colors.deepen[props.depth]
         const headerLocation = props.headerLocation || 'top-left'
         const [headerPosition, headerAlignment] = headerLocation.split('-')
+        const [activeTab, setActiveTab] = React.useState(0)
         return (
             <BoxContainer {...props} {...{depth, headerPosition}}>
                 {
@@ -182,7 +201,10 @@ const BoxContainer = styled.div`
                         return React.cloneElement(child, {
                             depth,
                             headerPosition, 
-                            headerAlignment
+                            headerAlignment,
+                            setActiveTab,
+                            activeTab,
+                            z
                         })
                     })
                 }
@@ -190,8 +212,51 @@ const BoxContainer = styled.div`
         )
     }
 
+function HeaderTabs(props) {
+    return (
+        <HeaderTabsContainer>
+            {
+                React.Children.map(props.children,(child, childi) => (
+                    React.cloneElement(
+                        child,
+                        Object.assign({},_.omit(props,'children'),{
+                            tabId: childi,
+                            active: childi === props.activeTab,
+                            onClick: () => {
+                                props.setActiveTab(childi)
+                            },
+                            z: props.z
+                        })
+                        )
+                    ))
+            }
+        </HeaderTabsContainer>
+    )
+}
+
+function ContentTabs(props) {
+    return (
+        <ContentTabsContainer>
+            {
+                React.Children.map(props.children,(child, childi) => (
+                    React.cloneElement(
+                        child,
+                        Object.assign({},_.omit(props,'children'),{
+                            tabId: childi,
+                            active: props.activeTab===childi,
+                            z: props.z
+                        })
+                        )
+                    ))
+            }
+        </ContentTabsContainer>
+    )
+}
+
 export default Object.assign(Box,{
     Header,
+    HeaderTabs,
+    ContentTabs,
     Content,
     Divider
 })
