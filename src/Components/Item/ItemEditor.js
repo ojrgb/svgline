@@ -27,10 +27,14 @@ const Classes = {
 
 export default function ItemEditor(props) {
     const {contextState, contextDispatch} = React.useContext(contextStore)
-    const {getSingle} = React.useContext(entitiesStore)
+    const {getSingle, getNestedEntity} = React.useContext(entitiesStore)
     const {selectedItems} = contextState
-    const object = selectedItems?.paths?.[0] && getSingle(selectedItems.entity, selectedItems?.paths?.[0])
+    const {entity, paths, target} = selectedItems
+    
+    const object = target ? getSingle(target, paths) : undefined
     console.log(contextState)
+    console.log(object)
+    
     return (
         <Box {...props} headerLocation="left-top" z={9}>
             <Box.Header>
@@ -40,10 +44,10 @@ export default function ItemEditor(props) {
                 <Box depth={2} headerLocation="top-left" w={10} h={10}>
                     <Box.Header>
                         {
-                            !!!contextState.selectedItems ? ( 
+                            !!!paths ? ( 
                                 'No selection'
                             ) : (
-                                contextState.selectedItems.paths.length>1 ? (
+                                paths.length>1 ? (
                                     'Multiple selection'
                                 ) : (
                                     `Editing ${object._id}`
@@ -53,20 +57,20 @@ export default function ItemEditor(props) {
                     </Box.Header>
                     <Box.Content>
                         {
-                            !!!contextState.selectedItems ? (
+                            !!!paths ? (
                                 <Classes.PlaceholderText>
                                     No selection
                                 </Classes.PlaceholderText>
                             ) : (
-                                contextState.selectedItems.paths.length>1 ? (
+                                paths.length>1 ? (
                                     <Classes.PlaceholderText>
                                         Multiple selection
                                     </Classes.PlaceholderText>
                                 ) : (
                                     <EntityForm
-                                        key={`${selectedItems.entity}-${selectedItems.paths[0].join('-')}`} 
+                                        key={`${selectedItems.entity}-${selectedItems.paths.join('-')}`} 
                                         entity={selectedItems.entity} 
-                                        path={selectedItems.paths[0]}
+                                        paths={selectedItems.paths[0]}
                                     />        
                                 )
                             )

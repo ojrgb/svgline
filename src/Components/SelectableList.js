@@ -46,23 +46,39 @@ const Classes = {
 }
 
 function SelectableListItem(props) {
-    const {object, onClick, entity, isGroup, isExpanded, path} = props
+    const {object, onClick, entity, isGroup, isExpanded, paths, target} = props
     const {contextState, contextDispatch} = React.useContext(contextStore)
     const indentStartCalc = modifySize(theme.scale.space[indentStart],indentModifier)
     const levelIndent = modifySize(theme.scale.space[props.path?.length || 0],indentModifier)
     const paddingLeft = `calc(${indentStartCalc} + ${levelIndent})`
+
+    const selected = 
+    !!!target ? (
+        contextState.selectedItems?.entity === entity &&    
+        contextState.selectedItems?.paths.find(v => _.isEqual(v,paths))
+    ) : (
+        contextState.selectedItems?.entity === entity &&    
+        contextState.selectedItems?.paths.find(v => _.isEqual(v,paths)) && 
+        _.isEqual(target,contextState.selectedItems?.target)
+    )
+
+    
+    
+
     return (
-        <Classes.Single {...{path}} style={{paddingLeft}}
+        <Classes.Single {...{paths}} style={{paddingLeft}}
             onClick={()=> {
                 contextDispatch({
                     type: 'SET_SELECTED',
                     entity,
-                    paths: [path]
+                    target,
+                    paths
                 })
                
             }}
-            selected={contextState.selectedItems?.entity === entity && 
-                contextState.selectedItems?.paths.find(v => _.isEqual(v,path))
+            selected={
+                selected
+                
             }
         >
                 {isGroup && <ExpandIcon expand={isExpanded}/>}
@@ -73,16 +89,18 @@ function SelectableListItem(props) {
 
 export default function SelectableList({
  list,
- entity
+ entity,
+ target,
+ paths
 }) {
     return (
         <Classes.Root>
-            {list.map((object, objecti) => 
+            {list?.map((object, objecti) => 
                 <RecursiveElement 
                     element={SelectableListItem} 
                     key={objecti}
-                    path={[objecti]} 
-                    {...{object, entity}}
+                    paths={(paths || []).concat([objecti])} 
+                    {...{object, entity, target}}
                 />  
             )}
         </Classes.Root>

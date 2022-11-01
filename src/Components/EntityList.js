@@ -4,10 +4,16 @@ import styled from 'styled-components'
 import { entitiesStore } from 'Context/entitiesStore'
 import SelectableList from './SelectableList'
 
-export default function EntityList({entity}) {
-    const {entitiesState,entitiesDispatch} = React.useContext(entitiesStore)
+export default function EntityList(props) {
+    const {entity,paths} = props
+    const target = props.target || [entity] // This ensures that either "configurations" is the entity and target, or "elements" is the entity but "configurations.elements" is the target
+    
+    const {entitiesState,entitiesDispatch,getList} = React.useContext(entitiesStore)
+    const list = getList(target,paths)
     
     return (
-        <SelectableList {...{entity}} list={entitiesState[entity]}/>
+        <SelectableList 
+        {...{entity,target,paths,list}} 
+        />
     )
 }

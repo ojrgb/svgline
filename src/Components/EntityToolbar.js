@@ -21,16 +21,16 @@ export default function EntityToolbar(props) {
     // E.g. elements -> layers.[index].elements
     const targetEntity = target[0]
     if(!!target && !Array.isArray(target)) {
-        console.log('Must specify target in array format!')
+        
     }
 
     const onAdd = () => {
         if(target.length===1) {
-            console.log('adding')
+            
             entitiesDispatch({type:`ADD_${targetEntity.toUpperCase()}`})
         }
         else {
-            console.log('adding nested element')
+            
             const targetObject = getSingle(targetEntity,path),
                 nestedLocation = [...target].splice(1),
                 nestedObject = getNested(targetObject,nestedLocation),
@@ -42,15 +42,7 @@ export default function EntityToolbar(props) {
                 targetForMerge = generateDeep(
                     nestedLocationWithIndex.concat(newEntity))
                 
-            console.log({
-                targetObject,
-                nestedLocation,
-                nestedObject,
-                nestedObjectLength,
-                nestedLocationWithIndex,
-                targetForMerge,
-                newEntity
-            })
+            
 
             entitiesDispatch({
                 type: `UPDATE_${targetEntity.toUpperCase()}`,

@@ -3,7 +3,11 @@ import { trace } from 'utils'
 import _ from 'lodash'
 
 const initialState = {
-  selectedItems: undefined
+  selectedItems: {
+    entity: undefined,
+    paths: undefined,
+    target: undefined
+  }
 }
 
 const contextStore = React.createContext(initialState)
@@ -17,7 +21,8 @@ const reducer = (state,action,override) => {
       calculations: 'selectedItems',
       datasets: 'selectedItems',
       components: 'selectedItems',
-      layers: 'selectedItems'
+      layers: 'selectedItems',
+      elements: 'selectedItems'
     }
 
     const actions = {
@@ -25,7 +30,8 @@ const reducer = (state,action,override) => {
         return _.merge({},state,{
           [selectionTypes[action.entity]]: {
             entity: action.entity,
-            paths: action.paths
+            paths: action.paths,
+            target: action.target || action.entity
           }
         })
       }

@@ -5,7 +5,7 @@ import theme from "theme";
 
 export const modifySize = (value, modifier) => {
     // if(!!!value) {
-    //     console.log(`modifySize received an empty value!`)
+    //     
     //     return '';
     // }
     return `${parseFloat(value.match(/^\d+(\.\d{1,2})?/)?.[0])*modifier}${value.match(/[a-zA-Z]+$/)?.[0]}`
@@ -26,7 +26,7 @@ export function relaxColor(color,delta) {
 }
 
 export function trace(msg) {
-    // console.log(msg)
+    // 
 }
 
 export function generateNewEntity(entity, object) {
@@ -43,6 +43,10 @@ export function generateNewEntity(entity, object) {
 }
 
 export function getDeep(array,path) {
+    if(!!!path) {
+        
+        return undefined
+    }
     if(path.length===1) {
         if(!!!array || array.length===0) {
             trace('Index out of bounds.')
@@ -56,10 +60,13 @@ export function getDeep(array,path) {
 }
 
 export function getNested(object, path) {
+    if(!!!path) {
+        return object
+    }
     if(path.length===1) {
         if(!!!object || !!!object[path[0]]) {
-            console.log(`Property ${path[0]} doesn't exist in object:`)
-            console.log(object)
+            
+            
         } 
         else {return object[path[0]]}
     }

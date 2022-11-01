@@ -8,7 +8,7 @@ export default function ResultPreview(props) {
     const {entitiesState, entitiesDispatch, getSingle} = React.useContext(entitiesStore)
     const svgParams = getSingle('parameters',[0])
     const layers = entitiesState.layers
-    console.log(layers)
+    
     return (
  
             <svg key={JSON.stringify(layers)}

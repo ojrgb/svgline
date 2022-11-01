@@ -5,9 +5,11 @@ import Form from './Form'
 import entities from 'ents'
 import { entitiesStore } from 'Context/entitiesStore'
 
-export default function EntityForm({entity, path}) {
+export default function EntityForm(props) {
+    const {entity, paths} = props
+    const target = props.target || entity
     const {entitiesState, entitiesDispatch, getSingle} = React.useContext(entitiesStore)
-    const object = getSingle(entity, path) 
+    const object = getSingle(target, paths) 
     const entityConfig = entities[entity]
     
     return (
@@ -16,7 +18,8 @@ export default function EntityForm({entity, path}) {
                 entitiesDispatch({
                     type:`SET_${entity.toUpperCase()}`,
                     [entity]: [res],
-                    paths: [path]
+                    target,
+                    paths: paths
                 })
             }}
         >

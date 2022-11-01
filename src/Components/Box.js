@@ -28,7 +28,14 @@ const BoxContainer = styled.div`
         align-items: baseline;
     `,
     HeaderContainer = styled.div`
-        
+        ${props => (
+            {
+                top: `height: ${headerSizePx}px;`,
+                bottom: `height: ${headerSizePx}px;`,
+                left: `width: ${headerSizePx}px;`,
+                right: `width: ${headerSizePx}px;`
+            }[props.headerPosition]
+        )}
         display: flex;
         font-size: ${theme.fonts.body.size};
         cursor: ${props => (props.onClick ? 'pointer' : 'default')};
@@ -67,8 +74,14 @@ const BoxContainer = styled.div`
         transform: rotate(180deg);`)}
     `,
     Content = styled.div`
-        width: 100%;
-        height: 100%;
+    ${props => (
+        {
+            top: `height: calc(100% - ${headerSizePx}px); width: 100%;`,
+            bottom: `height: calc(100% - ${headerSizePx}px); width: 100%;`,
+            left: `width: calc(100%); height: 100%;`,
+            right: `width: calc(100%); height: 100%;`,
+        }[props.headerPosition]
+    )}
         max-height: calc(100%);
         ${props => `margin-${props.headerPosition}: -1px`};
         ${props => (props.active===false ? `display: none;` : ``)}

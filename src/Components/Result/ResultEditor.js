@@ -33,7 +33,7 @@ export default function ResultEditor(props) {
                         <Box.Content>
                             <EntityForm
                                 entity="parameters" 
-                                path={[0]}
+                                paths={[0]}
                             />   
                         </Box.Content>
                     </Box>
