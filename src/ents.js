@@ -97,6 +97,11 @@ export default {
                 _id: 'opacity',
                 type: 'number',
                 defaultValue: 100
+            },
+            {
+                _id: 'elements',
+                type: 'array',
+                defaultValue: []
             }
         ]
     },

@@ -29,10 +29,17 @@ export function trace(msg) {
     // console.log(msg)
 }
 
-export function generateNewEntity(entity) {
-    return entities[entity].attributes.map((v,i) => {
-        return {[v._id]:undefined}
-    }).reduce((a,b) => {return Object.assign({},a,b)})
+export function generateNewEntity(entity, object) {
+     
+    return Object.assign(
+            {},
+            //Default values below
+            entities[entity].attributes.map((v,i) => {
+                return {[v._id]: v.defaultValue || undefined}
+            }).reduce((a,b) => {return Object.assign({},a,b)}),
+            // ID below
+            object
+        )
 }
 
 export function getDeep(array,path) {
@@ -45,6 +52,19 @@ export function getDeep(array,path) {
     }
     else {
         return getDeep(array[path[0]].children,[...path].splice(1))
+    }
+}
+
+export function getNested(object, path) {
+    if(path.length===1) {
+        if(!!!object || !!!object[path[0]]) {
+            console.log(`Property ${path[0]} doesn't exist in object:`)
+            console.log(object)
+        } 
+        else {return object[path[0]]}
+    }
+    else {
+        return getNested(object[path[0]],[...path.splice(1)])
     }
 }
 
@@ -82,6 +102,19 @@ export function setDeep(array,path,value,replace) {
         })
     }
 }
+
+export const generateDeep = (arr) => {
+    if(arr.length===1) {
+        return arr[0]
+    }
+    else {
+        return Object.assign({},{
+            [arr[0]] : generateDeep([...arr].splice(1))
+        })
+    }
+}
+
+
 
 export const applyQuickStyles = (props) => {
     const spaces = {

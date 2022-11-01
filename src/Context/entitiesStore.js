@@ -23,15 +23,12 @@ const reducer = (state,action,override) => {
         const entity=entities[entityi]
         return {
             [`ADD_${entityi.toUpperCase()}`]: () => {
+                
                 return _.merge({},state,{
                     [entityi]: [...state[entityi]].concat(
-                        [Object.assign(
-                            {},
-                            entity.attributes.filter(v => !!v.defaultValue)?.map(
-                                v => ({[v._id]: v.defaultValue})
-                            )?.reduce((a,b) => (Object.assign({},a,b))) || {},
-                            {_id:`New ${entity._id} ${state[entityi].length+1}`},
-                            action[entity._id])]
+                        [
+                            generateNewEntity(entityi,{_id:`New ${entity._id} ${state[entityi].length+1}`}),
+                        ]
                     )
                 })
                 
@@ -45,6 +42,14 @@ const reducer = (state,action,override) => {
                   [entityi] : setDeep(state[entityi],action.paths[0],action[entityi][0],true)  
                 })
                 
+            },
+            [`UPDATE_${entityi.toUpperCase()}`]: () => {
+                if(!!!action.paths?.[0]?.[0] || !!!action[entityi]?.[0]) {
+                    console.log(`Must provide ${entityi} and paths in array format!`)
+                }
+                return _.merge({},state,{
+                    [entityi]: setDeep(state[entityi],action.paths[0],action[entityi])  
+                })
             },
             [`REMOVE_${entityi.toUpperCase()}`]: () => {
                 return _.merge(state,{

@@ -8,6 +8,7 @@ import ComponentsEditor from './Components/ComponentsEditor'
 import LayersEditor from './Layers/LayersEditor'
 import ItemEditor from './Item/ItemEditor'
 import ResultEditor from './Result/ResultEditor'
+import ElementsEditor from './Elements/ElementsEditor'
 
 const rowHeights = [2,2,6]
 
@@ -45,7 +46,7 @@ export default function ContextWorkspace({children}) {
                 <ResultEditor w={8} h={rowHeights[2]}/>
                 <Classes.UIComponents>
                     <LayersEditor w={10} h={3}/>
-                    <LayersEditor w={10} h={7}/>
+                    <ElementsEditor w={10} h={7}/>
                 </Classes.UIComponents>
                 
             </React.Fragment>

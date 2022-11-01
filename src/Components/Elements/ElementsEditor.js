@@ -6,17 +6,25 @@ import Toolbar from '../Toolbar'
 import EntityList from 'Components/EntityList'
 import Space from 'Components/Space'
 import EntityToolbar from 'Components/EntityToolbar'
+import { contextStore } from 'Context/contextStore'
 
 export default function ElementsEditor(props) {
+    const {contextState, contextDispatch} = React.useContext(contextStore)
+    console.log(contextState)
     return (
         <Box {...props} headerLocation="right-top">
             <Box.Header>
-                Datasets
+                Elements
             </Box.Header>
             <Box.Content>
                 <EntityList entity="elements"/>
                 <Space py={2}/>
-                <EntityToolbar entity="elements" add remove/>
+                <EntityToolbar 
+                    entity="elements" 
+                    target={['layers','elements']}
+                    path={contextState.selectedItems?.paths?.[0]}
+                    add remove
+                />
             </Box.Content>
         </Box>
     )
