@@ -31,9 +31,9 @@ export default function ItemEditor(props) {
     const {selectedItems} = contextState
     const {entity, paths, target} = selectedItems
     
-    const object = target ? getSingle(target, paths) : undefined
-    console.log(contextState)
-    console.log(object)
+    const object = (target && paths) ? getSingle(target, paths) : undefined
+    
+    
     
     return (
         <Box {...props} headerLocation="left-top" z={9}>
@@ -44,10 +44,10 @@ export default function ItemEditor(props) {
                 <Box depth={2} headerLocation="top-left" w={10} h={10}>
                     <Box.Header>
                         {
-                            !!!paths ? ( 
+                            !!!object ? ( 
                                 'No selection'
                             ) : (
-                                paths.length>1 ? (
+                                paths.length>100 ? (
                                     'Multiple selection'
                                 ) : (
                                     `Editing ${object._id}`
@@ -57,20 +57,21 @@ export default function ItemEditor(props) {
                     </Box.Header>
                     <Box.Content>
                         {
-                            !!!paths ? (
+                            !!!object ? (
                                 <Classes.PlaceholderText>
                                     No selection
                                 </Classes.PlaceholderText>
                             ) : (
-                                paths.length>1 ? (
+                                paths.length>100 ? (
                                     <Classes.PlaceholderText>
                                         Multiple selection
                                     </Classes.PlaceholderText>
                                 ) : (
                                     <EntityForm
-                                        key={`${selectedItems.entity}-${selectedItems.paths.join('-')}`} 
-                                        entity={selectedItems.entity} 
-                                        paths={selectedItems.paths[0]}
+                                        key={`${entity}-${paths.join('-')}`} 
+                                        target={target}
+                                        entity={entity} 
+                                        paths={paths}
                                     />        
                                 )
                             )

@@ -10,7 +10,7 @@ import ents from 'ents'
 export default function EntityToolbar(props) {
     const {
         entity,
-        path
+        paths
     } = props;
     const {entitiesState, entitiesDispatch, getSingle} = React.useContext(entitiesStore)
     const entityConfig = ents[entity]
@@ -25,34 +25,7 @@ export default function EntityToolbar(props) {
     }
 
     const onAdd = () => {
-        if(target.length===1) {
-            
-            entitiesDispatch({type:`ADD_${targetEntity.toUpperCase()}`})
-        }
-        else {
-            
-            const targetObject = getSingle(targetEntity,path),
-                nestedLocation = [...target].splice(1),
-                nestedObject = getNested(targetObject,nestedLocation),
-                nestedObjectLength = nestedObject.length,
-                nestedLocationWithIndex = nestedLocation.concat(nestedObjectLength),
-                newEntity = generateNewEntity(entity,{
-                    _id: `New ${entityConfig._id} ${nestedObjectLength+1}`
-                }),
-                targetForMerge = generateDeep(
-                    nestedLocationWithIndex.concat(newEntity))
-                
-            
-
-            entitiesDispatch({
-                type: `UPDATE_${targetEntity.toUpperCase()}`,
-                [targetEntity]: _.merge(
-                        {},
-                        targetForMerge
-                    ),
-                paths: [path]
-            })   
-        }
+        entitiesDispatch({type:`ADD_OBJECT`,entity,paths,target})
     }
 
 

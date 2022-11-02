@@ -110,6 +110,48 @@ export function setDeep(array,path,value,replace) {
     }
 }
 
+export const normalizePaths = (paths) => {
+    if(paths === undefined) {
+        return undefined
+    }
+    const __paths = Array.isArray(paths) ? paths : [paths]
+    return _.isEqual(__paths,__paths.flat()) ? [__paths] : __paths
+}
+
+export const normalizeTarget = (target) => {
+    return [target].flat()    
+}
+
+export function generateDeepPath(target,paths) {
+    
+    const _paths = normalizePaths(paths)
+    
+    const _target = normalizeTarget(target)
+    // this turns target=[layers,elements] paths=[[0,1],[0,0]] into ['layers', 0, 'children', 1, 'elements', 0, 'children', 0]
+    const res = _target.map((v,i) => {
+        return [v] // [configurations]
+            .concat(
+                !!!_paths?.[i] ? [] : _paths[i] // [[0]].map
+                    .map((v1,i1)=> {
+                        return [v1].concat(
+                            i1===_paths[i].length-1 ? 
+                                [] : 
+                                ['children']
+                            )
+                        }
+                        ).flat()
+                )
+    }).flat()
+    
+    return res
+}
+
+export function getDeepProp(object,target,paths) {
+    const res = _.get(object,generateDeepPath(target,paths))
+    
+    return res
+}
+
 export const generateDeep = (arr) => {
     if(arr.length===1) {
         return arr[0]

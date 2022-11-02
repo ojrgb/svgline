@@ -26,7 +26,7 @@ export default function ElementsEditor(props) {
                 <EntityToolbar 
                     entity="elements" 
                     target={['layers','elements']}
-                    path={contextState.selectedItems?.paths?.[0]}
+                    paths={[contextState.selectedItems?.paths?.[0]]}
                     add remove
                 />
             </Box.Content>

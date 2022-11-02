@@ -1,7 +1,7 @@
 import React from 'react'
 import theme from 'theme'
 import styled from 'styled-components'
-import { deepenColor, modifySize, relaxColor } from 'utils'
+import { deepenColor, modifySize, normalizePaths, relaxColor } from 'utils'
 import ExpandIcon from './ExpandIcon'
 import RecursiveElement from './RecursiveElement'
 import Space from './Space'
@@ -46,33 +46,34 @@ const Classes = {
 }
 
 function SelectableListItem(props) {
-    const {object, onClick, entity, isGroup, isExpanded, paths, target} = props
+    const {object, onClick, entity, isGroup, isExpanded, paths, path, target} = props
     const {contextState, contextDispatch} = React.useContext(contextStore)
     const indentStartCalc = modifySize(theme.scale.space[indentStart],indentModifier)
     const levelIndent = modifySize(theme.scale.space[props.path?.length || 0],indentModifier)
     const paddingLeft = `calc(${indentStartCalc} + ${levelIndent})`
 
-    const selected = 
-    !!!target ? (
-        contextState.selectedItems?.entity === entity &&    
-        contextState.selectedItems?.paths.find(v => _.isEqual(v,paths))
-    ) : (
-        contextState.selectedItems?.entity === entity &&    
-        contextState.selectedItems?.paths.find(v => _.isEqual(v,paths)) && 
-        _.isEqual(target,contextState.selectedItems?.target)
-    )
+    console.log('contextTarget',contextState?.selectedItems?.target)
+        console.log('contextPaths',contextState?.selectedItems?.paths)
+            console.log('propsTarget',target)
+                console.log('propsPaths',   normalizePaths(paths))
+                console.log('propsPath',normalizePaths(path))
+    
 
+    const selected = 
+        _.isEqual(target,contextState?.selectedItems?.target) && 
+        _.isEqual((normalizePaths(paths) || []).concat([normalizePaths(path)]),contextState?.selectedItems?.paths)
     
     
 
     return (
         <Classes.Single {...{paths}} style={{paddingLeft}}
             onClick={()=> {
+                console.log('paths',paths,'path',path)
                 contextDispatch({
                     type: 'SET_SELECTED',
                     entity,
                     target,
-                    paths
+                    paths: (normalizePaths(paths) || []).concat([normalizePaths(path)])
                 })
                
             }}
@@ -99,7 +100,8 @@ export default function SelectableList({
                 <RecursiveElement 
                     element={SelectableListItem} 
                     key={objecti}
-                    paths={(paths || []).concat([objecti])} 
+                    paths={paths} 
+                    path={objecti}
                     {...{object, entity, target}}
                 />  
             )}

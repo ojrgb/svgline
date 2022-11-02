@@ -16,8 +16,8 @@ export default function EntityForm(props) {
         <Form {...{object}}
             onBlur={(res) => {
                 entitiesDispatch({
-                    type:`SET_${entity.toUpperCase()}`,
-                    [entity]: [res],
+                    type:`SET_OBJECT`,
+                    object: res,
                     target,
                     paths: paths
                 })
