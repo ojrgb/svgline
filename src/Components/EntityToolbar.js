@@ -10,7 +10,8 @@ import ents from 'ents'
 export default function EntityToolbar(props) {
     const {
         entity,
-        paths
+        paths,
+        disabled
     } = props;
     const {entitiesState, entitiesDispatch, getSingle} = React.useContext(entitiesStore)
     const entityConfig = ents[entity]
@@ -42,7 +43,7 @@ export default function EntityToolbar(props) {
     }
 
     const ToolbarButtons = Object.keys(props).map((action,actioni) => {
-        return toolbarButtons[action]
+        return toolbarButtons[action] ? React.cloneElement(toolbarButtons[action],{disabled}) : undefined
     }).filter(Boolean).map((element,elementi) => {return React.cloneElement(element,{key:elementi})})
 
     return (

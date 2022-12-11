@@ -27,7 +27,8 @@ const reducer = (state,action,override) => {
 
     const actions = {
       'SET_SELECTED': () => {
-        return _.merge({},state,{
+        
+        return Object.assign({},state,{
           [selectionTypes[action.entity]]: {
             entity: action.entity,
             paths: action.paths,

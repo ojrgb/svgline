@@ -5,6 +5,7 @@ import { Slate, Editable, withReact } from 'slate-react'
 import styled from 'styled-components'
 import { applyQuickStyles, modifySize, relaxColor } from 'utils'
 import theme from 'theme'
+import * as CustomEditor from './Calculations/CustomEditor'
 
 const relaxDelta = 0.1,
     relaxTextDelta = 0.6,
@@ -34,21 +35,34 @@ const Classes = {
     `
 }
 
-const Leaf = (props) => {
+const Leaf = ({ attributes, children, leaf }) => {
     
+    const styles = {
+        'arithmeticOperator': {
+            color: 'pink'
+        },
+        'parentheses': {
+            color: 'yellow'
+        },
+        'quotes': {
+            color: '#d76117'
+        }
+    }
+
+     
+
     return (
         <span
-            {...props.attributes}
-            style={{
-                
-            }}
-            >
-                {props.children}
+            style={Object.keys(leaf).map(v => styles[v]).filter(Boolean)[0]}
+            {...attributes}
+        >
+            {children}
         </span>
     )
 }
 
 export default function Calculation(props) {
+    const {onChange} = props
     const [editor] = useState(() => withReact(createEditor()))
     
     const initialValue = [
@@ -63,107 +77,14 @@ export default function Calculation(props) {
       }, [])
 
     const renderElement = React.useCallback(props => {
-        const Element = {
-            parentheses : EditorElements.ParenthesesElement,
-            operator: EditorElements.OperatorElement,
-            block: EditorElements.BlockElement
-        }[props.element.type]
-        return Element ? <Element {...props}/> : <span {...props}/>
+        return <span {...props}/>
       }, [])
 
-    const EditorElements = {
-        ParenthesesElement: (props) => {
-            return (
-                <span>
-                    <span style={{color: 'yellow'}}>(</span>
-                    {props.children}
-                    <span style={{color: 'yellow'}}>)</span>
-                </span>
-            )
-        },
-        OperatorElement: (props) => {
-            return (
-                <span 
-                    style={{color: 'pink'}}
-                    >
-                    {props.children}
-                </span>
-            )
-        },
-        BlockElement: (props) => {
-            return (
-                <span>
-                    {props.children}
-                </span>
-            )
-        }
-    }
-
     const handleChange = (value) => {
-
+        onChange(value)
     }
 
-    const handleKeyDown = event => {
-
-        const arithmeticOperators = ['+','-','/','*']
-
-        const singleLetterNodes = [{
-            '(': {
-                node: {
-                    type: 'parentheses',
-                    children: [
-                        {text: ''}
-                    ]
-                },
-                wrap: true,
-                selection: () => {}
-            },
-        }].concat(
-            arithmeticOperators.map(v => ({
-                [v]: {
-                    node: {type: 'operator',
-                    children: [{text: v}]}
-                }
-            }))
-        ).reduce((a,b) => {return Object.assign(a,b)})
-
-        const triggerLetters = Object.keys(singleLetterNodes).map(
-            v => ({
-                [v]: Object.assign({},singleLetterNodes[v],{
-                    selection: singleLetterNodes[v].selection ? singleLetterNodes[v].selection : () => {return []}
-                })
-            })
-        ).reduce((a,b) => {return Object.assign({},a,b)})
-
-        const triggeredAction = triggerLetters[event.key]
-
-        
-        if (triggeredAction) {
-          const curSelection = editor.selection
-          
-          event.preventDefault()
-
-            
-
-          Transforms.insertNodes(editor,[triggeredAction.node])
-          
-          if(editor.children[editor.children.length-1].type!=='block') {
-            Transforms.insertNodes(editor, [{
-                type:'block',
-                children: [{
-                    text: ''
-                }]
-              }])
-          }
-          
-          
-          Transforms.select(editor, curSelection)
-          Transforms.move(editor, {
-            distance: 1, unit: 'character'
-          })
-          
-        }
-      }
+    
     return (
         <Classes.Root {...props}>
             <Slate 
@@ -175,7 +96,8 @@ export default function Calculation(props) {
                     style={{}}
                     renderElement={renderElement}
                     renderLeaf={renderLeaf}
-                    onKeyDown={handleKeyDown}
+                    onKeyDown={(e) => {CustomEditor.handleKeyDown(editor,e)}}
+                    decorate={CustomEditor.decorate}
                 />
             </Slate>
         </Classes.Root>

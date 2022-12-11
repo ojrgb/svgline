@@ -24,12 +24,12 @@ export default function EntityForm(props) {
             }}
         >
             {
-                entityConfig.attributes.map((attribute,attributei) => 
+                entityConfig.attributes.filter(v => (v.condition===undefined || v.condition(object)===true)).map((attribute,attributei) => 
                     <Form.Field 
                         key={attributei} 
                         w={3}
                         attribute={attribute._id}
-                        immediate={attribute.type==='color'}
+                        immediate={attribute.immediate}
                     >
                         <Form.Caption>{attribute.name || attribute._id}</Form.Caption>
                         <Form.Input 

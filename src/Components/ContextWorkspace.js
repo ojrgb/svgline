@@ -10,7 +10,7 @@ import ItemEditor from './Item/ItemEditor'
 import ResultEditor from './Result/ResultEditor'
 import ElementsEditor from './Elements/ElementsEditor'
 
-const rowHeights = [2,2,6]
+const rowHeights = [2,3,5]
 
 
 const Classes = {

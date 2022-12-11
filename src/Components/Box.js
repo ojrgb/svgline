@@ -82,6 +82,8 @@ const BoxContainer = styled.div`
             right: `width: calc(100%); height: 100%;`,
         }[props.headerPosition]
     )}
+        overflow-x: ${props => (props.overflowX || 'unset')};
+        overflow-y: ${props => (props.overflowY || 'unset')};
         max-height: calc(100%);
         ${props => `margin-${props.headerPosition}: -1px`};
         ${props => (props.active===false ? `display: none;` : ``)}

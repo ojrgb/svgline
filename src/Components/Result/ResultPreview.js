@@ -23,13 +23,21 @@ export default function ResultPreview(props) {
                         <svg key={layeri} style={{
                             backgroundColor: layer.backgroundColor,
                             width: '100%',
-                            height: '100%'
+                            height: '100%',
+                            opacity: layer.opacity ? layer.opacity/100 : 1  
                         }}>
                             <rect x="0" width="100" height="100" 
                             fill={layer.backgroundColor || 'rgba(0,0,0,0)'}
                             style={{
-                              opacity: layer.opacity ? layer.opacity/100 : 1  
+                              
                             }}/>
+                            {
+                                layer.elements?.filter(v => !!v.type).map((element,elementi) => {
+                                    return (
+                                        <element.type {...element}/>
+                                    )
+                                })
+                            }
                         </svg>  
                     )
                 }

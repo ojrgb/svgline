@@ -91,7 +91,8 @@ export default {
             },
             {
                 _id: 'backgroundColor',
-                type: 'color'
+                type: 'color',
+                immediate: true,
             },
             {
                 _id: 'opacity',
@@ -118,6 +119,127 @@ export default {
                 _id: 'name',
                 type: 'string'
             },
+            {
+                _id: 'type',
+                type: 'list',
+                immediate: true,
+                options: [
+                    {
+                        _id: 'line',
+                        name: 'Line',
+                    },
+                    {
+                        _id: 'circle',
+                        name: 'Circle',
+                    },
+                    {
+                        _id: 'rect',
+                        name: 'Rectangle',
+                    },
+                    {
+                        _id: 'polygon',
+                        name: 'Polygon',
+                    },
+                ]
+            },
+            {
+                _id: 'stroke',
+                name: 'Stroke',
+                type: 'color',
+                immediate: true,
+                condition: props => (['polygon','rect','line','circle'].indexOf(props.type)>-1),
+            },
+            {
+                _id: 'strokeWidth',
+                name: 'Stroke width',
+                type: 'string',
+                condition: props => (['polygon','rect','line','circle'].indexOf(props.type)>-1),
+            },
+            {
+                _id: 'fill',
+                name: 'Fill',
+                type: 'color',
+                condition: props => (['polygon','rect','circle'].indexOf(props.type)>-1),
+            },
+            {
+                _id: 'x1',
+                name: 'x1',
+                type: 'string',
+                condition: props => props.type==='line',
+            },
+            {
+                _id: 'y1',
+                name: 'y1',
+                type: 'string',
+                condition: props => props.type==='line',
+            },
+            {
+                _id: 'x2',
+                name: 'x2',
+                type: 'string',
+                condition: props => props.type==='line',
+            },
+            {
+                _id: 'y2',
+                name: 'y2',
+                type: 'string',
+                condition: props => props.type==='line',
+            },
+            {
+                _id: 'cx',
+                name: 'Circle X',
+                type: 'string',
+                condition: props => props.type==='circle',
+            },
+            {
+                _id: 'cy',
+                name: 'Circle Y',
+                type: 'string',
+                condition: props => props.type==='circle',
+            },
+            {
+                _id: 'r',
+                name: 'Radius',
+                type: 'string',
+                condition: props => props.type==='circle',
+            },
+            
+            {
+                _id: 'x',
+                name: 'x',
+                type: 'string',
+                condition: props => props.type==='rect',
+            },
+            {
+                _id: 'y',
+                name: 'y',
+                type: 'string',
+                condition: props => props.type==='rect',
+            },
+            {
+                _id: 'rx',
+                name: 'Round X',
+                type: 'string',
+                condition: props => props.type==='rect',
+            },
+            {
+                _id: 'ry',
+                name: 'Round Y',
+                type: 'string',
+                condition: props => props.type==='rect',
+            },
+            {
+                _id: 'width',
+                name: 'Width',
+                type: 'string',
+                condition: props => props.type==='rect',
+            },
+            {
+                _id: 'height',
+                name: 'Height',
+                type: 'string',
+                condition: props => props.type==='rect',
+            },
         ]
     },
     parameters: {
@@ -135,7 +257,7 @@ export default {
             },
             {
                 _id: 'ratio',
-                type: 'select',
+                type: 'list',
                 options: [{
                     _id:'1-1',
                     name: '1:1'

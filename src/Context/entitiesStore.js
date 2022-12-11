@@ -73,8 +73,9 @@ const reducer = (state,action,override) => {
             
         }
     }
-
-    return actions[action.type]();
+    const res = actions[action.type]()
+    
+    return res;
     
 }
 
