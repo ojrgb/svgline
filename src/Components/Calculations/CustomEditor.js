@@ -29,7 +29,7 @@ export const decorate = ([node, path]) => {
       const end = start + getLength(token);
       if (typeof token !== "string") {
         ranges.push({
-          [token.display]: true,
+          [token.group]: true,
           anchor: { path, offset: start },
           focus: { path, offset: end },
         });

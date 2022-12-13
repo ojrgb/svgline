@@ -46,6 +46,9 @@ const Leaf = ({ attributes, children, leaf }) => {
         },
         'quotes': {
             color: '#d76117'
+        },
+        'function': {
+            color: '#e42662'
         }
     }
 

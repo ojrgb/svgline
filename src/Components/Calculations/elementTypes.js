@@ -2,39 +2,67 @@ const elementTypes = [
     {
         _id: 'singleQuote',
       test: /\'[^']*\'/g,
-      display: 'quotes'
+      group: 'quotes'
     },
     {
         _id: 'doubleQuote',
       test: /\"[^"]*\"?/g,
-      display: 'quotes'
+      group: 'quotes'
     },
+    
     {
         _id: 'parenthesesStart',
       test: /[(]/g,
-      display: 'parentheses'
+      group: 'parentheses'
     },
     {
         _id: 'parenthesesEnd',
       test: /[)]/g,
-      display: 'parentheses'
+      group: 'parentheses'
     },
+    
     {
         _id: 'add',
       test: /\+/g,
-      display: 'arithmeticOperator'
+      group: 'arithmeticOperator'
     },{
         _id: 'subtract',
       test: /\-/g,
-      display: 'arithmeticOperator'
+      group: 'arithmeticOperator'
     },{
         _id: 'divide',
       test: /\//g,
-      display: 'arithmeticOperator'
+      group: 'arithmeticOperator'
     },{
         _id: 'multiply',
       test: /\*/g,
-      display: 'arithmeticOperator'
-    }]
+      group: 'arithmeticOperator'
+    },
+  {
+    _id: 'or',
+    test:/OR/gi,
+    group: 'function'
+  },
+  {
+    _id: 'and',
+    test:/AND/gi,
+    group: 'function'
+  },
+  {
+    _id: 'length',
+    test:/LENGTH/gi,
+    group: 'function'
+  },
+  {
+    _id: 'number',
+    test: /\d+(\.\d)?/,
+    group: 'number'
+  },
+  {
+    _id: 'invalid',
+    test: /.+/,
+    group: 'invalid'
+  }
+]
 
 export default elementTypes.map(v => Object.assign({},v,{testParse: v.testParse || v.test}))
