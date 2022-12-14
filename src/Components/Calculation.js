@@ -1,17 +1,40 @@
 import React, { useState } from 'react'
 import { createEditor } from 'slate'
-import { Transforms } from 'slate'
-import { Slate, Editable, withReact } from 'slate-react'
+import { Transforms, Range } from 'slate'
+import { Slate, Editable, withReact, ReactEditor } from 'slate-react'
 import styled from 'styled-components'
 import { applyQuickStyles, modifySize, relaxColor } from 'utils'
 import theme from 'theme'
 import * as CustomEditor from './Calculations/CustomEditor'
+import Autocomplete from './Calculations/Autocomplete'
 
 const relaxDelta = 0.1,
     relaxTextDelta = 0.6,
     borderThicknessDelta = 2,
     relaxBorderDelta = 0.1,
     deepenBorderDelta = 0.1
+
+const suggestions = [
+    {
+        _id:'CALCULATIONS',
+        type: 'list',
+        children: [
+            {
+                _id: 'CALCULATION1',
+                type: 'string',
+            },
+            {
+                _id: 'CALCULATION2',
+                type: 'string',
+            },
+            {
+                _id: 'TEST',
+                type: 'string',
+            }
+        ]
+    }
+]
+
 
 const Classes = {
     Root: styled.div`
@@ -35,8 +58,12 @@ const Classes = {
     `
 }
 
-const Leaf = ({ attributes, children, leaf }) => {
+const Leaf = (props) => {
     
+    const { attributes, children, leaf, editor } = props
+    const childRefs = React.useRef([])
+    console.log(childRefs)
+    console.log(props)
     const styles = {
         'arithmeticOperator': {
             color: 'pink'
@@ -51,15 +78,38 @@ const Leaf = ({ attributes, children, leaf }) => {
             color: '#e42662'
         }
     }
-
-     
-
+    
+    
+    
     return (
         <span
             style={Object.keys(leaf).map(v => styles[v]).filter(Boolean)[0]}
             {...attributes}
         >
             {children}
+            {
+                leaf.variable && editor?.selection?.focus && leaf?.rangeLocation && Range.includes(leaf.rangeLocation,editor.selection.focus) && (
+                    <Autocomplete
+                        suggestions={
+                            suggestions
+                        }
+                        input={leaf.text.slice(1,leaf.text.length)}
+                        onSelect={(v) => {
+                            const splitText = leaf.text.slice(1,leaf.text.length).split(".")
+                            const curPart = splitText[splitText.length-1] 
+                            console.log("splitText",splitText)
+                            if(curPart.length>0) {
+                                Transforms.delete(editor,{distance: curPart.length,unit:'character',reverse:true})
+                            }
+                            Transforms.insertText(editor,v._id)
+                            
+                            ReactEditor.focus(editor)
+                            Transforms.setSelection(editor,{focus:leaf.rangeLocation.focus})
+                            Transforms.collapse(editor,{edge:'end'})
+                        }}
+                    />
+                )
+            }
         </span>
     )
 }
@@ -76,7 +126,7 @@ export default function Calculation(props) {
       ]
     const renderLeaf = React.useCallback(props => {
         
-        return <Leaf {...props} />
+        return <Leaf {...props} editor={editor} />
       }, [])
 
     const renderElement = React.useCallback(props => {
@@ -84,6 +134,8 @@ export default function Calculation(props) {
       }, [])
 
     const handleChange = (value) => {
+        
+        
         onChange(value)
     }
 
@@ -99,7 +151,9 @@ export default function Calculation(props) {
                     style={{}}
                     renderElement={renderElement}
                     renderLeaf={renderLeaf}
-                    onKeyDown={(e) => {CustomEditor.handleKeyDown(editor,e)}}
+                    onKeyDown={(e) => {
+                        CustomEditor.handleKeyDown(editor,e)
+                    }}
                     decorate={CustomEditor.decorate}
                 />
             </Slate>

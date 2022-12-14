@@ -15,6 +15,7 @@
     "react-scripts": "5.0.1",
     "slate": "^0.84.0",
     "slate-react": "^0.83.2",
+    "slate-suggestions": "^0.4.0",
     "styled-components": "^5.3.6",
     "web-vitals": "^2.1.4"
   },

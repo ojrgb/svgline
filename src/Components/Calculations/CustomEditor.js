@@ -18,6 +18,8 @@ const getLength = (token) =>
       : token.content.reduce((l, t) => l + getLength(t), 0);
   
 
+
+
 export const decorate = ([node, path]) => {
     if (!Text.isText(node)) {
       return [];
@@ -32,6 +34,10 @@ export const decorate = ([node, path]) => {
           [token.group]: true,
           anchor: { path, offset: start },
           focus: { path, offset: end },
+          rangeLocation: {
+            anchor: { path, offset: start },
+            focus: { path, offset: end }
+          } 
         });
       }
       start = end;

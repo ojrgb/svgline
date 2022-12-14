@@ -59,6 +59,11 @@ const elementTypes = [
     group: 'number'
   },
   {
+    _id: 'variable',
+    test: /\$.+/,
+    group: 'variable'
+  },
+  {
     _id: 'invalid',
     test: /.+/,
     group: 'invalid'

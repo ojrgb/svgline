@@ -55,7 +55,7 @@ const tokenize = (text) => {
       
       // Flatten this array like a pita
       while(curString.find(v => Array.isArray(v))) { curString = curString.flat()}
-      console.log('curString',curString)
+      
     })
 
   return curString
@@ -113,7 +113,7 @@ const parse = text => {
 
     let curString = tokenize(text)
 
-    console.log("input",curString)
+    
 
     curString = curString.map(v => v?.group === 'quotes' ? {type: 'string', value: v.content} : v)
 
@@ -144,7 +144,7 @@ const parse = text => {
     
 }
 
-console.log(parse("1+1+2+(1+3)"))
+
 
 export default {
     tokenize,
