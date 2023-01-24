@@ -1,11 +1,16 @@
 import React from 'react'
 import Portal from 'Components/Portal';
 import styled from 'styled-components';
+import theme from 'theme';
+import { entitiesStore } from 'Context/entitiesStore';
 
 const getSuggestionsList = (str,arr) => {
     
     
     let res = [...arr]
+    if(!str || str.length===0) {
+        return res 
+    }
     const parts = str.split('.')
     parts.forEach((part,parti) => {
         if(parti<parts.length-1) {
@@ -33,22 +38,67 @@ const Classes = {
         flex-direction: column;
         cursor: default;
         user-select: none;
+    `,
+    ListItem: styled.div`
+        padding: 4px;
+        color: ${theme.colors.text.secondary};
+        font-family: ${theme.fonts.code.family};
+        font-size: ${theme.fonts.code.size};
+        border: ${theme.borders.primary.width} ${theme.borders.primary.style} ${theme.borders.primary.color};
+        ${props => props.active && `
+            background-color: #6b98c9;;
+            color: white;
+            font-weight: bold;
+        `}
     `
 }
 
-const ListItem = (props) => {
+const ListItem = ({onMouseOver, onClick, active, children}) => {
     return (
-     <div onClick={props.onClick}>
-        {props.children}
-     </div>   
+     <Classes.ListItem {...{onClick,onMouseOver,active}}>
+        {children}
+     </Classes.ListItem>   
     )
 }
 
+const generateSuggestionsMaster = (entitiesState) => {
+    return Object.keys(entitiesState).map(v=>({
+        _id: v.toUpperCase(),
+        children: entitiesState[v]
+    }))
+} 
+
+// const suggestions = [
+//     {
+//         _id:'CALCULATIONS',
+//         type: 'list',
+//         children: [
+//             {
+//                 _id: 'CALCULATION1',
+//                 type: 'string',
+//             },
+//             {
+//                 _id: 'CALCULATION2',
+//                 type: 'string',
+//             },
+//             {
+//                 _id: 'TEST',
+//                 type: 'string',
+//             }
+//         ]
+//     }
+// ]
+
+
 export default function Autocomplete (props) {
-    const {input, suggestions, onSelect} = props
-    if(!input || !suggestions || !onSelect) {
-        return "No input or suggestions or onSelect!"
+    const {input, onSelect} = props
+    const [active,setActive] = React.useState(0)
+    const {entitiesState} = React.useContext(entitiesStore)
+    const suggestions = generateSuggestionsMaster(entitiesState)
+    if(!suggestions || !onSelect) {
+        return "No input or onSelect!"
     }
+    
     const res = getSuggestionsList(input,suggestions)
     const selection = window?.getSelection();
     
@@ -71,7 +121,11 @@ export default function Autocomplete (props) {
                         res.map((v,i) => 
                             <ListItem key={i} onClick={(e) => {
                                 onSelect(v)
-                            }}>{v._id}</ListItem>    
+                            }}
+                            onMouseOver={(e) => {
+                                setActive(i)
+                            }}
+                            active={active===i}>{v._id}</ListItem>    
                         )
                     }
                 </Classes.SuggestionsList>

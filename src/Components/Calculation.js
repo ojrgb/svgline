@@ -14,26 +14,7 @@ const relaxDelta = 0.1,
     relaxBorderDelta = 0.1,
     deepenBorderDelta = 0.1
 
-const suggestions = [
-    {
-        _id:'CALCULATIONS',
-        type: 'list',
-        children: [
-            {
-                _id: 'CALCULATION1',
-                type: 'string',
-            },
-            {
-                _id: 'CALCULATION2',
-                type: 'string',
-            },
-            {
-                _id: 'TEST',
-                type: 'string',
-            }
-        ]
-    }
-]
+
 
 
 const Classes = {
@@ -62,8 +43,8 @@ const Leaf = (props) => {
     
     const { attributes, children, leaf, editor } = props
     const childRefs = React.useRef([])
-    console.log(childRefs)
-    console.log(props)
+    
+    
     const styles = {
         'arithmeticOperator': {
             color: 'pink'
@@ -79,7 +60,7 @@ const Leaf = (props) => {
         }
     }
     
-    
+ 
     
     return (
         <span
@@ -88,16 +69,15 @@ const Leaf = (props) => {
         >
             {children}
             {
-                leaf.variable && editor?.selection?.focus && leaf?.rangeLocation && Range.includes(leaf.rangeLocation,editor.selection.focus) && (
+                leaf.variable && 
+                    editor?.selection?.focus && leaf?.rangeLocation && Range.includes(leaf.rangeLocation,editor.selection.focus) && (
                     <Autocomplete
-                        suggestions={
-                            suggestions
-                        }
+                        
                         input={leaf.text.slice(1,leaf.text.length)}
                         onSelect={(v) => {
                             const splitText = leaf.text.slice(1,leaf.text.length).split(".")
                             const curPart = splitText[splitText.length-1] 
-                            console.log("splitText",splitText)
+                            
                             if(curPart.length>0) {
                                 Transforms.delete(editor,{distance: curPart.length,unit:'character',reverse:true})
                             }

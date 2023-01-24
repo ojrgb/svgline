@@ -54,15 +54,16 @@ const elementTypes = [
     group: 'function'
   },
   {
+    _id: 'variable',
+    test: /\$([^+]+)?/,
+    group: 'variable'
+  },
+  {
     _id: 'number',
     test: /\d+(\.\d)?/,
     group: 'number'
   },
-  {
-    _id: 'variable',
-    test: /\$.+/,
-    group: 'variable'
-  },
+  
   {
     _id: 'invalid',
     test: /.+/,
