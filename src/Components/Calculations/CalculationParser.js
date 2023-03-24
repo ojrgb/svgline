@@ -41,7 +41,7 @@ const tokenize = (text) => {
         }
         else {
           // Else we look for the leaf matches in the text part
-          return regexpReplace(str,leaf.test, (res) => {
+          let res= regexpReplace(str,leaf.test, (res) => {
             return  {
                 content: res[0],
                 group: leaf.group,
@@ -49,6 +49,8 @@ const tokenize = (text) => {
               }
             }
           )
+        
+          return res
         }
         
       })
@@ -102,7 +104,7 @@ const replaceOperator = (array, operator, curI) => {
   return res
 }
 
-const parse = text => {
+const _parse = text => {
     // const singleQuote = elementTypes.findById('singleQuote')
     // const doubleQuote = elementTypes.findById('doubleQuote')
     // const parentheses = elementTypes.findById('parentheses')
@@ -112,7 +114,7 @@ const parse = text => {
     // const multiply = elementTypes.findById('multiply')
 
     let curString = tokenize(text)
-
+    
     
 
     curString = curString.map(v => v?.group === 'quotes' ? {type: 'string', value: v.content} : v)
@@ -142,6 +144,37 @@ const parse = text => {
     
 
     
+}
+
+const parse = (text,curValue) => {
+  if(!!!curValue) {
+    curValue = [text]
+  }
+  console.log(curValue)
+  curValue.forEach((textPart,textParti) => {
+    if(typeof textPart !== 'string') {
+      return 
+    }
+    const numRegex = elementTypes.find((v)=>v._id==='number').test
+    const matches = [...textPart.matchAll(numRegex)]
+    if(matches.length>0) {
+      const match = matches[0]
+      const [matchString] = match
+      const {index: matchIndex} = match
+      const matchLength = matchString.length
+
+      const newTextPart = [textPart.slice(0,matchIndex),{type: 'number',children:textPart.slice(matchIndex,matchIndex+matchLength)},textPart.slice(matchIndex+matchLength,textPart.length)]
+      const newCurValue = curValue.map((v,i) => {
+        if(i!==textParti) {
+          return v
+        }
+        else {
+          return newTextPart
+        }
+      }).flat()
+      return parse(text,newCurValue)
+    }
+  })
 }
 
 

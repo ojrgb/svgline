@@ -1,4 +1,15 @@
 const elementTypes = [
+  {
+    _id: 'dynamic',
+    test: /\{([^}]+)?\}/g,
+    group: 'dynamic'
+  },
+  {
+    _id: 'dynamicActive',
+    test: /\{([^}]+)?/g,
+    group: 'dynamic'
+  },
+  
     {
         _id: 'singleQuote',
       test: /\'[^']*\'/g,
@@ -6,7 +17,7 @@ const elementTypes = [
     },
     {
         _id: 'doubleQuote',
-      test: /\"[^"]*\"?/g,
+      test: /\".+\"/g,
       group: 'quotes'
     },
     
@@ -53,20 +64,17 @@ const elementTypes = [
     test:/LENGTH/gi,
     group: 'function'
   },
-  {
-    _id: 'variable',
-    test: /\$([^+]+)?/,
-    group: 'variable'
-  },
+  
   {
     _id: 'number',
-    test: /\d+(\.\d)?/,
+    // test: /\d+(\.\d)?/g,
+    test: /\d+/g,
     group: 'number'
   },
   
   {
     _id: 'invalid',
-    test: /.+/,
+    test: /.+/g,
     group: 'invalid'
   }
 ]

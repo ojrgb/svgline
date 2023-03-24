@@ -57,19 +57,22 @@ const Leaf = (props) => {
         },
         'function': {
             color: '#e42662'
+        },
+        'dynamic': {
+            color:'#22e9df'
         }
     }
     
- 
+//   console.log(leaf)
     
     return (
         <span
-            style={Object.keys(leaf).map(v => styles[v]).filter(Boolean)[0]}
+            style={styles[leaf.group]}
             {...attributes}
         >
             {children}
             {
-                leaf.variable && 
+                leaf.dynamic && 
                     editor?.selection?.focus && leaf?.rangeLocation && Range.includes(leaf.rangeLocation,editor.selection.focus) && (
                     <Autocomplete
                         
@@ -98,7 +101,7 @@ export default function Calculation(props) {
     const {onChange} = props
     const [editor] = useState(() => withReact(createEditor()))
     
-    const initialValue = [
+    const initialValue = props.value || [
         {
           type: 'block',
           children: [{ text: '' }],
@@ -118,6 +121,7 @@ export default function Calculation(props) {
         
         onChange(value)
     }
+    console.log(editor?.children?.[0]?.children?.[0]?.text)
 
     
     return (
@@ -135,6 +139,7 @@ export default function Calculation(props) {
                         CustomEditor.handleKeyDown(editor,e)
                     }}
                     decorate={CustomEditor.decorate}
+                    
                 />
             </Slate>
         </Classes.Root>

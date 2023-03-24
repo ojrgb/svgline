@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React from 'react'
 import { Text, Transforms } from 'slate'
 import CalculationParser from './CalculationParser'
@@ -20,16 +21,21 @@ const getLength = (token) =>
 
 
 
-export const decorate = ([node, path]) => {
+export const _decorate = ([node, path]) => {
     if (!Text.isText(node)) {
       return [];
     }
-    const ranges = [];
+    let ranges = [];
     const tokens = tokenize(node.text);
+    
     let start = 0;
+    
     for (const token of tokens) {
       const end = start + getLength(token);
+      
       if (typeof token !== "string") {
+        
+        
         ranges.push({
           [token.group]: true,
           anchor: { path, offset: start },
@@ -42,5 +48,67 @@ export const decorate = ([node, path]) => {
       }
       start = end;
     }
+    let startRange = 0
+    let newRanges = ranges.map((v,i) => {
+      let endRange = v.dynamic ? (startRange + 2) : startRange+(v.focus.offset - v.anchor.offset)
+      const res = _.merge({},v,{
+        anchor: {offset:startRange},    
+        focus: {offset:endRange},
+        rangeLocation: {
+          anchor:{offset:startRange},
+          focus:{offset:endRange}
+        }
+      }
+      )
+      startRange = endRange
+      return res
+    })
+    
     return ranges;
   };
+
+
+export const decorate = ([node,path]) => {
+  let ranges = []
+  const {text} = node
+  if(!!!text) { 
+    return ranges // continue only if the node is a text node
+  }
+  else {
+     let matches = t(text)
+     
+ 
+     matches.forEach((matchGroup,matchGroupi) => {
+      const [matchId,matchGroupId,matchGroupMatches] = matchGroup
+      matchGroupMatches.forEach((matchGroupMatch,MatchGroupMatchi) => {
+        // onsole.log(matchGroupId,matchGroupMatch.index,matchGroupMatch.length)
+        const start = matchGroupMatch.index, end = matchGroupMatch.index+matchGroupMatch[0].length
+        ranges.push({
+          matchId, 
+          group: matchGroupId,
+          anchor: {path, offset: start},
+          focus: { path, offset: end },
+          rangeLocation: {
+            anchor: { path, offset: start },
+            focus: { path, offset: end }
+          } 
+        })
+      })
+     })
+     return ranges.reverse()
+  }
+  
+  
+}
+
+const t = (text) => {
+  
+  return elementTypes.map((elementType,elementTypei) => {
+    const matches = text.matchAll(elementType.test)
+    const matchesArray = matches ? [...matches] : undefined
+    return (matchesArray && matchesArray.length>0) ? [elementType._id,elementType.group,matchesArray] : undefined
+  }).filter(Boolean)
+
+
+  
+}
