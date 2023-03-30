@@ -23,6 +23,8 @@ export default {
         primary: '#3e3e3e',
         secondary: "#cdcdcd",
         background:"#515151",
+        green: "#00870e",
+        red: "#910000",
         deepen: (new Array(11)).fill().map((v,i) => {return i/10})
     },    
     fonts: {

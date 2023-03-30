@@ -1,0 +1,62 @@
+import React from 'react'
+import { Transforms, Range } from 'slate'
+import { ReactEditor } from 'slate-react'
+import Autocomplete from './Autocomplete'
+
+export default function Leaf (props) {
+    
+    const { attributes, children, leaf, editor } = props
+    const childRefs = React.useRef([])
+    
+    
+    const styles = {
+        'arithmeticOperator': {
+            color: 'pink'
+        },
+        'parentheses': {
+            color: 'yellow'
+        },
+        'quotes': {
+            color: '#d76117'
+        },
+        'function': {
+            color: '#e42662'
+        },
+        'dynamic': {
+            color:'#22e9df'
+        }
+    }
+    
+  console.log(leaf)
+    
+    return (
+        <span
+            style={styles[leaf.group]}
+            {...attributes}
+        >
+            {children}
+            {
+                leaf.matchId==='dynamicActive' && 
+                    editor?.selection?.focus && leaf?.rangeLocation && Range.includes(leaf.rangeLocation,editor.selection.focus) && (
+                    <Autocomplete
+                        
+                        input={leaf.text.slice(1,leaf.text.length)}
+                        onSelect={(v) => {
+                            const splitText = leaf.text.slice(1,leaf.text.length).split(".")
+                            const curPart = splitText[splitText.length-1] 
+                            
+                            if(curPart.length>0) {
+                                Transforms.delete(editor,{distance: curPart.length,unit:'character',reverse:true})
+                            }
+                            Transforms.insertText(editor,v._id)
+                            
+                            ReactEditor.focus(editor)
+                            Transforms.setSelection(editor,{focus:leaf.rangeLocation.focus})
+                            Transforms.collapse(editor,{edge:'end'})
+                        }}
+                    />
+                )
+            }
+        </span>
+    )
+}

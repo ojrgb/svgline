@@ -63,7 +63,7 @@ const ListItem = ({onMouseOver, onClick, active, children}) => {
 
 const generateSuggestionsMaster = (entitiesState) => {
     return Object.keys(entitiesState).map(v=>({
-        _id: v.toUpperCase(),
+        _id: v,
         children: entitiesState[v]
     }))
 } 

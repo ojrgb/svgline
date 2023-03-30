@@ -28,7 +28,17 @@ export default {
                         name: 'Color'
                     }
                 ]
-            }
+            },
+            {
+                _id: 'defaultValue',
+                name: 'Default Value',
+                type: 'string'
+            },
+            {
+                _id: 'sampleValue',
+                name: 'Sample Value',
+                type: 'string'
+            },
         ]
     },
     datasets: {

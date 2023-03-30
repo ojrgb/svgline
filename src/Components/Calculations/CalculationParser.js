@@ -1,3 +1,5 @@
+import _ from "lodash"
+import {create, all} from "mathjs"
 import elementTypes from "./elementTypes"
 
 function regexpReplace(str, reg, replace) {
@@ -146,40 +148,100 @@ const _parse = text => {
     
 }
 
-const parse = (text,curValue) => {
-  if(!!!curValue) {
-    curValue = [text]
-  }
-  console.log(curValue)
-  curValue.forEach((textPart,textParti) => {
-    if(typeof textPart !== 'string') {
-      return 
-    }
-    const numRegex = elementTypes.find((v)=>v._id==='number').test
-    const matches = [...textPart.matchAll(numRegex)]
-    if(matches.length>0) {
-      const match = matches[0]
-      const [matchString] = match
-      const {index: matchIndex} = match
-      const matchLength = matchString.length
+const createMath = (props) => {
+  let math =  create(all)
+  const {variables} = props
 
-      const newTextPart = [textPart.slice(0,matchIndex),{type: 'number',children:textPart.slice(matchIndex,matchIndex+matchLength)},textPart.slice(matchIndex+matchLength,textPart.length)]
-      const newCurValue = curValue.map((v,i) => {
-        if(i!==textParti) {
-          return v
-        }
-        else {
-          return newTextPart
-        }
-      }).flat()
-      return parse(text,newCurValue)
+  const getVar = (path) => {
+    console.log('PATH IS:',path)
+    const _path = path.split(".")
+    if(_path[0]==="configurations") {
+      console.log("Getting configuration:" + _path[1])
+      return variables.configurations.find(v => v._id===_path[1]).sampleValue
+    }
+  }
+
+  math.import({
+    VAR: function(path) {
+      const res = getVar(path)
+      console.log('Returned VAR',res)
+      return res
     }
   })
+  return math
+}
+
+const evaluate = (props) => {
+  let {expression, variables} = props
+  expression = expression?.replace(/\{([^}]+)\}/,'VAR("$1")')
+  console.log(expression)
+  console.log('variables',variables)
+  const math = createMath(props)
+
+  let result = undefined;
+  try {
+    result = math.evaluate(expression)
+    return {
+      status: '1',
+      result
+    }
+  } 
+  catch (err) {
+    return {
+      status: '2',
+      message: err
+    }
+  }
+  
+}
+
+const parse = (props) => {
+  const {expression, variables} = props
+  // THANKS CHATGPT!
+  // use math.parse to parse the expression into a node tree
+const math = createMath(props)
+let node = undefined;
+    
+
+try {
+  node = math.parse(expression);
+  console.log(node)
+}
+catch(err) {
+  console.log('Expression not valid!')
+  return
+}
+
+
+// define a function to convert the node tree into your desired object format
+function nodeToObject(node) {
+  // check if the node is a number or string, and if so return it as a leaf node
+  if (node.isConstantNode) {
+    return node.value;
+  }
+  if(node.isParenthesisNode) {
+    return {operation: 'parentheses', children: nodeToObject(node.content)}
+  }
+  // otherwise, the node is an operation, so recursively convert its children
+  const children = node.args?.map(child => nodeToObject(child));
+  
+  
+  // return an object representing the operation and its children
+  return { operation: node.op, children };
+}
+
+// convert the node tree to your desired object format
+return nodeToObject(node);
+
+
+
+
 }
 
 
 
 export default {
     tokenize,
-    parse
+    parse,
+    evaluate
 }
