@@ -67,18 +67,6 @@ const tokenize = (text) => {
 
 }
 
-const processText = (text,regexp,replace) => {
-    let curString = typeof text === 'string' ? [text] : text
-
-    curString = curString.map((part,parti) => {
-        return part.regexpReplace(regexp,replace)
-    })
-
-    while(curString.find(v => Array.isArray(v))) { curString = curString.flat()}
-
-    return curString
-}
-
 const replaceOperator = (array, operator, curI) => {
   let res = [...array]
   for(let i = curI || array.length; i--; i>1 ) {
@@ -150,23 +138,49 @@ const _parse = text => {
 
 const createMath = (props) => {
   let math =  create(all)
+  
   const {variables} = props
 
+  const VAR = (path) => {
+    const res = getVar(path)
+    
+    return res
+  }
+
   const getVar = (path) => {
-    console.log('PATH IS:',path)
+    
     const _path = path.split(".")
     if(_path[0]==="configurations") {
-      console.log("Getting configuration:" + _path[1])
+      
       return variables.configurations.find(v => v._id===_path[1]).sampleValue
     }
   }
 
-  math.import({
-    VAR: function(path) {
-      const res = getVar(path)
-      console.log('Returned VAR',res)
-      return res
+  const FOR = function(start, end, func) {
+    
+    const result = [];
+    for (let i = start; i <= end; i++) {
+      const _math = Object.assign({},math)
+      _math.import({
+        I: () => {return i}, 
+      }, {override: true})
+      
+      console.log(func)
+
+      result.push(_math.evaluate(func.toString()));
     }
+    return result;
+  };
+  
+  
+
+  math.import({
+    VAR,
+    FOR,
+    FUNC: (v) => {
+      return v.toString()
+    },
+    I: (i) => {return "I()" }
   })
   return math
 }
@@ -174,8 +188,7 @@ const createMath = (props) => {
 const evaluate = (props) => {
   let {expression, variables} = props
   expression = expression?.replace(/\{([^}]+)\}/,'VAR("$1")')
-  console.log(expression)
-  console.log('variables',variables)
+  
   const math = createMath(props)
 
   let result = undefined;
@@ -196,7 +209,8 @@ const evaluate = (props) => {
 }
 
 const parse = (props) => {
-  const {expression, variables} = props
+  let {expression, variables} = props
+  expression = expression?.replace(/\{([^}]+)\}/,'VAR("$1")')
   // THANKS CHATGPT!
   // use math.parse to parse the expression into a node tree
 const math = createMath(props)
@@ -205,10 +219,10 @@ let node = undefined;
 
 try {
   node = math.parse(expression);
-  console.log(node)
+  
 }
 catch(err) {
-  console.log('Expression not valid!')
+  
   return
 }
 

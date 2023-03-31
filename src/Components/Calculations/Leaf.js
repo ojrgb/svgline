@@ -27,7 +27,7 @@ export default function Leaf (props) {
         }
     }
     
-  console.log(leaf)
+  
     
     return (
         <span
