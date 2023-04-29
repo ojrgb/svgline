@@ -1,13 +1,13 @@
 import React from 'react'
-import theme from 'theme'
+import theme from 'theme.js'
 import styled from 'styled-components'
-import Box from 'Components/Box'
-import Toolbar from '../Toolbar'
-import EntityList from 'Components/EntityList'
-import Space from 'Components/Space'
-import EntityToolbar from 'Components/EntityToolbar'
-import EntityForm from 'Components/EntityForm'
-import ResultPreview from './ResultPreview'
+import Box from 'Components/Box.js'
+import Toolbar from '../Toolbar.js'
+import EntityList from 'Components/EntityList.js'
+import Space from 'Components/Space.js'
+import EntityToolbar from 'Components/EntityToolbar.js'
+import EntityForm from 'Components/EntityForm.js'
+import ResultPreview from './ResultPreview.js'
 
 export default function ResultEditor(props) {
     return (

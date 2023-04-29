@@ -1,11 +1,11 @@
 import React from 'react'
-import theme from 'theme'
+import theme from 'theme.js'
 import styled from 'styled-components'
-import { deepenColor, modifySize, normalizePaths, relaxColor } from 'utils'
-import ExpandIcon from './ExpandIcon'
-import RecursiveElement from './RecursiveElement'
-import Space from './Space'
-import { contextStore } from 'Context/contextStore'
+import { deepenColor, modifySize, normalizePaths, relaxColor } from 'utils.js'
+import ExpandIcon from './ExpandIcon.js'
+import RecursiveElement from './RecursiveElement.js'
+import Space from './Space.js'
+import { contextStore } from 'Context/contextStore.js'
 import _ from 'lodash'
 
 const deepenDelta = 0.1,

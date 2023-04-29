@@ -1,8 +1,8 @@
 import React from 'react'
-import theme from 'theme'
+import theme from 'theme.js'
 import styled from 'styled-components'
-import { entitiesStore } from 'Context/entitiesStore'
-import SelectableList from './SelectableList'
+import { entitiesStore } from 'Context/entitiesStore.js'
+import SelectableList from './SelectableList.js'
 
 export default function EntityList(props) {
     const {entity,paths} = props

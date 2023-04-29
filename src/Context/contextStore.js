@@ -1,5 +1,5 @@
 import React from 'react'
-import { trace } from 'utils'
+import { trace } from 'utils.js'
 import _ from 'lodash'
 
 const initialState = {

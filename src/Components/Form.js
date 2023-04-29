@@ -1,13 +1,13 @@
 import React from 'react'
-import theme from 'theme'
+import theme from 'theme.js'
 import styled from 'styled-components'
-import Select from './Select'
-import Text from './Text'
+import Select from './Select.js'
+import Text from './Text.js'
 import _ from 'lodash'
-import { entitiesStore } from 'Context/entitiesStore'
-import { modifySize } from 'utils'
-import Calculation from './Calculation'
-import ColorPicker from './ColorPicker'
+import { entitiesStore } from 'Context/entitiesStore.js'
+import { modifySize } from 'utils.js'
+import Calculation from './Calculation.js'
+import ColorPicker from './ColorPicker.js'
 
 const captionSizeModifier = 0.9
 

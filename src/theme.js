@@ -1,4 +1,4 @@
-import { deepenColor } from "utils"
+import { deepenColor } from "utils.js"
 
 const spaceModifier = 1,
 fontModifier = 1,
@@ -75,5 +75,9 @@ export default {
         zIndices: [0,1,2,3,4],
         lineHeight: ["0rem","1.4rem","1.8rem","2.2rem","2.6rem","3rem"]
     },
+    navbar: {
+        height: 30,
+        margin: 5
+    }
     
 } 

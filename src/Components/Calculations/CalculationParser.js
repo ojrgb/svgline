@@ -1,6 +1,6 @@
 import _ from "lodash"
 import {create, all} from "mathjs"
-import elementTypes from "./elementTypes"
+import elementTypes from "./elementTypes.js"
 
 function regexpReplace(str, reg, replace) {
     const regexp = new RegExp(reg,'g')
@@ -23,6 +23,9 @@ function regexpReplace(str, reg, replace) {
         })
 }
 
+const formatExpression = (expression) => {
+  return expression?.replace(/\{([^}]+)\}/,'VAR("$1")')
+}
 
 const tokenize = (text) => {
     
@@ -140,7 +143,7 @@ const createMath = (props) => {
   let math =  create(all)
   
   const {variables} = props
-
+  console.log(variables)
   const VAR = (path) => {
     const res = getVar(path)
     
@@ -153,6 +156,12 @@ const createMath = (props) => {
     if(_path[0]==="configurations") {
       
       return variables.configurations.find(v => v._id===_path[1]).sampleValue
+    }
+    if(_path[0]==="calculations") {
+      const calc = variables.calculations.find(v => v._id===_path[1])
+      const formula = formatExpression(calc.formula[0].children[0].text)
+      
+      return math.evaluate(formula)
     }
   }
 
@@ -187,7 +196,7 @@ const createMath = (props) => {
 
 const evaluate = (props) => {
   let {expression, variables} = props
-  expression = expression?.replace(/\{([^}]+)\}/,'VAR("$1")')
+  expression = formatExpression(expression)
   
   const math = createMath(props)
 

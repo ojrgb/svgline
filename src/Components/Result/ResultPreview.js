@@ -1,7 +1,7 @@
 import React from 'react'
-import theme from 'theme'
+import theme from 'theme.js'
 import styled from 'styled-components'
-import { entitiesStore } from 'Context/entitiesStore'
+import { entitiesStore } from 'Context/entitiesStore.js'
 
 
 export default function ResultPreview(props) {

@@ -1,14 +1,14 @@
 import React from 'react'
 import theme from 'theme'
 import styled from 'styled-components'
-import ConfigurationsEditor from './Configurations/ConfigurationsEditor'
-import DatasetsEditor from './Datasets/DatasetsEditor'
-import CalculationsEditor from './Calculations/CalculationsEditor'
-import ComponentsEditor from './Components/ComponentsEditor'
-import LayersEditor from './Layers/LayersEditor'
-import ItemEditor from './Item/ItemEditor'
-import ResultEditor from './Result/ResultEditor'
-import ElementsEditor from './Elements/ElementsEditor'
+import ConfigurationsEditor from './Configurations/ConfigurationsEditor.js'
+import DatasetsEditor from './Datasets/DatasetsEditor.js'
+import CalculationsEditor from './Calculations/CalculationsEditor.js'
+import ComponentsEditor from './Components/ComponentsEditor.js'
+import LayersEditor from './Layers/LayersEditor.js'
+import ItemEditor from './Item/ItemEditor.js'
+import ResultEditor from './Result/ResultEditor.js'
+import ElementsEditor from './Elements/ElementsEditor.js'
 
 const rowHeights = [2,3,5]
 

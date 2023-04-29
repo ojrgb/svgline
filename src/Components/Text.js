@@ -1,7 +1,7 @@
 import React from 'react'
-import theme from 'theme'
+import theme from 'theme.js'
 import styled from 'styled-components'
-import { applyQuickStyles, deepenColor, modifySize, relaxColor } from 'utils'
+import { applyQuickStyles, deepenColor, modifySize, relaxColor } from 'utils.js'
 
 const relaxDelta = 0.1,
     relaxTextDelta = 0.6,

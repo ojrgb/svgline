@@ -1,8 +1,8 @@
 import React from 'react'
-import Portal from 'Components/Portal';
+import Portal from 'Components/Portal.js';
 import styled from 'styled-components';
-import theme from 'theme';
-import { entitiesStore } from 'Context/entitiesStore';
+import theme from 'theme.js';
+import { entitiesStore } from 'Context/entitiesStore.js';
 
 const getSuggestionsList = (str,arr) => {
     

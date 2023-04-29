@@ -2,8 +2,8 @@ import React from 'react';
 import {EditableInput} from 'react-color/lib/components/common';
 import { ChromePicker, PhotoshopPicker, SketchPicker } from 'react-color';
 import styled from 'styled-components';
-import theme from 'theme';
-import { applyQuickStyles, modifySize, relaxColor } from 'utils';
+import theme from 'theme.js;
+import { applyQuickStyles, modifySize, relaxColor } from 'utils.js';
 
 const relaxDelta = 0.1,
     relaxTextDelta = 0.6,

@@ -1,9 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
-import Main from 'Views/Main';
-import { EntitiesStateProvider } from 'Context/entitiesStore'
-import { ContextStateProvider } from 'Context/contextStore'
-import 'globalFunctions' 
+import Main from 'Views/Main.js';
+import { EntitiesStateProvider } from 'Context/entitiesStore.js'
+import { ContextStateProvider } from 'Context/contextStore.js'
+import 'globalFunctions.js' 
 
 
 

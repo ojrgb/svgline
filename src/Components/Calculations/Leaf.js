@@ -1,7 +1,7 @@
 import React from 'react'
 import { Transforms, Range } from 'slate'
 import { ReactEditor } from 'slate-react'
-import Autocomplete from './Autocomplete'
+import Autocomplete from './Autocomplete.js'
 
 export default function Leaf (props) {
     

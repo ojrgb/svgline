@@ -1,11 +1,11 @@
 import React from 'react'
-import theme from 'theme'
+import theme from 'theme.js'
 import styled from 'styled-components'
-import Toolbar from './Toolbar'
-import { entitiesStore } from 'Context/entitiesStore'
+import Toolbar from './Toolbar.js'
+import { entitiesStore } from 'Context/entitiesStore.js'
 import _ from 'lodash'
-import { generateDeep, generateNewEntity, getNested } from 'utils'
-import ents from 'ents'
+import { generateDeep, generateNewEntity, getNested } from 'utils.js'
+import ents from 'ents.js'
 
 export default function EntityToolbar(props) {
     const {

@@ -1,8 +1,8 @@
 import React from 'react'
-import theme from 'theme'
+import theme from 'theme.js'
 import styled from 'styled-components'
-import Button from './Button'
-import { deepenColor } from 'utils'
+import Button from './Button.js'
+import { deepenColor } from 'utils.js'
 
 const Classes = {
     Root: styled.div`

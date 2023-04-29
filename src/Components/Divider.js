@@ -1,7 +1,7 @@
 import React from 'react'
-import theme from 'theme'
+import theme from 'theme.js'
 import styled from 'styled-components'
-import Space from './Space'
+import Space from './Space.js'
 
 const Classes = {
     Line: styled.div`

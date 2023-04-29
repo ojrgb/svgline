@@ -1,9 +1,9 @@
 import React from 'react'
-import theme from 'theme'
+import theme from 'theme.js'
 import styled from 'styled-components'
-import Form from './Form'
-import entities from 'ents'
-import { entitiesStore } from 'Context/entitiesStore'
+import Form from './Form.js'
+import entities from 'ents.js'
+import { entitiesStore } from 'Context/entitiesStore.js'
 
 export default function EntityForm(props) {
     const {entity, paths} = props

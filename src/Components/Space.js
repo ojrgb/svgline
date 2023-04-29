@@ -1,5 +1,5 @@
 import React from 'react'
-import theme from 'theme'
+import theme from 'theme.js'
 import styled from 'styled-components'
 
 export default function Space({children, p, py, px, pt, pr, pb, pl, m, my, mx, mt, mr, mb, ml}) {

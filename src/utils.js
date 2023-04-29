@@ -1,7 +1,7 @@
 import interpolate from "color-interpolate";
-import entities from 'ents'
+import entities from 'ents.js'
 import _ from "lodash";
-import theme from "theme";
+import theme from "theme.js";
 
 export const modifySize = (value, modifier) => {
     // if(!!!value) {

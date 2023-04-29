@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import React from 'react'
 import { Text, Transforms } from 'slate'
-import CalculationParser from './CalculationParser'
-import elementTypes from './elementTypes'
+import CalculationParser from './CalculationParser.js'
+import elementTypes from './elementTypes.js'
 
 export const handleKeyDown = (editor, event) => {
     

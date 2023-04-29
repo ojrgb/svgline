@@ -1,7 +1,11 @@
 import React from 'react'
-import theme from 'theme'
+import theme from 'theme.js'
 import styled from 'styled-components'
-import ContextEditor from 'Components/ContextWorkspace'
+import ContextEditor from 'Components/ContextWorkspace.js'
+import Navbar from 'Components/Navbar.js'
+
+const navbarHeight = theme.navbar.height;
+const navbarMargin = theme.navbar.margin;
 
 const Classes = {
     Root: styled.div`
@@ -9,16 +13,26 @@ const Classes = {
         height: 100%;
         font-family: ${theme.fonts.body.family};
         font-size: ${theme.fonts.body.size};
-        padding: ${theme.scale.space[1]};
+        padding: 0;
         
     `,
+    NavbarDivider: styled.div`
+        height: ${navbarMargin}px;
+    `,
+    ContextEditorContainer: styled.div`
+        height: calc(100% - ${navbarHeight + navbarMargin}px);
+    `
 
 }
 
 export default function Main({children}) {
     return (
         <Classes.Root>
-            <ContextEditor/>
+            <Navbar/>
+            <Classes.NavbarDivider/>
+            <Classes.ContextEditorContainer>
+                <ContextEditor/>
+            </Classes.ContextEditorContainer>
         </Classes.Root>
     )
 }

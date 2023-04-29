@@ -1,12 +1,12 @@
 import React from 'react'
-import theme from 'theme'
+import theme from 'theme.js'
 import styled from 'styled-components'
 import {
     BsPlus,
     BsDash,
     BsTrash,
     BsFilePlus
-} from 'react-icons/bs'
+} from 'react-icons'
 
 const Classes = {
     Root: styled.button`

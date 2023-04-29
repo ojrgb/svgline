@@ -1,8 +1,8 @@
 import React from 'react'
-import theme from 'theme'
+import theme from 'theme.js'
 import styled from 'styled-components'
-import Divider from './Divider'
-import { convertRemToPixels, deepenColor, modifySize } from 'utils'
+import Divider from './Divider.js'
+import { convertRemToPixels, deepenColor, modifySize } from 'utils.js'
 import _ from 'lodash'
 
 const headerSizeModifier = 1.3,

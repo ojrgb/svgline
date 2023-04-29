@@ -1,6 +1,6 @@
 import React from 'react'
-import entities from 'ents'
-import { generateDeep, generateDeepPath, generateNewEntity, getDeep, getDeepProp, getNested, normalizePaths, normalizeTarget, setDeep, trace } from 'utils'
+import entities from 'ents.js'
+import { generateDeep, generateDeepPath, generateNewEntity, getDeep, getDeepProp, getNested, normalizePaths, normalizeTarget, setDeep, trace } from 'utils.js'
 import _ from 'lodash'
 
 const initialResultParameters = {
