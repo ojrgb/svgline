@@ -1,7 +1,5 @@
 import _ from 'lodash'
 
-const { trace } = require("utils")
-
 window._ = _
 
 Object.defineProperty(Array.prototype, 'findById', {

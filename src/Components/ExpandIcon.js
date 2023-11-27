@@ -1,7 +1,7 @@
 import React from 'react'
 import theme from 'theme.js'
 import styled from 'styled-components'
-import {BsCaretRightFill} from 'react-icons/bs'
+import {BsCaretRightFill} from './Icons/Icons.js'
 
 export default function ExpandIcon({isExpanded}) {
     return (

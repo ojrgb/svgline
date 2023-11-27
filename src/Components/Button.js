@@ -6,7 +6,7 @@ import {
     BsDash,
     BsTrash,
     BsFilePlus
-} from 'react-icons'
+} from './Icons/Icons.js'
 
 const Classes = {
     Root: styled.button`
