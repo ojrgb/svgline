@@ -7,15 +7,18 @@ const initialState = {
     entity: undefined,
     paths: undefined,
     target: undefined
+  },
+  modals: {
+
   }
 }
 
 const contextStore = React.createContext(initialState)
 const {Provider} = contextStore
 
-const reducer = (state,action,override) => {
+const reducer = (_state,action,override) => {
     trace(`Executing reducer actions: ${action.type}`)
-    
+    const state = Object.assign({},_state)
     const selectionTypes = {
       configurations: 'selectedItems',
       calculations: 'selectedItems',
@@ -23,6 +26,13 @@ const reducer = (state,action,override) => {
       components: 'selectedItems',
       layers: 'selectedItems',
       elements: 'selectedItems'
+    }
+
+    if(action.type in ['OPEN_MODAL','CLOSE_MODAL','TOGGLE_MODAL']) {
+      if(state.modals[action._id] === undefined) {
+        console.log('instantiating modal ' + action._id + ' with default state of false')
+        state.modals[action._id] = false
+      }
     }
 
     const actions = {
@@ -33,6 +43,27 @@ const reducer = (state,action,override) => {
             entity: action.entity,
             paths: action.paths,
             target: action.target || action.entity
+          }
+        })
+      },
+      'OPEN_MODAL': () => {
+        return Object.assign({},state,{
+          modals: {
+            [action._id]: true
+          }
+        })
+      },
+      'CLOSE_MODAL': () => {
+        return Object.assign({},state,{
+          modals: {
+            [action._id]: false
+          }
+        })
+      },
+      'TOGGLE_MODAL': () => {
+        return Object.assign({},state,{
+          modals: {
+            [action._id]: state.modals[action._id] ? false : true
           }
         })
       }

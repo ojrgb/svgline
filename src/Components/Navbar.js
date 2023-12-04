@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { deepenColor } from 'utils.js'
 import dataService from './Data/dataService.js'
 import { entitiesStore } from 'Context/entitiesStore.js'
+import { contextStore } from 'Context/contextStore.js'
 
 const deepenDelta = 0.1,
 deepenDeltaHover = 0.01
@@ -76,10 +77,14 @@ const NavbarItem = (props) => {
 export default function Navbar (props) {
     const {height} = props
     const {entitiesState, entitiesDispatch} = React.useContext(entitiesStore)
+    const {contextState, contextDispatch} = React.useContext(contextStore)
     console.log(entitiesState)
     return (
         <Classes.Root {...{height}}>
             <NavbarButton text="file" {...{height}}>
+                <NavbarItem text="load" 
+                    onClick={async () => {contextDispatch({type: 'OPEN_MODAL', _id: 'loadPackages'})}}
+                />
                 <NavbarItem text="save" 
                     onClick={async () => {console.log(await dataService.save({item: entitiesState}))}}
                 />

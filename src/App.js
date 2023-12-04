@@ -3,6 +3,7 @@ import './App.css';
 import Main from 'Views/Main.js';
 import { EntitiesStateProvider } from 'Context/entitiesStore.js'
 import { ContextStateProvider } from 'Context/contextStore.js'
+import ModalFactory from 'Components/Dialog/ModalFactory.js'
 import 'globalFunctions.js' 
 
 
@@ -13,6 +14,7 @@ function App() {
       <EntitiesStateProvider>
         <ContextStateProvider>
           <Main/>
+          <ModalFactory/>
         </ContextStateProvider>
       </EntitiesStateProvider>
     </div>

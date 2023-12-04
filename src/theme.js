@@ -38,7 +38,7 @@ export default {
             size: `${fontModifier*0.9}rem`,
         },
         h1: {
-
+            size: `${fontModifier*2.6}rem`
         },
         h2: {
             size: `${fontModifier*2.3}rem`,
@@ -48,6 +48,9 @@ export default {
         },
         h4: {
             size: `${fontModifier*1.7}rem`,
+        },
+        h5: {
+            size: `${fontModifier*1.3}rem`,
         }
     } ,
     borders: {
