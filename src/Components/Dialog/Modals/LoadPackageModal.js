@@ -1,17 +1,30 @@
 import React from 'react';
 import Modal from '../Modal';
-import SelectableList from 'Components/SelectableList';
-import dataService from 'Components/Data/dataService';
+import EntityList from 'Components/EntityList';
+import { entitiesStore } from 'Context/entitiesStore.js'
+import { contextStore } from 'Context/contextStore.js'
+
 
 function LoadPackageModal(props) {
-  const [packageList, setPackageList] = React.useState([]); // [ {name: 'package1', id: 1}, {name: 'package2', id: 2} ]
-  const getPackageList = async () => {
-    setPackageList(dataService.getPackageList());
-  };
+  const {entitiesState,entitiesDispatch, getSingle} = React.useContext(entitiesStore)
+  const {contextState,contextDispatch} = React.useContext(contextStore)
   
+  const onConfirm = () => {
+    const targetPackage = getSingle('packages',contextState.selectedPackages.paths)
+    console.log('Loading selected packages:', targetPackage);
+    
+    entitiesDispatch({
+      type:'RESET'
+    })
+    entitiesDispatch({
+      type:'REPLACE',
+      data: targetPackage
+    })
+    props.onClose()
+  }
   return (
-    <Modal {...props}>
-        <SelectableList list={packageList}/>
+    <Modal {...props} onConfirm={onConfirm}>
+        <EntityList entity='packages' load df={Date.now()}/>
     </Modal>    
   );
 }

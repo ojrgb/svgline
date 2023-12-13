@@ -13,20 +13,23 @@ const initialState = {
   }
 }
 
+const selectionTypes = {
+  configurations: 'selectedItems',
+  calculations: 'selectedItems',
+  datasets: 'selectedItems',
+  components: 'selectedItems',
+  layers: 'selectedItems',
+  elements: 'selectedItems',
+  packages: 'selectedPackages',
+}
+
 const contextStore = React.createContext(initialState)
 const {Provider} = contextStore
 
 const reducer = (_state,action,override) => {
     trace(`Executing reducer actions: ${action.type}`)
     const state = Object.assign({},_state)
-    const selectionTypes = {
-      configurations: 'selectedItems',
-      calculations: 'selectedItems',
-      datasets: 'selectedItems',
-      components: 'selectedItems',
-      layers: 'selectedItems',
-      elements: 'selectedItems'
-    }
+    
 
     if(action.type in ['OPEN_MODAL','CLOSE_MODAL','TOGGLE_MODAL']) {
       if(state.modals[action._id] === undefined) {
@@ -37,7 +40,9 @@ const reducer = (_state,action,override) => {
 
     const actions = {
       'SET_SELECTED': () => {
-        
+        if(selectionTypes[action.entity] === undefined) {
+          console.error(`Invalid entity type ${action.entity}`)
+        }
         return Object.assign({},state,{
           [selectionTypes[action.entity]]: {
             entity: action.entity,
@@ -68,8 +73,9 @@ const reducer = (_state,action,override) => {
         })
       }
     }
-
-    return actions[action.type]()
+    const res = actions[action.type]()
+    trace(res)
+    return res
     
 }
 
@@ -78,4 +84,4 @@ const ContextStateProvider = ( { children } ) => {
     return <Provider value={{contextState: state, contextDispatch: dispatch }}>{children}</Provider>;
   };
   
-  export {contextStore, ContextStateProvider}
+  export {contextStore, ContextStateProvider, selectionTypes}

@@ -1,3 +1,4 @@
+const root = 'http://localhost:3001/api/v1/'
 const post = async (props) => {
 return await fetch(props.url, {
   method: "POST",
@@ -16,6 +17,11 @@ const save = async (props) => {
     return res.text()
 }
 
-const dataService = {save}
+const get = async (props) => {
+    const res = await fetch(root + props.entity)
+    return await res.json()
+}
+
+const dataService = {save, get}
 
 export default dataService

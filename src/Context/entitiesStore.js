@@ -58,7 +58,20 @@ const funcs = {
             ))
         return res
     },
-} 
+    load: (state,action) => {
+        const {entity, data} = action
+        const res = _.merge({},state,{[entity]:data})
+        return res
+    },
+    reset: (state,action) => {
+        return initialState
+    },
+    replace: (state,action) => {
+        return _.merge({},state,action.data);
+    }
+}
+
+
 
 const reducer = (state,action,override) => {
     trace(`Executing reducer actions: ${action.type}`)
@@ -70,6 +83,18 @@ const reducer = (state,action,override) => {
         },
         'ADD_OBJECT': () => {
             return funcs.add(state,action)
+            
+        },
+        'LOAD_OBJECTS': () => {
+            return funcs.load(state,action)
+            
+        },
+        'RESET': () => {
+            return funcs.reset(state,action)
+            
+        },
+        'REPLACE': () => {
+            return funcs.replace(state,action)
             
         }
     }

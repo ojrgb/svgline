@@ -51,6 +51,9 @@ export default {
         },
         h5: {
             size: `${fontModifier*1.3}rem`,
+        },
+        button: {
+            size: `${fontModifier*1.3}rem`,
         }
     } ,
     borders: {
@@ -81,6 +84,10 @@ export default {
     navbar: {
         height: 30,
         margin: 5
+    },
+    modal: {
+        height: 400,
+        width: 400,
+        // add other props here...
     }
-    
-} 
+}

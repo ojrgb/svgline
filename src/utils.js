@@ -26,7 +26,7 @@ export function relaxColor(color,delta) {
 }
 
 export function trace(msg) {
-    // 
+    console.log(msg)
 }
 
 export function generateNewEntity(entity, object) {

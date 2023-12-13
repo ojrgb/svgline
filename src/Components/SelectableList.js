@@ -5,7 +5,7 @@ import { deepenColor, modifySize, normalizePaths, relaxColor } from 'utils.js'
 import ExpandIcon from './ExpandIcon.js'
 import RecursiveElement from './RecursiveElement.js'
 import Space from './Space.js'
-import { contextStore } from 'Context/contextStore.js'
+import { contextStore, selectionTypes } from 'Context/contextStore.js'
 import _ from 'lodash'
 
 const deepenDelta = 0.1,
@@ -22,6 +22,7 @@ const Classes = {
         display: flex;
         flex-grow: 1;
         width: 100%;
+        height: 100%;
         box-shadow: ${theme.scale.space[1]} ${theme.scale.space[1]} ${theme.scale.space[2]} -${theme.scale.space[3]}, -${theme.scale.space[3]} -${theme.scale.space[3]} ${theme.scale.space[6]} -${theme.scale.space[8]} inset;
         flex-direction: column;
         justify-content: normal;
@@ -46,21 +47,23 @@ const Classes = {
 }
 
 function SelectableListItem(props) {
+    
     const {object, onClick, entity, isGroup, isExpanded, paths, path, target} = props
+    const selectionType = selectionTypes[entity]
     const {contextState, contextDispatch} = React.useContext(contextStore)
     const indentStartCalc = modifySize(theme.scale.space[indentStart],indentModifier)
     const levelIndent = modifySize(theme.scale.space[props.path?.length || 0],indentModifier)
     const paddingLeft = `calc(${indentStartCalc} + ${levelIndent})`
 
     const selected = 
-        _.isEqual(target,contextState?.selectedItems?.target) && 
-        _.isEqual((normalizePaths(paths) || []).concat([normalizePaths(path)]),contextState?.selectedItems?.paths)
+        _.isEqual(target,contextState?.[selectionType]?.target) && 
+        _.isEqual((normalizePaths(paths) || []).concat([normalizePaths(path)]),contextState?.[selectionType]?.paths)
     
     
 
     return (
         <Classes.Single {...{paths}} style={{paddingLeft}}
-            onClick={()=> {
+            onClick={onClick ? onClick(props) : ()=> {
                 
                 contextDispatch({
                     type: 'SET_SELECTED',
@@ -87,6 +90,7 @@ export default function SelectableList({
  target,
  paths
 }) {
+    
     return (
         <Classes.Root>
             {list?.map((object, objecti) => 
