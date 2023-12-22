@@ -2,7 +2,6 @@ import React from 'react'
 import theme from 'theme.js'
 import styled from 'styled-components'
 import { deepenColor } from 'utils.js'
-import dataService from './Data/dataService.js'
 import { entitiesStore } from 'Context/entitiesStore.js'
 import { contextStore } from 'Context/contextStore.js'
 
@@ -83,10 +82,10 @@ export default function Navbar (props) {
         <Classes.Root {...{height}}>
             <NavbarButton text="file" {...{height}}>
                 <NavbarItem text="load" 
-                    onClick={async () => {contextDispatch({type: 'OPEN_MODAL', _id: 'loadPackages'})}}
+                    onClick={async () => {contextDispatch({type: 'OPEN_MODAL', _id: 'loadPackage'})}}
                 />
                 <NavbarItem text="save" 
-                    onClick={async () => {console.log(await dataService.save({item: entitiesState}))}}
+                    onClick={async () => {contextDispatch({type: 'OPEN_MODAL', _id: 'savePackage'})}}
                 />
             </NavbarButton>
         </Classes.Root>    

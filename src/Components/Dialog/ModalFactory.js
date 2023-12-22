@@ -3,10 +3,12 @@ import React from 'react';
 import Modal from './Modal';
 import LoadPackageModal from './Modals/LoadPackageModal';
 import { contextStore } from 'Context/contextStore';
+import SavePackageModal from './Modals/SavePackageModal';
 
 const ModalFactory = () => {
   const modals = [
-    {_id: 'loadPackages', title: 'Load Packages', description: 'Select a package to load', component: <LoadPackageModal/>}
+    {_id: 'loadPackage', title: 'Load Package', description: 'Select a package to load', component: <LoadPackageModal/>},
+    {_id: 'savePackage', title: 'Save Package', description: 'Save this package', component: <SavePackageModal/>}
   ]
   const {contextState,contextDispatch} = React.useContext(contextStore)
 

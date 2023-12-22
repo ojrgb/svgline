@@ -1,5 +1,6 @@
 import React from 'react'
 import { trace } from 'utils.js'
+import { generateDeep, generateDeepPath, generateNewEntity, getDeep, getDeepProp, getNested, normalizePaths, normalizeTarget, setDeep } from 'utils.js'
 import _ from 'lodash'
 
 const initialState = {
@@ -71,7 +72,11 @@ const reducer = (_state,action,override) => {
             [action._id]: state.modals[action._id] ? false : true
           }
         })
-      }
+      },
+      'LOAD_OBJECTS': () => {
+        return Object.assign({},state,{[action.entity]:action.data})
+        
+      },
     }
     const res = actions[action.type]()
     trace(res)
@@ -80,8 +85,21 @@ const reducer = (_state,action,override) => {
 }
 
 const ContextStateProvider = ( { children } ) => {
+
+      const getList = (target, paths) => {
+            
+        return getDeepProp(state,target,paths) 
+    }
+
+    const getSingle = (target, paths) => {
+        
+        const res = getDeepProp(state,target,paths)
+        
+        return res
+    }
+
     const [state, dispatch] = React.useReducer(reducer, initialState);
-    return <Provider value={{contextState: state, contextDispatch: dispatch }}>{children}</Provider>;
+    return <Provider value={{contextState: state, contextDispatch: dispatch, getSingle, getList }}>{children}</Provider>;
   };
   
   export {contextStore, ContextStateProvider, selectionTypes}

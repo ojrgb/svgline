@@ -27,7 +27,9 @@ const generateMergeTarget = (target, paths, object) => {
 const funcs = {
     set: (state,action) => {
         const {entity, target, paths, object} = action
-        
+        if(target===undefined) {
+            return _.merge({},state,object)
+        }
         const mergeTarget = generateMergeTarget(
             target,
             paths,

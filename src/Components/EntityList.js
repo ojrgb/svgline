@@ -2,25 +2,39 @@ import React from 'react'
 import theme from 'theme.js'
 import styled from 'styled-components'
 import { entitiesStore } from 'Context/entitiesStore.js'
+import { contextStore } from 'Context/contextStore.js'
 import SelectableList from './SelectableList.js'
 import dataService from './Data/dataService.js'
 
 export default function EntityList(props) {
-    const {entity,paths,load} = props // "entity" is the entity to load, "paths" is the path to the list of objects to display, "load" is a boolean indicating whether to load the list of objects
+    const {entity,paths,load, module} = props // "entity" is the entity to load, "paths" is the path to the list of objects to display, "load" is a boolean indicating whether to load the list of objects
     const target = props.target || [entity] // This ensures that either "configurations" is the entity and target, or "elements" is the entity but "configurations.elements" is the target
+    const {entitiesDispatch,getList} = React.useContext(entitiesStore)
+    const {contextDispatch,contextState} = React.useContext(contextStore)
+    let dispatch, list
+    if(module === undefined || module === 'entity') {
+        dispatch = entitiesDispatch
+        list = getList(target,paths)
+    }
+    else if(module === 'context') {
+        dispatch = contextDispatch
+        list = contextState[entity]
+    }
+    else {
+        console.error(`Invalid module ${module} in EntityList`)
+    }
     
-    const {entitiesState,entitiesDispatch,getList} = React.useContext(entitiesStore)
-    const list = getList(target,paths)
+    
     React.useEffect(() => {
         const loadObjects = async () => {if (load) {
-            entitiesDispatch({
+            dispatch({
                 type: 'LOAD_OBJECTS',
                 entity,
                 data: await dataService.get({entity})
             })
         }}
         loadObjects()
-    },[props.df])
+    },[])
     return (
         <SelectableList 
         {...{entity,target,paths,list}} 
