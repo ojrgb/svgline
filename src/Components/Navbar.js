@@ -77,7 +77,7 @@ export default function Navbar (props) {
     const {height} = props
     const {entitiesState, entitiesDispatch} = React.useContext(entitiesStore)
     const {contextState, contextDispatch} = React.useContext(contextStore)
-    console.log(entitiesState)
+    
     return (
         <Classes.Root {...{height}}>
             <NavbarButton text="file" {...{height}}>

@@ -8,6 +8,7 @@ export default function ResultPreview(props) {
     const {entitiesState, entitiesDispatch, getSingle} = React.useContext(entitiesStore)
     const svgParams = getSingle('parameters',[0])
     const layers = entitiesState.layers
+    console.log(layers)
     
     return (
  
@@ -34,7 +35,7 @@ export default function ResultPreview(props) {
                             {
                                 layer.elements?.filter(v => !!v.type).map((element,elementi) => {
                                     return (
-                                        <element.type {...element}/>
+                                        <element.type key={elementi} {...element}/>
                                     )
                                 })
                             }

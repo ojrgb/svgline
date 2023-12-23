@@ -26,7 +26,7 @@ export function relaxColor(color,delta) {
 }
 
 export function trace(msg) {
-    console.log(msg)
+    // console.log(msg)
 }
 
 export function generateNewEntity(entity, object) {
@@ -203,4 +203,37 @@ export const applyQuickStyles = (props) => {
         ` : undefined
     }).filter(Boolean)
     
+}
+
+export function renderCalculation(calculation, p) {
+    if(calculation.text) {
+        if(isNaN(calculation.text)) {
+            return calculation.text
+        }
+        else {
+            return parseInt(calculation.text)
+        }
+    }
+    else if(calculation.children) {
+        return renderCalculation(calculation.children,p)
+    }
+    else if(typeof calculation=='array') {
+        return calculation.map(v => renderCalculation(v,p)).reduce((a,b) => a+b)
+    }
+    else {
+        return calculation
+    }
+}
+
+export function renderPackage(p) {
+    let res = Object.assign({},p);
+    let targets = ['layers','calculations']
+    targets.map((target) => {
+        res[target] = res[target].map((v,i) => {
+            return renderCalculation(v,p)
+        })
+    })
+    console.log(res)
+    return res
+
 }
