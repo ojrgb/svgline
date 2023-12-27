@@ -9,6 +9,39 @@ export default function ResultPreview(props) {
     const svgParams = getSingle('parameters',[0])
     const layers = entitiesState.layers
     console.log(layers)
+
+    const createLayers = (layers) => {
+        return layers.map(layer => createLayer(layer))
+        
+    }
+
+    const createLayer = (layer) => {
+       return (
+            <svg key={layer._id} style={{
+                backgroundColor: layer.backgroundColor,
+                width: '100%',
+                height: '100%',
+                opacity: layer.opacity ? layer.opacity/100 : 1  
+            }}>
+                <rect x="0" width="100" height="100" 
+                fill={layer.backgroundColor || 'rgba(0,0,0,0)'}
+                style={{
+                
+                }}/>
+                {
+                    layer.elements?.filter(v => !!v.type).map((element,elementi) => {
+                        return (
+                            <element.type key={elementi} {...element}/>
+                        )
+                    })
+                }
+            </svg>  
+       )
+    }
+
+    const createElement = (element) => {
+
+    }
     
     return (
  
@@ -19,29 +52,7 @@ export default function ResultPreview(props) {
                 }}
                 viewBox={`0 0 ${{'1-1': '100', '4-3': 100*4/3}[svgParams.ratio]} ${{'1-1': '100', '4-3': '100'}[svgParams.ratio]}`}
             >
-                {
-                    layers.map((layer, layeri) => 
-                        <svg key={layeri} style={{
-                            backgroundColor: layer.backgroundColor,
-                            width: '100%',
-                            height: '100%',
-                            opacity: layer.opacity ? layer.opacity/100 : 1  
-                        }}>
-                            <rect x="0" width="100" height="100" 
-                            fill={layer.backgroundColor || 'rgba(0,0,0,0)'}
-                            style={{
-                              
-                            }}/>
-                            {
-                                layer.elements?.filter(v => !!v.type).map((element,elementi) => {
-                                    return (
-                                        <element.type key={elementi} {...element}/>
-                                    )
-                                })
-                            }
-                        </svg>  
-                    )
-                }
+                
             
             </svg>
        
