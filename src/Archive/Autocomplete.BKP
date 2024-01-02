@@ -1,0 +1,135 @@
+import React from 'react'
+import Portal from 'Components/Portal.js';
+import styled from 'styled-components';
+import theme from 'theme.js';
+import { entitiesStore } from 'Context/entitiesStore.js';
+
+const getSuggestionsList = (str,arr) => {
+    
+    
+    let res = [...arr]
+    if(!str || str.length===0) {
+        return res 
+    }
+    const parts = str.split('.')
+    parts.forEach((part,parti) => {
+        if(parti<parts.length-1) {
+            // This part handles cases where the string part isn't the end. for example CALCULATIONS.CAL
+            const match = res.find(v => v._id===part)
+            if(match) {
+                res = match.children
+            }
+        }
+        else {
+            if (part.length===0) {
+                res = res // returns the list
+            }
+            else {
+                res = res.filter(v => v._id.indexOf(part)===0)
+            }
+        }
+    })
+    return res
+}
+
+const Classes = {
+    SuggestionsList: styled.div`
+        display: flex;
+        flex-direction: column;
+        cursor: default;
+        user-select: none;
+    `,
+    ListItem: styled.div<{active?: boolean}>`
+        padding: 4px;
+        color: ${theme.colors.text.secondary};
+        font-family: ${theme.fonts.code.family};
+        font-size: ${theme.fonts.code.size};
+        border: ${theme.borders.primary.width} ${theme.borders.primary.style} ${theme.borders.primary.color};
+        ${props => props.active && `
+            background-color: #6b98c9;;
+            color: white;
+            font-weight: bold;
+        `}
+    `
+}
+
+const ListItem = ({onMouseOver, onClick, active, children}) => {
+    return (
+     <Classes.ListItem {...{onClick,onMouseOver,active}}>
+        {children}
+     </Classes.ListItem>   
+    )
+}
+
+const generateSuggestionsMaster = (entitiesState) => {
+    return Object.keys(entitiesState).map(v=>({
+        _id: v,
+        children: entitiesState[v]
+    }))
+} 
+
+// const suggestions = [
+//     {
+//         _id:'CALCULATIONS',
+//         type: 'list',
+//         children: [
+//             {
+//                 _id: 'CALCULATION1',
+//                 type: 'string',
+//             },
+//             {
+//                 _id: 'CALCULATION2',
+//                 type: 'string',
+//             },
+//             {
+//                 _id: 'TEST',
+//                 type: 'string',
+//             }
+//         ]
+//     }
+// ]
+
+
+export default function Autocomplete (props) {
+    const {input, onSelect} = props
+    const [active,setActive] = React.useState(0)
+    const {entitiesState} = React.useContext(entitiesStore)
+    const suggestions = generateSuggestionsMaster(entitiesState)
+    if(!suggestions || !onSelect) {
+        return "No input or onSelect!"
+    }
+    
+    const res = getSuggestionsList(input,suggestions)
+    const selection = window?.getSelection();
+    
+    const range = selection.type!== 'None' ? selection?.getRangeAt(0) : undefined
+    const rect = range?.getBoundingClientRect();
+    
+    return (
+        <Portal>
+            <div style={{
+                position: 'absolute',
+                top: rect?.y || '50%',
+                left: rect?.x || '50%',
+
+                zIndex: 99,
+                background: 'white',
+                transform: 'translate(0px,1.2rem)'
+            }}>
+                <Classes.SuggestionsList>
+                    {
+                        res.map((v,i) => 
+                            <ListItem key={i} onClick={(e) => {
+                                onSelect(v)
+                            }}
+                            onMouseOver={(e) => {
+                                setActive(i)
+                            }}
+                            active={active===i}>{v._id}</ListItem>    
+                        )
+                    }
+                </Classes.SuggestionsList>
+            </div>
+        </Portal>
+    )
+}

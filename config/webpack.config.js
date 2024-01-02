@@ -229,6 +229,8 @@ export default function (webpackEnv) {
         : isEnvDevelopment &&
           (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
     },
+    // Enable sourcemaps for debugging webpack's output.
+    devtool: "source-map",
     cache: {
       type: 'filesystem',
       version: createEnvironmentHash(env.raw),

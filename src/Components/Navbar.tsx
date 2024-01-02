@@ -1,0 +1,104 @@
+import React from 'react'
+import theme from 'theme'
+import styled from 'styled-components'
+import { deepenColor } from 'utils'
+import { entitiesStore } from 'Context/entitiesStore'
+import { contextStore } from 'Context/contextStore'
+
+const deepenDelta = 0.1,
+deepenDeltaHover = 0.01
+
+const Classes = {
+    Root: styled.div<{
+        height: number;
+    }>`
+        height: ${theme.navbar.height}px;
+        background-color: ${deepenColor(theme.colors.primary,deepenDelta)};
+        border-bottom: ${theme.borders.primary.width} ${theme.borders.primary.style} ${deepenColor(theme.borders.primary.color,deepenDelta)};
+        display: flex;
+        justify-content: flex-start;
+        font-size: ${props => props.height*0.5}px;
+        color: ${theme.colors.text.primary};
+        
+    `,
+    NavbarButtonContainer: styled.div`
+        display: flex;
+        
+        cursor: default;
+        flex-direction: column;
+        height: ${theme.navbar.height}px;
+        &:hover {
+            background-color: ${deepenColor(theme.colors.primary,deepenDeltaHover)};
+            
+        }
+        z-index: 9999;
+    `,
+    NavbarButton: styled.div`
+        padding-left: ${theme.scale.space[3]};
+        padding-right: ${theme.scale.space[3]};
+        height: ${theme.navbar.height}px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        background-color: ${deepenColor(theme.colors.primary,deepenDelta)};
+        border-bottom: ${theme.borders.primary.width} ${theme.borders.primary.style} ${deepenColor(theme.borders.primary.color,deepenDelta)};
+    `,
+    NavbarListContainer: styled.div<{
+        active?: boolean;
+    
+    }>`
+        display: ${props => props.active ? 'flex' : 'none'};
+        border: ${theme.borders.primary.width} ${theme.borders.primary.style} ${deepenColor(theme.borders.primary.color,deepenDelta)};
+    `,
+    NavbarTextContainer: styled.div`
+        
+    `
+}
+
+const NavbarButton = (props: {
+    text: string;
+    children: React.ReactNode;
+}) => {
+    const [active,setActive] = React.useState(false)
+
+    return (
+        <Classes.NavbarButtonContainer className="navbar-button-container" onClick={() => {setActive(!active)}}>
+            <Classes.NavbarButton className="navbar-button">
+                <Classes.NavbarTextContainer className="navbar-text-container">{props.text}</Classes.NavbarTextContainer>
+            </Classes.NavbarButton>
+            <Classes.NavbarListContainer className="navbar-list-container" active={active}>
+                {props.children}
+            </Classes.NavbarListContainer>
+        </Classes.NavbarButtonContainer>
+    )
+}
+
+const NavbarItem = (props: {
+    text: string;
+    onClick: () => void;
+}) => {
+    return (
+        <Classes.NavbarButton className="navbar-item-button" onClick={props.onClick}>
+            <Classes.NavbarTextContainer className="navbar-item-text-container">{props.text}</Classes.NavbarTextContainer>
+        </Classes.NavbarButton>
+    )
+}
+
+export default function Navbar (props) {
+    const {height} = props
+    const {entitiesState, entitiesDispatch} = React.useContext(entitiesStore)
+    const {contextState, contextDispatch} = React.useContext(contextStore)
+    
+    return (
+        <Classes.Root {...{height}} id="navbar">
+            <NavbarButton text="file" {...{height}}>
+                <NavbarItem text="load" 
+                    onClick={async () => {contextDispatch({type: 'OPEN_MODAL', _id: 'loadPackage'})}}
+                />
+                <NavbarItem text="save" 
+                    onClick={async () => {contextDispatch({type: 'OPEN_MODAL', _id: 'savePackage'})}}
+                />
+            </NavbarButton>
+        </Classes.Root>    
+    )
+}
