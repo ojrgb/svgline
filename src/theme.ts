@@ -25,6 +25,7 @@ export default {
         background:"#515151",
         green: "#00870e",
         red: "#910000",
+        error: "#9f0000",
         deepen: (new Array(11)).fill(undefined).map((v,i) => {return i/10})
     },    
     fonts: {

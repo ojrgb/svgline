@@ -12,11 +12,11 @@ const relaxDelta = 0.1,
     deepenBorderDelta = 0.1
 
 const Classes = {
-    Root: styled.div`
+    Root: styled.div.attrs({className: 'color-picker-root'})`
         position: relative;
         display: flex;
     `,
-    Input: styled.input`
+    Input: styled.input.attrs({className: 'color-picker-input'})`
         ${applyQuickStyles}
         background-color: ${relaxColor(theme.colors.primary,relaxDelta)}; 
         color: ${relaxColor(theme.colors.text.primary,relaxTextDelta)};
@@ -26,13 +26,13 @@ const Classes = {
             border: ${modifySize(theme.borders.primary.width,borderThicknessDelta)} inset ${relaxColor(theme.borders.primary.color,relaxBorderDelta)};
             outline: none;
         }
-        
+        width:70%;
     `,
-    SketchContainer: styled.div`
+    SketchContainer: styled.div.attrs({className: 'color-picker-sketch-container'})`
         position: absolute;
         z-index: ${theme.scale.zIndices[2]}
     `,
-    SketchCover: styled.div `
+    SketchCover: styled.div.attrs({className: 'color-picker-sketch-cover'})`
         position: fixed;
         top: 0px;
         right: 0px;

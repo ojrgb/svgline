@@ -41,7 +41,7 @@ const reducer = (_state: any, action: any) => {
 
     const actions = {
       'SET_SELECTED': () => {
-        console.info(`Setting selected`,action)
+        
         if(selectionTypes[action.entity] === undefined) {
           console.error(`Invalid entity type ${action.entity}`)
         }

@@ -7,7 +7,8 @@ export default {
             {
                 _id: '_id',
                 name: 'Identifier',
-                type: 'identifier'
+                type: 'identifier',
+                mandatory: true,
             }, 
             {
                 _id: 'name',
@@ -27,17 +28,20 @@ export default {
                         _id: 'color',
                         name: 'Color'
                     }
-                ]
+                ],
+                mandatory: true,
             },
             {
                 _id: 'defaultValue',
                 name: 'Default Value',
-                type: 'string'
+                type: 'string',
+                mandatory: true,
             },
             {
                 _id: 'sampleValue',
                 name: 'Sample Value',
-                type: 'string'
+                type: 'string',
+                mandatory: true,
             },
         ]
     },
@@ -48,11 +52,13 @@ export default {
         attributes: [
             {
                 _id: '_id',
-                type: 'identifier'
+                type: 'identifier',
+                mandatory: true,
             }, 
             {
                 _id: 'name',
-                type: 'string'
+                type: 'string',
+                mandatory: true,
             },
         ]
     },
@@ -63,11 +69,13 @@ export default {
         attributes: [
             {
                 _id: '_id',
-                type: 'identifier'
+                type: 'identifier',
+                mandatory: true,
             }, 
             {
                 _id: 'formula',
-                type: 'calculation'
+                type: 'calculation',
+                
             },
         ]
     },
@@ -93,11 +101,13 @@ export default {
         attributes: [
             {
                 _id: '_id',
-                type: 'identifier'
+                type: 'identifier',
+                mandatory: true,
             }, 
             {
                 _id: 'name',
-                type: 'string'
+                type: 'string',
+                mandatory: true,
             },
             {
                 _id: 'backgroundColor',
@@ -112,7 +122,8 @@ export default {
             {
                 _id: 'elements',
                 type: 'array',
-                defaultValue: []
+                defaultValue: [],
+                visible: false,
             }
         ]
     },
@@ -123,7 +134,8 @@ export default {
         attributes: [
             {
                 _id: '_id',
-                type: 'identifier'
+                type: 'identifier',
+                mandatory: true,
             }, 
             {
                 _id: 'name',
@@ -150,7 +162,8 @@ export default {
                         _id: 'polygon',
                         name: 'Polygon',
                     },
-                ]
+                ],
+                mandatory: true,
             },
             {
                 _id: 'stroke',
@@ -259,11 +272,13 @@ export default {
         attributes: [
             {
                 _id: '_id',
-                type: 'identifier'
+                type: 'identifier',
+                mandatory: true,
             }, 
             {
                 _id: 'name',
-                type: 'string'
+                type: 'string',
+                mandatory: true,
             },
             {
                 _id: 'ratio',
@@ -275,7 +290,7 @@ export default {
                     _id:'4-3',
                     name: '4:3'
                 }],
-                
+                mandatory: true,
             }
         ]
     }

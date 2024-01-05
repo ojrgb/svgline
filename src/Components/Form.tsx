@@ -32,7 +32,16 @@ const Classes = {
         user-select: none;
         font-size: ${modifySize(theme.fonts.code.size,captionSizeModifier)};
         text-align: left;
-    `
+    `,
+    InputFieldContainer: styled.div`
+        display: flex;
+        justify-content: flex-start;
+    `,
+    InputFieldElementContainer: styled.div<{valid: boolean}>`
+        ${props => props.valid ? `border-right: 3px solid rgba(0,0,0,0);` : `border-right: 3px solid ${theme.colors.error};`}
+        width: 70%;
+    `,
+    
 
 }
 
@@ -67,10 +76,11 @@ function Field(props: React.HTMLAttributes<HTMLDivElement> & React.PropsWithChil
         w?: number,
         onChange?: (v: any) => void,
         onBlur?: () => void,
-        immediate?: boolean
+        immediate?: boolean,
+        mandatory?: boolean
     }>
     ) {
-        const {children, value, attribute, w, onChange, onBlur, immediate} = props
+        const {children, value, attribute, w, onChange, onBlur, immediate, mandatory} = props
     return (
         <Classes.Single {...{w}}>
             {React.Children.map(children,(child) => {
@@ -80,7 +90,8 @@ function Field(props: React.HTMLAttributes<HTMLDivElement> & React.PropsWithChil
                         attribute,
                         onChange,
                         onBlur,
-                        immediate
+                        immediate,
+                        mandatory
                     })
             })}
         </Classes.Single>
@@ -99,9 +110,11 @@ function Input(props: React.HTMLAttributes<HTMLInputElement> & React.PropsWithCh
     onChange?: (v: any) => void,
     onBlur?: () => void,
     immediate?: boolean,
+    mandatory? :boolean,
     value?: any
 }>) {
-    const {type, options, onBlur, immediate, value} = props
+    const {type, options, onBlur, immediate, mandatory, value} = props
+    console.log('This is the mandatory:', mandatory)
     const onChange = (v: any) => {
         props.onChange && props.onChange(props.type==='calculation' ? {value: v, type: props.type} : v)
     }
@@ -119,7 +132,12 @@ function Input(props: React.HTMLAttributes<HTMLInputElement> & React.PropsWithCh
         return (<div>{`Couldn't find field for type: ${props.type}`}</div>)
     }
     return (
-        <InputField {...selectedProps} w={7}/>
+        <Classes.InputFieldContainer>
+            <Classes.InputFieldElementContainer valid={
+                // Implement mandatory check below.
+                (mandatory!==true || (value?.length>0))
+            }><InputField {...selectedProps} w={10}/></Classes.InputFieldElementContainer>
+        </Classes.InputFieldContainer>
     )
 }
 

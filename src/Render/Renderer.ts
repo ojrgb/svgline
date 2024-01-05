@@ -55,7 +55,7 @@ function renderRecursive(object: any, p: any) {
       res = parseFloat(object.value)
     }
     else if (Array.isArray(object)) {
-      console.log('Array!',object)
+      
       res = object.map((v,i) => {
         return renderRecursive(v,p)
       })
@@ -69,23 +69,23 @@ function renderRecursive(object: any, p: any) {
         
     }
     else {
-      console.log('Received empty!',object)
+      
       
     }
   }
   if(res === undefined) {
-    console.log('Hol up! I got undefined for this guy: ',object)
+    
   }
   return res
 }
 
 function renderPackage(p: any) {
     let res = Object.assign({},p);
-    console.log('Rendering package.')
+    
     let targets = ['calculations','layers']
     targets.map((target) => {
         res[target] = renderRecursive(res[target],res)
-        console.log('New res',res)
+        
     })
   
     return res
