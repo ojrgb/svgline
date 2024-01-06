@@ -114,7 +114,7 @@ function Input(props: React.HTMLAttributes<HTMLInputElement> & React.PropsWithCh
     value?: any
 }>) {
     const {type, options, onBlur, immediate, mandatory, value} = props
-    console.log('This is the mandatory:', mandatory)
+    
     const onChange = (v: any) => {
         props.onChange && props.onChange(props.type==='calculation' ? {value: v, type: props.type} : v)
     }

@@ -16,7 +16,7 @@ export default function CalculationsEditor(props) {
             <Box.Content>
                 <EntityList entity="calculations"/>
                 <Space py={2}/>
-                <EntityToolbar entity="calculations" add remove/>
+                <EntityToolbar entity="calculations" add remove moveUp moveDown duplicate addGroup/>
             </Box.Content>
         </Box>
     )

@@ -72,7 +72,105 @@ const funcs = {
     },
     replace: (state,action) => {
         return _.merge({},state,action.data);
-    }
+    },
+    moveUp: (state,action) => {
+        const {entity, target, paths} = action
+        const _paths = normalizePaths(paths)
+        const curList = getDeepProp(state,target,paths)
+        const index = _paths.pop()
+        const newIndex = index - 1
+        const res = _.merge(
+            {},
+            state,
+            generateMergeTarget(
+                target,
+                _paths,
+                {[newIndex]: curList[index]}
+            ))
+        return res
+    },
+    moveDown: (state,action) => {
+        const {entity, target, paths} = action
+        const _paths = normalizePaths(paths)
+        const curList = getDeepProp(state,target,paths)
+        const index = _paths.pop()
+        const newIndex = index + 1
+        const res = _.merge(
+            {},
+            state,
+            generateMergeTarget(
+                target,
+                _paths,
+                {[newIndex]: curList[index]}
+            ))
+        return res
+    },
+    remove: (state,action) => {
+        const {entity, target, paths} = action
+        const _paths = normalizePaths(paths)
+        const curList = getDeepProp(state,target,paths)
+        const index = _paths.pop()
+        const res = _.merge(
+            {},
+            state,
+            generateMergeTarget(
+                target,
+                _paths,
+                {[index]: undefined}
+            ))
+        return res
+    },
+    duplicate: (state,action) => {
+        const {entity, target, paths} = action
+        const _paths = normalizePaths(paths)
+        const curList = getDeepProp(state,target,undefined)
+        const curObject = getDeepProp(state,target,_paths)
+        const newList = curList.concat([curObject])
+        console.log(generateMergeTarget(
+            target,
+            [],
+            newList
+        ))
+        const res = _.merge(
+            {},
+            state,
+            generateMergeTarget(
+                target,
+                [],
+                newList
+            ))
+        return res
+    },
+    addLoop: (state,action) => {
+        const {entity, target, paths} = action
+        const _paths = normalizePaths(paths)
+        const curList = getDeepProp(state,target,paths)
+        const index = _paths.pop()
+        const res = _.merge(
+            {},
+            state,
+            generateMergeTarget(
+                target,
+                _paths,
+                {[index]: undefined}
+            ))
+        return res
+    },
+    addGroup: (state,action) => {
+        const {entity, target, paths} = action
+        const _paths = normalizePaths(paths)
+        const curList = getDeepProp(state,target,paths)
+        const index = _paths.pop()
+        const res = _.merge(
+            {},
+            state,
+            generateMergeTarget(
+                target,
+                _paths,
+                {[index]: undefined}
+            ))
+        return res
+    },
 }
 
 
@@ -100,7 +198,32 @@ const reducer = (state: any, action: any) => {
         'REPLACE': () => {
             return funcs.replace(state,action)
             
-        }
+        },
+        'MOVE_UP': () => {
+            return funcs.moveUp(state,action)
+            
+        },
+        'MOVE_DOWN': () => {
+            return funcs.moveDown(state,action)
+            
+        },
+        'REMOVE': () => {
+            return funcs.remove(state,action)
+            
+        },
+        'DUPLICATE': () => {
+            return funcs.duplicate(state,action)
+            
+        },
+        'ADD_LOOP': () => {
+            return funcs.addLoop(state,action)
+            
+        },
+        'ADD_GROUP': () => {
+            return funcs.addGroup(state,action)
+            
+        },
+
     }
     const res = actions[action.type]()
     

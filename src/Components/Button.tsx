@@ -5,7 +5,14 @@ import {
     BsPlus,
     BsDash,
     BsTrash,
-    BsFilePlus
+    BsFilePlus,
+    BsBasket3,
+    BsArrowCounterclockwise,
+    BsArrowUp,
+    BsArrowDown,
+    BsCopy,
+    BsCaretUp,
+    BsCaretDown
 } from './Icons/Icons'
 
 const Classes = {
@@ -29,6 +36,11 @@ export default function Button(props) {
 
     const icons = {
         plus: BsPlus,
+        "plus-loop": BsArrowCounterclockwise,
+        "plus-group": BsBasket3,
+        "move-up": BsCaretUp,
+        "move-down": BsCaretDown,
+        duplicate: BsCopy,
         minus: BsDash,
         remove: BsTrash,
         add: BsFilePlus

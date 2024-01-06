@@ -7,7 +7,7 @@ import theme from 'theme';
 
 const Classes = {
     Root: styled.div.attrs({className: 'calculation-root'})`
-      width: 70%; 
+      
     `,
     Editor: styled.div.attrs({className: 'calculation-editor'})`
       &>* {
