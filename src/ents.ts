@@ -3,6 +3,7 @@ export default {
         _id: 'configuration',
         nameSingle: 'Configuration',
         namePlural: 'Configurations',
+        shortName: 'config',
         attributes: [
             {
                 _id: '_id',
@@ -49,6 +50,7 @@ export default {
         _id: 'dataset',
         nameSingle: 'Dataset',
         namePlural: 'Datasets',
+        shortName: 'dataset',
         attributes: [
             {
                 _id: '_id',
@@ -66,6 +68,7 @@ export default {
         _id: 'calculation',
         nameSingle: 'Calculation',
         namePlural: 'Calculations',
+        shortName: 'calc',
         attributes: [
             {
                 _id: '_id',
@@ -83,6 +86,7 @@ export default {
         _id: 'component',
         nameSingle: 'Component',
         namePlural: 'Components',
+        shortName: 'comp',
         attributes: [
             {
                 _id: '_id',
@@ -98,6 +102,7 @@ export default {
         _id: 'layer',
         nameSingle: 'Layer',
         namePlural: 'Layers',
+        shortName: 'layer',
         attributes: [
             {
                 _id: '_id',
@@ -131,6 +136,7 @@ export default {
         _id: 'element',
         nameSingle: 'Element',
         namePlural: 'Elements',
+        shortName: 'element',
         attributes: [
             {
                 _id: '_id',
@@ -269,6 +275,7 @@ export default {
         _id: 'parameter',
         nameSingle: 'Parameter',
         namePlural: 'Parameters',
+        shortName: 'param',
         attributes: [
             {
                 _id: '_id',

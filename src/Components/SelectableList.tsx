@@ -7,6 +7,7 @@ import RecursiveElement from './RecursiveElement'
 import Space from './Space'
 import { contextStore, selectionTypes } from 'Context/contextStore'
 import _ from 'lodash'
+import ents from 'ents'
 
 const deepenDelta = 0.1,
     relaxDelta = 0.1,
@@ -33,6 +34,7 @@ const Classes = {
         selected?: boolean;
       
     }>`
+        display: flex;
         width: 100%;
         text-align: left;
         cursor: pointer;
@@ -45,7 +47,18 @@ const Classes = {
                 background-color: ${relaxColor(theme.colors.primary,relaxDelta)};
             `
         )}
+    `,
+    ShortName: styled.div.attrs({className:'short-name'})`
+        font-family: ${theme.fonts.code.family};
+        font-size: ${theme.fonts.code.size};
+        margin-left: ${theme.scale.space[3]};
+        background-color: ${theme.colors.primary};
+        border-radius: ${theme.borders.primary.radius};
+        padding-left: ${theme.scale.space[2]};
+        padding-right: ${theme.scale.space[2]};
+        border: ${theme.borders.primary.width} ${theme.borders.primary.style} ${theme.borders.primary.color};
     `
+    
  
 }
 
@@ -65,7 +78,7 @@ function SelectableListItem(props: {
     const indentStartCalc = modifySize(theme.scale.space[indentStart],indentModifier)
     const levelIndent = modifySize(theme.scale.space[props.path?.length || 0],indentModifier)
     const paddingLeft = `calc(${indentStartCalc} + ${levelIndent})`
-
+    const config = ents[entity]
     const selected = 
         _.isEqual(target,contextState?.[selectionType]?.target) && 
         _.isEqual((normalizePaths(paths) || []).concat([normalizePaths(path)]),contextState?.[selectionType]?.paths)
@@ -90,7 +103,7 @@ function SelectableListItem(props: {
             }
         >
                 {isGroup && <ExpandIcon isExpanded={isExpanded}/>}
-                <span>{object.name || object._id || '(null)'}</span>
+                <span>{object.name || object._id || '(null)'}</span>{config?.shortName && <Classes.ShortName>{config.shortName}</Classes.ShortName>}
         </Classes.Single>
     )
 }
