@@ -15,6 +15,10 @@ export default class Entity {
         return this.parent;
     }
 
+    public setParent(parent: Entity): void {
+        this.parent = parent;
+    }
+
     public addToSet(set: string, child: Entity): void {
         if(!this[set]) {
             console.error(`set ${set} does not exist`);
@@ -67,6 +71,46 @@ export default class Entity {
         this[set] = newSet;
 
     }
-
     
+    public get(attribute?: string): any {
+        if(!attribute) {
+            return this;
+        }
+        if(!this[attribute]) {
+            console.error(`attribute ${attribute} does not exist`);
+        }
+        if(this[attribute] instanceof Attribute) {
+            const attr: Attribute = this[attribute];
+            return attr.get();
+        }
+        return this[attribute];
+    }
+
+    public toJSON(): any {
+        let result: any = {};
+        for(let key in this) {
+            if(key === 'parent') {
+                continue;
+            }
+            let target: any = this.get(key)
+            if(target instanceof Entity) {
+                result[key] = target.toJSON();
+                continue;
+            }
+            if(Array.isArray(target)) {
+                result[key] = target.map((element: Entity) => element.toJSON());
+                continue;
+            }
+            if(target instanceof Attribute) {
+                result[key] = target.toJSON();
+                continue;
+            }
+            result[key] = this.get(key);
+        }
+        return result;
+    }
+
+    public keys(): string[] {
+        return Object.keys(this);
+    }
 }

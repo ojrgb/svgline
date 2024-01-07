@@ -2,8 +2,6 @@ import Attribute from "./Attribute";
 import Entity from "./Entity";
 
 export default class Element extends Entity {
-    _id: number;
-    parent: Element;
     type: Attribute = new Attribute({
         _id: 'type',
         name: 'Type',
@@ -34,7 +32,6 @@ export default class Element extends Entity {
         mandatory: true,
         conditions: props => (['polygon','rect','line','circle'].indexOf(props.type)>-1)
     });
-
     fill: Attribute = new Attribute({
         _id: 'fill',
         name: 'Fill',
@@ -148,8 +145,48 @@ export default class Element extends Entity {
         conditions: props => (['text'].indexOf(props.type)>-1)
     });
 
-    constructor(_id: number, parent?: Element) {
-        super(_id,parent);
-        
+    constructor(props: {
+        _id: string, 
+        parent?: Element, 
+        type: 'polygon' | 'rect' | 'line' | 'circle' | 'text',
+        stroke?: string,
+        strokeWidth?: string,
+        fill?: string,
+        opacity?: string,
+        x?: string,
+        y?: string,
+        width?: string,
+        height?: string,
+        radius?: string,
+        x1?: string,
+        y1?: string,
+        x2?: string,
+        y2?: string,
+        cx?: string,
+        cy?: string,
+        rx?: string,
+        ry?: string,
+        text?: string
+    }) {
+        super(props._id,props.parent);
+        this.type.value = props.type;
+        this.stroke.value = props.stroke;
+        this.strokeWidth.value = props.strokeWidth;
+        this.fill.value = props.fill;
+        this.opacity.value = props.opacity;
+        this.x.value = props.x;
+        this.y.value = props.y;
+        this.width.value = props.width;
+        this.height.value = props.height;
+        this.radius.value = props.radius;
+        this.x1.value = props.x1;
+        this.y1.value = props.y1;
+        this.x2.value = props.x2;
+        this.y2.value = props.y2;
+        this.cx.value = props.cx;
+        this.cy.value = props.cy;
+        this.rx.value = props.rx;
+        this.ry.value = props.ry;
+        this.text.value = props.text;
     }
 }
