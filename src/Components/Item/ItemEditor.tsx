@@ -3,14 +3,13 @@ import theme from 'theme'
 import styled from 'styled-components'
 import Box from 'Components/Box'
 import Toolbar from '../Toolbar'
-import EntityList from 'Components/EntityList'
 import Space from 'Components/Space'
 import EntityToolbar from 'Components/EntityToolbar'
 import { contextStore } from 'Context/contextStore'
 import entities from 'ents'
 import { deepenColor } from 'utils'
 import EntityForm from 'Components/EntityForm'
-import { entitiesStore } from 'Context/entitiesStore'
+import Entity from 'Model/Entity'
 
 const deepenDelta = 0.5,
     noSelectionBlurModifier = 1.3
@@ -25,18 +24,20 @@ const Classes = {
     
 }
 
-export default function ItemEditor(props) {
-    const {contextState, contextDispatch} = React.useContext(contextStore)
-    const {getSingle, getNestedEntity} = React.useContext(entitiesStore)
-    const {selectedItems} = contextState
-    const {entity, paths, target} = selectedItems
-    
-    const object = (target && paths) ? getSingle(target, paths) : undefined
+export default function ItemEditor(props: {
+    w: number
+    h: number
+
+}) {
     
     
-    
+    const {contextState,contextDispatch} = React.useContext(contextStore)
+
+    const {selected} = contextState
+    const selectionType: 'none' | 'single' | 'multiple' = selected.length===0 ? 'none' : selected.length===1 ? 'single' : 'multiple'
+    const entity: Entity = selectionType==='single' ? selected[0] : null
     return (
-        <Box {...props} headerLocation="left-top" z={9}>
+        <Box w={props.w} h={props.h} headerLocation="left-top" z={9}>
             <Box.Header>
                 Edit Panel    
             </Box.Header>    
@@ -44,34 +45,32 @@ export default function ItemEditor(props) {
                 <Box depth={2} headerLocation="top-left" w={10} h={10}>
                     <Box.Header>
                         {
-                            !!!object ? ( 
+                            selectionType==='none' ? ( 
                                 'No selection'
                             ) : (
-                                paths.length>100 ? (
+                                selectionType==='multiple' ? (
                                     'Multiple selection'
                                 ) : (
-                                    `Editing ${object._id}`
+                                    `Editing ${entity._id.get()}`
                                 )
                             )
                         }
                     </Box.Header>
                     <Box.Content>
                         {
-                            !!!object ? (
+                            selectionType==='none' ? (
                                 <Classes.PlaceholderText>
                                     No selection
                                 </Classes.PlaceholderText>
                             ) : (
-                                paths.length>100 ? (
+                                selectionType==='multiple' ? (
                                     <Classes.PlaceholderText>
                                         Multiple selection
                                     </Classes.PlaceholderText>
                                 ) : (
                                     <EntityForm
-                                        key={`${entity}-${paths.join('-')}`} 
-                                        target={target}
+                                        key={entity.internalId} 
                                         entity={entity} 
-                                        paths={paths}
                                     />        
                                 )
                             )

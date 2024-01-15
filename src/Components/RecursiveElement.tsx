@@ -1,33 +1,33 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import theme from 'theme.js'
 import styled from 'styled-components'
+import Entity from 'Model/Entity'
 
 export default function RecursiveElement(props: {
-    element: any,
-    children?: any[],
-    path: number[],
-    paths?: any[],
+    element: ReactNode,
+    
 }) {
-    const {element, children} = props;
-    const path = props.path; // you must pass the path to the first recursive element. Would normally be an array with a single member denoting the index of the element in the parent array
-    const Element = element
-    if(children && children.length>0) {
-        return (
-            <Element {...props} isGroup {...{path}}>
-                {children?.map((v,i) => 
-                    <RecursiveElement 
-                        {...props} 
-                        children={undefined}
-                        {...v}
-                        path={[...path].concat([i])}
-                    />
-                )}
-            </Element>
-        )
-    }
-    else {
-        return (
-            <Element {...props} {...{path}}/>
-        )
-    }
+    
+    
+    
+    // if(children && children.length>0) {
+    //     return (
+    //         <Element {...props} isGroup {...{path}}>
+    //             {children?.map((v,i) => 
+    //                 <RecursiveElement 
+    //                     {...props} 
+    //                     children={undefined}
+    //                     {...v}
+    //                     path={[...path].concat([i])}
+    //                 />
+    //             )}
+    //         </Element>
+    //     )
+    // }
+    // else {
+    //     return (
+    //         <Element {...props} {...{path}}/>
+    //     )
+    // }
+    return <div/>
 }

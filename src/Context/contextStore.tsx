@@ -2,32 +2,26 @@ import React from 'react'
 import { trace } from 'utils'
 import { generateDeep, generateDeepPath, generateNewEntity, getDeep, getDeepProp, getNested, normalizePaths, normalizeTarget, setDeep } from 'utils'
 import _ from 'lodash'
+import Entity from 'Model/Entity'
 
 const initialState = {
-  selectedItems: {
-    entity: undefined,
-    paths: undefined,
-    target: undefined
-  },
+  selected: [],
   modals: {
 
   }
 }
 
-const selectionTypes = {
-  configurations: 'selectedItems',
-  calculations: 'selectedItems',
-  datasets: 'selectedItems',
-  components: 'selectedItems',
-  layers: 'selectedItems',
-  elements: 'selectedItems',
-  packages: 'selectedPackages',
-}
 
 const contextStore = React.createContext(undefined)
 const {Provider} = contextStore
 
-const reducer = (_state: any, action: any) => {
+const reducer = (_state: any, action: {
+  type: 'OPEN_MODAL'|'CLOSE_MODAL'|'TOGGLE_MODAL'|'LOAD_OBJECTS',
+  _id?: string,
+  entity?: string,
+  data?: any,
+  selected?: Entity[]
+}) => {
     trace(`Executing reducer actions: ${action.type}`)
     const state = Object.assign({},_state)
     
@@ -41,16 +35,8 @@ const reducer = (_state: any, action: any) => {
 
     const actions = {
       'SET_SELECTED': () => {
-        
-        if(selectionTypes[action.entity] === undefined) {
-          console.error(`Invalid entity type ${action.entity}`)
-        }
         return Object.assign({},state,{
-          [selectionTypes[action.entity]]: {
-            entity: action.entity,
-            paths: action.paths,
-            target: action.target || action.entity
-          }
+          selected: action.selected
         })
       },
       'OPEN_MODAL': () => {
@@ -99,8 +85,8 @@ const ContextStateProvider = ( { children } ) => {
         return res
     }
 
-    const [state, dispatch] = React.useReducer(reducer, initialState);
+    const [state, dispatch] = React.useReducer(reducer, initialState) as [typeof initialState, React.Dispatch<any>];
     return <Provider value={{contextState: state, contextDispatch: dispatch, getSingle, getList }}>{children}</Provider>;
   };
   
-  export {contextStore, ContextStateProvider, selectionTypes}
+  export {contextStore, ContextStateProvider}

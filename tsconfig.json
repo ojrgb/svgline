@@ -1,10 +1,11 @@
 {
     "compilerOptions": {
       "jsx": "react",
-  
+      "moduleResolution":"node",
       "outDir": "./built",
       "allowJs": true,
       "target": "es6",
+      "experimentalDecorators": true,
       "allowSyntheticDefaultImports": true,
       "baseUrl": "./src"
       

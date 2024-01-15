@@ -1,15 +1,15 @@
 import React from 'react'
 import theme from 'theme'
 import styled from 'styled-components'
-import { entitiesStore } from 'Context/entitiesStore'
+
 import Renderer from 'Render/Renderer'
 
 
 
 export default function ResultPreview(props) {
-    const {entitiesState, entitiesDispatch, getSingle} = React.useContext(entitiesStore)
-    const svgParams = getSingle('parameters',[0])
-    const renderedPackage = Renderer.renderPackage(entitiesState)
+ 
+    const svgParams = {}
+    const renderedPackage = Renderer.renderPackage(undefined)
     const layers = renderedPackage.layers
     
 
@@ -63,16 +63,17 @@ export default function ResultPreview(props) {
     
     return (
  
-            <svg key={JSON.stringify(layers)}
-                style={{
-                    height: '100%',
-                    width: {'1-1': '100%'}[svgParams.ratio]
-                }}
-                viewBox={`0 0 ${{'1-1': '100', '4-3': 100*4/3}[svgParams.ratio]} ${{'1-1': '100', '4-3': '100'}[svgParams.ratio]}`}
-            >
-             {createLayers(layers)}   
+            // <svg key={JSON.stringify(layers)}
+            //     style={{
+            //         height: '100%',
+            //         width: {'1-1': '100%'}[svgParams.ratio]
+            //     }}
+            //     viewBox={`0 0 ${{'1-1': '100', '4-3': 100*4/3}[svgParams.ratio]} ${{'1-1': '100', '4-3': '100'}[svgParams.ratio]}`}
+            // >
+            //  {createLayers(layers)}   
             
-            </svg>
+            // </svg>
+            <div/>
        
     )
 }

@@ -1,7 +1,7 @@
 
 import './App.css';
 import Main from 'Views/Main';
-import { EntitiesStateProvider } from 'Context/entitiesStore'
+import { FlowProvider } from 'Context/flowStore';
 import { ContextStateProvider } from 'Context/contextStore'
 import ModalFactory from 'Components/Dialog/ModalFactory'
 import 'globalFunctions' 
@@ -10,12 +10,12 @@ import React from 'react'; // Import React
 function App() {
   return (
     <div className="App">
-      <EntitiesStateProvider>
+      <FlowProvider>
         <ContextStateProvider>
           <Main/>
           <ModalFactory/>
         </ContextStateProvider>
-      </EntitiesStateProvider>
+      </FlowProvider>
     </div>
   );
 }

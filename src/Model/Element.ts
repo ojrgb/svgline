@@ -1,8 +1,22 @@
+import { BsGearFill } from "Components/Icons/Icons";
 import Attribute from "./Attribute";
 import Entity from "./Entity";
 
+@Entity.Configure({
+    nameSingle: 'Element',
+    namePlural: 'Elements',
+    shortName: 'elem',
+    formAttributes: ['name', 'type', 'stroke', 'strokeWidth', 'fill', 'opacity', 'x', 'y', 'width', 'height', 'radius', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'rx', 'ry', 'text'],
+    icon: BsGearFill,
+})
 export default class Element extends Entity {
-    type: Attribute = new Attribute({
+    name: Attribute = this.newAttribute({
+        _id: 'name',
+        name: 'Name',
+        type: 'string',
+        mandatory: true,
+    });
+    type: Attribute = this.newAttribute({
         _id: 'type',
         name: 'Type',
         type: 'list',
@@ -18,126 +32,126 @@ export default class Element extends Entity {
         ],
         mandatory: true,
     });
-    stroke: Attribute = new Attribute({
+    stroke: Attribute = this.newAttribute({
         _id: 'stroke',
         name: 'Stroke',
         type: 'color',
         mandatory: true,
         conditions: props => (['polygon','rect','line','circle'].indexOf(props.type)>-1)
     });
-    strokeWidth: Attribute = new Attribute({
+    strokeWidth: Attribute = this.newAttribute({
         _id: 'strokeWidth',
         name: 'Stroke Width',
         type: 'number',
         mandatory: true,
         conditions: props => (['polygon','rect','line','circle'].indexOf(props.type)>-1)
     });
-    fill: Attribute = new Attribute({
+    fill: Attribute = this.newAttribute({
         _id: 'fill',
         name: 'Fill',
         type: 'color',
         mandatory: true,
         conditions: props => (['polygon','rect','circle'].indexOf(props.type)>-1)
     });
-    opacity: Attribute = new Attribute({
+    opacity: Attribute = this.newAttribute({
         _id: 'opacity',
         name: 'Opacity',
         type: 'number',
         mandatory: true,
 
     });
-    x: Attribute = new Attribute({
+    x: Attribute = this.newAttribute({
         _id: 'x',
         name: 'X',
         type: 'number',
         mandatory: true,
         conditions: props => (['polygon','rect','circle'].indexOf(props.type)>-1)
     });
-    y: Attribute = new Attribute({
+    y: Attribute = this.newAttribute({
         _id: 'y',
         name: 'Y',
         type: 'number',
         mandatory: true,
         conditions: props => (['polygon','rect','circle'].indexOf(props.type)>-1)
     });
-    width: Attribute = new Attribute({
+    width: Attribute = this.newAttribute({
         _id: 'width',
         name: 'Width',
         type: 'number',
         mandatory: true,
         conditions: props => (['polygon','rect','circle'].indexOf(props.type)>-1)
     });
-    height: Attribute = new Attribute({
+    height: Attribute = this.newAttribute({
         _id: 'height',
         name: 'Height',
         type: 'number',
         mandatory: true,
         conditions: props => (['polygon','rect','circle'].indexOf(props.type)>-1)
     });
-    radius: Attribute = new Attribute({
+    radius: Attribute = this.newAttribute({
         _id: 'radius',
         name: 'Radius',
         type: 'number',
         mandatory: true,
         conditions: props => (['circle'].indexOf(props.type)>-1)
     });
-    x1: Attribute = new Attribute({
+    x1: Attribute = this.newAttribute({
         _id: 'x1',
         name: 'x1',
         type: 'number',
         mandatory: true,
         conditions: props => (['line'].indexOf(props.type)>-1)
     });
-    y1: Attribute = new Attribute({
+    y1: Attribute = this.newAttribute({
         _id: 'y1',
         name: 'y1',
         type: 'number',
         mandatory: true,
         conditions: props => (['line'].indexOf(props.type)>-1)
     });
-    x2: Attribute = new Attribute({
+    x2: Attribute = this.newAttribute({
         _id: 'x2',
         name: 'x2',
         type: 'number',
         mandatory: true,
         conditions: props => (['line'].indexOf(props.type)>-1)
     });
-    y2: Attribute = new Attribute({
+    y2: Attribute = this.newAttribute({
         _id: 'y2',
         name: 'y2',
         type: 'number',
         mandatory: true,
         conditions: props => (['line'].indexOf(props.type)>-1)
     });
-    cx: Attribute = new Attribute({
+    cx: Attribute = this.newAttribute({
         _id: 'cx',
         name: 'Circle X',
         type: 'number',
         mandatory: true,
         conditions: props => (['circle'].indexOf(props.type)>-1)
     });
-    cy: Attribute = new Attribute({
+    cy: Attribute = this.newAttribute({
         _id: 'cy',
         name: 'Circle Y',
         type: 'number',
         mandatory: true,
         conditions: props => (['circle'].indexOf(props.type)>-1)
     });
-    rx: Attribute = new Attribute({
+    rx: Attribute = this.newAttribute({
         _id: 'rx',
         name: 'Round X',
         type: 'number',
         mandatory: true,
         conditions: props => (['rect'].indexOf(props.type)>-1)
     });
-    ry: Attribute = new Attribute({
+    ry: Attribute = this.newAttribute({
         _id: 'ry',
         name: 'Round Y',
         type: 'number',
         mandatory: true,
         conditions: props => (['rect'].indexOf(props.type)>-1)
     });
-    text: Attribute = new Attribute({
+    text: Attribute = this.newAttribute({
         _id: 'text',
         name: 'Text',
         type: 'string',
@@ -148,7 +162,7 @@ export default class Element extends Entity {
     constructor(props: {
         _id: string, 
         parent?: Element, 
-        type: 'polygon' | 'rect' | 'line' | 'circle' | 'text',
+        type?: 'polygon' | 'rect' | 'line' | 'circle' | 'text',
         stroke?: string,
         strokeWidth?: string,
         fill?: string,
@@ -168,7 +182,7 @@ export default class Element extends Entity {
         ry?: string,
         text?: string
     }) {
-        super(props._id,props.parent);
+        super({_id: props._id},props.parent);
         this.type.value = props.type;
         this.stroke.value = props.stroke;
         this.strokeWidth.value = props.strokeWidth;

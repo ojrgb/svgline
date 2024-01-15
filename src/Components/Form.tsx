@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import Select from './Select'
 import Text from './Text'
 import _ from 'lodash'
-import { entitiesStore } from 'Context/entitiesStore'
 import { modifySize } from 'utils'
 import Calculation from './Calculation'
 import ColorPicker from './ColorPicker'
@@ -12,7 +11,7 @@ import ColorPicker from './ColorPicker'
 const captionSizeModifier = 0.9
 
 const Classes = {
-    Root: styled.form`
+    Root: styled.form.attrs({className: 'form-root'})`
         width: 100%;
         max-height: 100%;
         display: flex;
@@ -21,19 +20,19 @@ const Classes = {
         justify-content: flex-start;
         font-size: ${theme.fonts.code.size};
     `,
-    Single: styled.div<{w: number}>`
+    Single: styled.div.attrs({className: 'field-single'})<{w: number}>`
         ${props => props.w && `width: ${theme.scale.width[props.w]};`}
         display: flex;
         flex-direction: column;
         margin-bottom: ${theme.scale.space[2]};
     `,
-    Caption: styled.div`
+    Caption: styled.div.attrs({className: 'form-caption'})`
         font-family: ${theme.fonts.code.family};
         user-select: none;
         font-size: ${modifySize(theme.fonts.code.size,captionSizeModifier)};
         text-align: left;
     `,
-    InputFieldContainer: styled.div`
+    InputFieldContainer: styled.div.attrs({className: 'input-field'})`
         display: flex;
         justify-content: flex-start;
     `,
@@ -46,97 +45,29 @@ const Classes = {
 }
 
 function Form(props) {
-    const {children, entity} = props
-    const [object, setObject] = React.useState(props.object || {})
-
-    const {entitiesState, entitiesDispatch} = React.useContext(entitiesStore)
+    const {children, ...rest} = props
     return (
-        <Classes.Root>
-            {React.Children.map(children,(child) => {return React.cloneElement(child,{
-                onChange: (v) => {
-                    const res = _.merge({},object,{[child.props.attribute]:v})
-                    setObject(res)
-                    if(!!child.props.immediate) {
-                        props.onBlur(res)
-                    }
-                },
-                onBlur: () => {
-                        props.onBlur(object)
-                    },  
-                value: object[child.props.attribute] && object[child.props.attribute]?.value ? object[child.props.attribute]?.value : object[child.props.attribute] || ''
-            })})}
+        <Classes.Root {...rest}>
+            {children}
         </Classes.Root>
     )
+
 }
 
-function Field(props: React.HTMLAttributes<HTMLDivElement> & React.PropsWithChildren<{
-        children?: React.ReactNode, // The children to render.
-        value?: any,
-        attribute?: string,
-        w?: number,
-        onChange?: (v: any) => void,
-        onBlur?: () => void,
-        immediate?: boolean,
-        mandatory?: boolean
-    }>
-    ) {
-        const {children, value, attribute, w, onChange, onBlur, immediate, mandatory} = props
+function Field(props) {
+    const {children, ...rest} = props
     return (
-        <Classes.Single {...{w}}>
-            {React.Children.map(children,(child) => {
-                return React.cloneElement((child as React.ReactElement),
-                    {
-                        value, 
-                        attribute,
-                        onChange,
-                        onBlur,
-                        immediate,
-                        mandatory
-                    })
-            })}
+        <Classes.Single {...rest}>
+            {children}
         </Classes.Single>
     )
 }
 
-/**
- * Renders an input element with the provided props.
- * 
- * @param type - The input's type.
- * @returns The rendered input element.
- */
-function Input(props: React.HTMLAttributes<HTMLInputElement> & React.PropsWithChildren<{
-    type: string,
-    options?: string[],
-    onChange?: (v: any) => void,
-    onBlur?: () => void,
-    immediate?: boolean,
-    mandatory? :boolean,
-    value?: any
-}>) {
-    const {type, options, onBlur, immediate, mandatory, value} = props
-    
-    const onChange = (v: any) => {
-        props.onChange && props.onChange(props.type==='calculation' ? {value: v, type: props.type} : v)
-    }
-    const selectedProps = {type, options, onChange, onBlur, immediate, value}
-    const InputField = {
-        select: Select, 
-        list: Select,
-        'string': Text,
-        'number': Text,
-        'identifier': Text,
-        'calculation': Calculation,
-        color: ColorPicker,
-    }[props.type]
-    if(!!!InputField) {
-        return (<div>{`Couldn't find field for type: ${props.type}`}</div>)
-    }
+function Input(props) {
+    const {children, ...rest} = props
     return (
-        <Classes.InputFieldContainer>
-            <Classes.InputFieldElementContainer valid={
-                // Implement mandatory check below.
-                (mandatory!==true || (value?.length>0))
-            }><InputField {...selectedProps} w={10}/></Classes.InputFieldElementContainer>
+        <Classes.InputFieldContainer {...rest}>
+            {children}
         </Classes.InputFieldContainer>
     )
 }

@@ -1,48 +1,106 @@
-class Flow {
-    private configurations: {
-        _id?: string,
-        name?: string,
-        type?: string,
-        defaultValue?: string,
-        sampleValue?: string,
-    }[]
-    private datasets: {
-        _id?: string,
-        name?: string
-    }[]
-    private calculations: {
-        _id?: string,
-        formula?: string
-    }[]
-    private components: {
-        _id?: string,
-        name?: string,
-    }[]
-    private layers: {
-        _id?: string,
-        name?: string,
-        backgroundColor?: string,
-        opacity? : string,
-        elements: {
-            
-        }
-    }[]
-    
-        
+import Configuration from "./Configuration";
+import Dataset from "./Dataset";
+import Calculation from "./Calculation";
+import Component from "./Component";
+import Layer from "./Layer";
+import Entity from "./Entity";
+import { BsFlower1 } from "Components/Icons/Icons";
+import Attribute from "./Attribute";
+import EntityList from "./EntityList";
 
-    constructor() {
-        this._flow = [];
+export default class Flow extends Entity {
+    
+    getRoot = (): Entity => {
+        return this;
     }
-    get flow() {
-        return this._flow;
+    configurations: EntityList<Configuration>
+    datasets: EntityList<Dataset>
+    calculations: EntityList<Calculation>
+    components: EntityList<Component>
+    layers: EntityList<Layer>
+    
+    name: Attribute = this.newAttribute({
+        _id: 'name',
+        name: 'name',
+        type: 'string',
+        mandatory: true,
+    }); 
+    ratio: Attribute = this.newAttribute({
+        _id: 'ratio',
+        name: 'ratio',
+        type: 'list',
+        options: [
+            {
+                _id: '1:1',
+                name: '1:1',
+            },
+            {
+                _id: '4:3',
+                name: '4:3',
+            },
+            {
+                _id: '16:9',
+                name: '16:9',
+            },
+            {
+                _id: '21:9',
+                name: '21:9',
+            },
+            {
+                _id: 'custom',
+                name: 'custom',
+            },
+        ],
+        mandatory: true,
+    });
+    autowired: boolean = true;
+
+    
+    // Create a new flow. A flow contains all the configurations, datasets, calculations, components, layers and parameters required to produce a graphic.
+    constructor(props: {
+        _id?: string,
+        configurations?: EntityList<Configuration>,
+        datasets?: EntityList<Dataset>,
+        calculations?: EntityList<Calculation>,
+        components?: EntityList<Component>,
+        layers?: EntityList<Layer>,
+        setFlow?: (flow: Flow) => void,
+    }) {
+        super({
+            _id: props?._id
+        });
+        
+        this._id.value = props?._id || 'New flow';
+        this.setFlow = props.setFlow
+        this.configurations = new EntityList<Configuration>({
+            _id: "Configurations Array",
+            type: Configuration,
+        },this);
+        this.datasets = new EntityList<Dataset>({
+            _id: "Datasets Array",
+            type: Dataset,
+            },this);
+        this.calculations= new EntityList<Calculation>({
+            _id: "Calculations Array",
+            type: Calculation,
+            },this);
+        this.components = new EntityList<Component>({
+            _id: "Components Array",
+            type: Component,
+            },this);
+        this.layers = new EntityList<Layer>({
+            _id: "Layers Array",
+            type: Layer,
+            },this);
+        
+        
+        
+        props?.configurations && (this.configurations = props.configurations);
+        props?.datasets && (this.datasets = props.datasets);
+        props?.calculations && (this.calculations = props.calculations);
+        props?.components && (this.components = props.components);
+        props?.layers && (this.layers = props.layers)
+       
     }
-    set flow(flow) {
-        this._flow = flow;
-    }
-    addFlow(flow) {
-        this._flow.push(flow);
-    }
-    getFlow() {
-        return this._flow;
-    }
+    
 }

@@ -2,17 +2,16 @@ import React from 'react'
 import theme from 'theme'
 import styled from 'styled-components'
 import Toolbar from './Toolbar'
-import { entitiesStore } from 'Context/entitiesStore'
-import { contextStore } from 'Context/contextStore'
 import _ from 'lodash'
-import { generateDeep, generateNewEntity, getNested } from 'utils'
-import ents from 'ents'
+import { flowStore } from 'Context/flowStore'
+import { contextStore } from 'Context/contextStore'
+import EntityList from 'Model/EntityList'
+import Entity from 'Model/Entity'
+import Flow from 'Model/Flow'
 
-export default function EntityToolbar(props: {
-    entity: string,
-    paths?: string[],
+export default function EntityToolbar<T extends Entity>(props: {
+    list: EntityList<T>,
     disabled?: boolean,
-    target?: string[]
     add?: boolean,
     addLoop?: boolean,
     addGroup?: boolean,
@@ -23,30 +22,28 @@ export default function EntityToolbar(props: {
 
 }) {
     const {
-        entity,
-        
+        list: list,
         disabled
     } = props;
+  
     const {contextState, contextDispatch} = React.useContext(contextStore)
-    const {entitiesState, entitiesDispatch, getSingle} = React.useContext(entitiesStore)
-    const entityConfig = ents[entity]
-    const target = props.target || [entity]
-    const paths = props.paths || contextState?.selectedItems?.paths || []
+    const typeofEntity = list.getType() as typeof Entity
     // The entity can either be loaded into an entities list
     // E.g. configurations -> state.configurations
     // Or into another target
     // E.g. elements -> layers.[index].elements
-
-    const targetEntity = target[0]
-    if(!!target && !Array.isArray(target)) {
-        
-    }
-
     const onAdd = () => {
-        entitiesDispatch({type:`ADD_OBJECT`,entity,paths,target})
+        list.newItem({_id: `new-${typeofEntity.name}`})
     }
 
-    
+    const onRemove = () => {
+        list.removeItem(contextState.selected[0])
+    }
+
+    const onDuplicate = () => {
+        list.duplicateItem(contextState.selected[0])
+    }
+
     const toolbarButtons = {
         add: <Toolbar.Button 
             icon="plus" 
@@ -54,27 +51,27 @@ export default function EntityToolbar(props: {
             />,
         addLoop: <Toolbar.Button
             icon="plus-loop"
-            onClick={() => {entitiesDispatch({type:`ADD_LOOP_${entity.toUpperCase()}`})}}
+            onClick={() => {}}
             />,
         addGroup: <Toolbar.Button
             icon="plus-group"
-            onClick={() => {entitiesDispatch({type:`ADD_GROUP_${entity.toUpperCase()}`})}}
+            onClick={() => {}}
             />,
         remove: <Toolbar.Button
             icon="remove"
-            onClick={() => {entitiesDispatch({type:`REMOVE_${entity.toUpperCase()}`})}}
+            onClick={onRemove}
             />,
         duplicate: <Toolbar.Button
             icon="duplicate"
-            onClick={() => {entitiesDispatch({type:`DUPLICATE`,entity,paths,target})}}
+            onClick={onDuplicate}
             />,
         moveUp: <Toolbar.Button
             icon="move-up"
-            onClick={() => {entitiesDispatch({type:`MOVE_UP_${entity.toUpperCase()}`})}}
+            onClick={() => {}}
             />,
         moveDown: <Toolbar.Button
             icon="move-down"
-            onClick={() => {entitiesDispatch({type:`MOVE_DOWN_${entity.toUpperCase()}`})}}
+            onClick={() => {}}
             />,
         
     }

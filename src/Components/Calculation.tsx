@@ -2,7 +2,6 @@ import React from 'react'
 import CodeMirror, { EditorState } from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import styled from 'styled-components'
-import { entitiesStore } from 'Context/entitiesStore'
 import theme from 'theme';
 
 const Classes = {
@@ -31,7 +30,7 @@ export default function Calculation(props: {
     onChange: (val: string) => void,
     onBlur: () => void
 }) {
-    const {entitiesState, entitiesDispatch} = React.useContext(entitiesStore)
+  
    
 
     const {value} = props

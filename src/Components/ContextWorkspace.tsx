@@ -1,14 +1,11 @@
 import React from 'react'
 import theme from 'theme'
 import styled from 'styled-components'
-import ConfigurationsEditor from './Configurations/ConfigurationsEditor'
-import DatasetsEditor from './Datasets/DatasetsEditor'
-import CalculationsEditor from './Calculations/CalculationsEditor'
-import ComponentsEditor from './Components/ComponentsEditor'
-import LayersEditor from './Layers/LayersEditor'
 import ItemEditor from './Item/ItemEditor'
 import ResultEditor from './Result/ResultEditor'
-import ElementsEditor from './Elements/ElementsEditor'
+import EntityConsole from './EntityConsole'
+import { flowStore } from 'Context/flowStore'
+import Configuration from 'Model/Configuration'
 
 const rowHeights = [2,3,5]
 
@@ -31,25 +28,38 @@ const Classes = {
 }
 
 export default function ContextWorkspace(props: React.HTMLAttributes<HTMLDivElement> & React.PropsWithChildren<{}>) {
+    const {flow, setFlow} = React.useContext(flowStore)
+    flow.setFlow = setFlow
+    console.log('Flow updated.',flow)
     return (
         <Classes.Root id="context-workspace">
-            <React.Fragment>
-                <ConfigurationsEditor w={2.5} h={rowHeights[0]}/>
-                <DatasetsEditor w={2.5} h={rowHeights[0]}/>
-                <CalculationsEditor w={2.5} h={rowHeights[0]}/>
-                <ComponentsEditor w={2.5} h={rowHeights[0]}/>
-            </React.Fragment>
-            <React.Fragment>
-                <ItemEditor w={10} h={rowHeights[1]}/>
-            </React.Fragment>
-            <React.Fragment>
-                <ResultEditor w={8} h={rowHeights[2]}/>
-                <Classes.UIComponents>
-                    <LayersEditor w={10} h={3}/>
-                    <ElementsEditor w={10} h={7}/>
-                </Classes.UIComponents>
-                
-            </React.Fragment>
+            {
+                flow!==undefined && (
+                <React.Fragment>
+                    <React.Fragment>
+                        <EntityConsole 
+                            list={flow.configurations}
+                            w={2.5} 
+                            h={rowHeights[0]}
+                            
+                        />
+                        {/* <DatasetsEditor w={2.5} h={rowHeights[0]}/>
+                        <CalculationsEditor w={2.5} h={rowHeights[0]}/>
+                        <ComponentsEditor w={2.5} h={rowHeights[0]}/> */}
+                    </React.Fragment>
+                    <React.Fragment>
+                        <ItemEditor w={10} h={rowHeights[1]}/>
+                    </React.Fragment>
+                    <React.Fragment>
+                        {/* <ResultEditor w={8} h={rowHeights[2]}/> */}
+                        <Classes.UIComponents>
+                            {/* <LayersEditor w={10} h={3}/>
+                            <ElementsEditor w={10} h={7}/> */}
+                        </Classes.UIComponents>
+                        
+                    </React.Fragment>
+                </React.Fragment>)
+            }
         </Classes.Root>
     )
 }

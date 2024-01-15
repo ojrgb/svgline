@@ -5,7 +5,7 @@ import { debug, deepenColor, modifySize, normalizePaths, relaxColor } from 'util
 import ExpandIcon from './ExpandIcon'
 import RecursiveElement from './RecursiveElement'
 import Space from './Space'
-import { contextStore, selectionTypes } from 'Context/contextStore'
+import { contextStore  } from 'Context/contextStore'
 import _ from 'lodash'
 import ents from 'ents'
 
@@ -73,16 +73,13 @@ function SelectableListItem(props: {
     target?: string[];
 }) {
     const {object, onClick, entity, isGroup, isExpanded, paths, path, target} = props
-    const selectionType = selectionTypes[entity]
+  
     const {contextState, contextDispatch} = React.useContext(contextStore)
     const indentStartCalc = modifySize(theme.scale.space[indentStart],indentModifier)
     const levelIndent = modifySize(theme.scale.space[props.path?.length || 0],indentModifier)
     const paddingLeft = `calc(${indentStartCalc} + ${levelIndent})`
     const config = ents[entity]
-    const selected = 
-        _.isEqual(target,contextState?.[selectionType]?.target) && 
-        _.isEqual((normalizePaths(paths) || []).concat([normalizePaths(path)]),contextState?.[selectionType]?.paths)
-    
+   
     
 
     return (
@@ -98,7 +95,7 @@ function SelectableListItem(props: {
                
             }}
             selected={
-                selected
+                false
                 
             }
         >
@@ -126,10 +123,10 @@ export default function SelectableList(props: {
         <Classes.Root className={`selectable-list-${entity}`}>
             {list?.map((object, objecti) => 
                 <RecursiveElement 
-                    element={SelectableListItem} 
+                     element={undefined}
                     key={objecti}
-                    path={[objecti]}
-                    paths={paths}
+                 
+               
                     {...{object, entity, target}}
                 />  
             )}

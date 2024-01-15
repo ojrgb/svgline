@@ -11,8 +11,10 @@ import {BsPlus as BsPlus1,
     BsCopy as BsCopy1,
     BsBasket3 as BsBasket31,
     BsArrowCounterclockwise as BsArrowCounterclockwise1,
-
-} from 'react-icons/bs/index.js'
+    BsDatabaseFill as BsDatabaseFill1,
+    BsGearFill as BsGearFill1,
+    BsFlower1 as BsFlower11,
+} from 'react-icons/bs'
 
 const Base = () => {
     return <div/>
@@ -30,3 +32,6 @@ export const BsCaretUp = BsCaretUp1
 export const BsCopy = BsCopy1
 export const BsBasket3 = BsBasket31
 export const BsArrowCounterclockwise = BsArrowCounterclockwise1
+export const BsDatabaseFill = BsDatabaseFill1
+export const BsGearFill = BsGearFill1
+export const BsFlower1 = BsFlower11

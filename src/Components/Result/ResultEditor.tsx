@@ -3,7 +3,6 @@ import theme from 'theme.js'
 import styled from 'styled-components'
 import Box from 'Components/Box'
 import Toolbar from '../Toolbar'
-import EntityList from 'Components/EntityList'
 import Space from 'Components/Space'
 import EntityToolbar from 'Components/EntityToolbar'
 import EntityForm from 'Components/EntityForm'
@@ -31,10 +30,10 @@ export default function ResultEditor(props) {
                 <Box.Content id="result-parameters-container">
                     <Box depth={2} w={10} h={10} id="result-parameters-spacer">
                         <Box.Content id="result-parameters-content">
-                            <EntityForm
+                            {/* <EntityForm
                                 entity="parameters" 
                                 paths={[0]}
-                            />   
+                            />    */}
                         </Box.Content>
                     </Box>
                 </Box.Content>
