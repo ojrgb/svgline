@@ -3,6 +3,7 @@ import theme from 'theme'
 import styled from 'styled-components'
 import ContextEditor from 'Components/ContextWorkspace'
 import Navbar from 'Components/Navbar'
+import { contextStore } from 'Context/contextStore'
 
 const navbarHeight = theme.navbar.height;
 const navbarMargin = theme.navbar.margin;
@@ -26,8 +27,22 @@ const Classes = {
 }
 
 export default function Main(props: React.HTMLAttributes<HTMLDivElement> & React.PropsWithChildren<{}>) {
+    const {contextDispatch} = React.useContext(contextStore)
     return (
-        <Classes.Root id="main-container">
+        <Classes.Root id="main-container" onClick={(e) => {
+            const { target } = e;
+            if (target instanceof HTMLElement) {
+                const classList = target.classList;
+                if(classList.contains('selectable-list-item')) {
+
+                }
+                else {
+                    contextDispatch({
+                        type: 'DESELECT_ALL'
+                    })
+                }
+            }
+        }}>
             <Navbar id="navbar"/>
             <Classes.NavbarDivider id="navbar-divider"/>
             <Classes.ContextEditorContainer id="context-editor-container">

@@ -8,6 +8,7 @@ import { contextStore } from 'Context/contextStore'
 import EntityList from 'Model/EntityList'
 import Entity from 'Model/Entity'
 import Flow from 'Model/Flow'
+import Group from 'Model/Group'
 
 export default function EntityToolbar<T extends Entity>(props: {
     list: EntityList<T>,
@@ -25,15 +26,24 @@ export default function EntityToolbar<T extends Entity>(props: {
         list: list,
         disabled
     } = props;
-  
     const {contextState, contextDispatch} = React.useContext(contextStore)
+    const {selected} = contextState
+    const selectedSingle = selected.length===1 ? selected[0] : undefined
+    if(!list) return <div/>
+    
     const typeofEntity = list.getType() as typeof Entity
     // The entity can either be loaded into an entities list
     // E.g. configurations -> state.configurations
     // Or into another target
     // E.g. elements -> layers.[index].elements
     const onAdd = () => {
-        list.newItem({_id: `new-${typeofEntity.name}`})
+        const targetId = `new-${typeofEntity.name}`
+        if(selectedSingle && selectedSingle instanceof Group) {
+            selectedSingle.addItem({_id: targetId})
+        }
+        else {
+            list.newItem({_id: targetId})
+        }
     }
 
     const onRemove = () => {
@@ -44,6 +54,24 @@ export default function EntityToolbar<T extends Entity>(props: {
         list.duplicateItem(contextState.selected[0])
     }
 
+    const onMoveUp = () => {
+        list.moveItem(contextState.selected[0],'up')
+    }
+
+    const onMoveDown = () => {
+        list.moveItem(contextState.selected[0],'down')
+    }
+
+    const onAddGroup = () => {
+        list.newGroup()
+    }
+
+    const onAddLoop = () => {
+        list.newLoop()
+    }
+
+
+
     const toolbarButtons = {
         add: <Toolbar.Button 
             icon="plus" 
@@ -51,11 +79,11 @@ export default function EntityToolbar<T extends Entity>(props: {
             />,
         addLoop: <Toolbar.Button
             icon="plus-loop"
-            onClick={() => {}}
+            onClick={onAddLoop}
             />,
         addGroup: <Toolbar.Button
             icon="plus-group"
-            onClick={() => {}}
+            onClick={onAddGroup}
             />,
         remove: <Toolbar.Button
             icon="remove"
@@ -67,11 +95,11 @@ export default function EntityToolbar<T extends Entity>(props: {
             />,
         moveUp: <Toolbar.Button
             icon="move-up"
-            onClick={() => {}}
+            onClick={onMoveUp}
             />,
         moveDown: <Toolbar.Button
             icon="move-down"
-            onClick={() => {}}
+            onClick={onMoveDown}
             />,
         
     }

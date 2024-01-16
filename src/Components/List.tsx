@@ -58,6 +58,7 @@ const Classes = {
         padding-left: ${theme.scale.space[2]};
         padding-right: ${theme.scale.space[2]};
         border: ${theme.borders.primary.width} ${theme.borders.primary.style} ${theme.borders.primary.color};
+        pointer-events: none;
     `
     
  
@@ -75,33 +76,34 @@ function ListItem(props: {
     const entity = props.entity
     
     const typeofEntity = entity.constructor as typeof Entity
-    const selected = contextState.selected.includes(entity._id.get())
-    
+    const selected = contextState.selected.includes(entity)
+    console.log(entity)
     return (
-        <Classes.Single className={`selectable-list-item-${entity._id.get()}`}
+        <Classes.Single className={`selectable-list-item list-item-${entity._id.get()}`}
         // style={{paddingLeft}}
             onClick={props.onClick}
             selected={selected}
         >
-                
-                <span>{entity.get('name') || entity.get('_id') || '(null)'}</span>{typeofEntity.shortName && <Classes.ShortName>{typeofEntity.shortName}</Classes.ShortName>}
+                {/*We have to disable pointer events on the actual text so we 
+                can make sure that de-selecting works (see the Main component) */}
+                <span style={{pointerEvents:'none'}}>{entity.get('name') || entity.get('_id') || '(null)'}</span>{typeofEntity.shortName && <Classes.ShortName>{typeofEntity.shortName}</Classes.ShortName>}
         </Classes.Single>
     )
 }
 
 /** A list containing Entities. */
 export default function List(props: {
-    list: EntityList<Entity>;
+    list?: EntityList<Entity>;
 }) {
     const {
         list,
      
        } = props
-       const typeofEntity = list.getType() as typeof Entity
+       const typeofEntity = list && list.getType() as typeof Entity
     const {contextDispatch} = React.useContext(contextStore)    
     return (
         <Classes.Root className={`selectable-list-${typeofEntity.namePlural}`}>
-            {list.entities.map((single, singlei) => 
+            {list?.entities.map((single, singlei) => 
                 <ListItem
                     key={singlei}
                     entity={single}

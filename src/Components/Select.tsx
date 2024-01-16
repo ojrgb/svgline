@@ -23,6 +23,7 @@ const Classes = {
             border: ${modifySize(theme.borders.primary.width,borderThicknessDelta)} inset ${relaxColor(theme.borders.primary.color,relaxBorderDelta)},${deepenColor(theme.borders.primary.color,deepenBorderDelta)};
             outline: none;
         } 
+        width: 100%;
     `,
     Option: styled.option`
         border-radius: 0px;

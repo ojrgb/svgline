@@ -2,6 +2,7 @@ import React from 'react'
 import Entity from 'Model/Entity'
 import Form from './Form'
 import Attribute from 'Model/Attribute'
+import Text from './Text'
 
 
 export default function EntityForm(props: {
@@ -25,9 +26,9 @@ export default function EntityForm(props: {
             }
         }
         
-        const input = attribute.getInput()
+        const input = React.cloneElement(attribute.getInput(),{value: attribute.get() || ""})
         return (
-          <Form.Field key={attributeId}>
+          <Form.Field w={2} key={attributeId}>
             <Form.Caption>
               {attribute.name}
             </Form.Caption>

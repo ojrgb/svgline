@@ -7,6 +7,7 @@ import Entity from "./Entity";
     namePlural: 'Configurations',
     shortName: 'config',
     formAttributes: [
+        '_id',
         'name',
         'type',
         'defaultValue',
@@ -25,7 +26,29 @@ export default class Configuration extends Entity {
     type: Attribute = this.newAttribute({
         _id: 'type',
         name: 'Type',
-        type: 'string',
+        type: 'list',
+        options: [
+            {
+                _id: 'string',
+                name: 'String',
+            },
+            {
+                _id: 'number',
+                name: 'Number',
+            },
+            {
+                _id: 'boolean',
+                name: 'Boolean',
+            },
+            {
+                _id: 'color',
+                name: 'Color',
+            },
+            {
+                _id: 'calculation',
+                name: 'Calculation',
+            },
+        ],
         mandatory: false,
     });
     defaultValue: Attribute = this.newAttribute({

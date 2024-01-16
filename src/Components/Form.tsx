@@ -67,7 +67,9 @@ function Input(props) {
     const {children, ...rest} = props
     return (
         <Classes.InputFieldContainer {...rest}>
+            <Classes.InputFieldElementContainer valid={true}>
             {children}
+            </Classes.InputFieldElementContainer>
         </Classes.InputFieldContainer>
     )
 }

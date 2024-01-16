@@ -16,7 +16,7 @@ const contextStore = React.createContext(undefined)
 const {Provider} = contextStore
 
 const reducer = (_state: any, action: {
-  type: 'OPEN_MODAL'|'CLOSE_MODAL'|'TOGGLE_MODAL'|'LOAD_OBJECTS',
+  type: 'OPEN_MODAL'|'CLOSE_MODAL'|'TOGGLE_MODAL'|'LOAD_OBJECTS'|'SET_SELECTED'|'DESELECT_ALL',
   _id?: string,
   entity?: string,
   data?: any,
@@ -37,6 +37,11 @@ const reducer = (_state: any, action: {
       'SET_SELECTED': () => {
         return Object.assign({},state,{
           selected: action.selected
+        })
+      },
+      'DESELECT_ALL': () => {
+        return Object.assign({},state,{
+          selected: []
         })
       },
       'OPEN_MODAL': () => {

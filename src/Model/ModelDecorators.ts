@@ -10,9 +10,9 @@
 export const Wire = (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
     descriptor.value = function(...args: any[]) {
-        console.log('Running function: ', propertyKey);
+        
         const result = originalMethod.apply(this, args);
-        console.log('Executing update.')
+        
         this.update();
         return result;
     };

@@ -8,7 +8,8 @@ import EntitySelect from './EntitySelect'
 
 /** This is each one of the labeled boxes in the Context Editor that contains a selectable list for the entity. */
 export default function EntityConsole(props: {
-    list: EntityList<Entity>;
+    list?: EntityList<Entity>;
+    type?: typeof Entity
     children?: React.ReactNode;
     w?: number;
     h?: number;
@@ -18,7 +19,7 @@ export default function EntityConsole(props: {
     moveUp?: boolean,
     moveDown?: boolean
 }) {
-    const typeofEntity = props.list.getType() as typeof Entity
+    const typeofEntity = props.list ? props.list.getType() as typeof Entity : props.type
     return (
         <Box id={`${typeofEntity.namePlural}-editor`} w={props.w} h={props.h}>
             <Box.Header>

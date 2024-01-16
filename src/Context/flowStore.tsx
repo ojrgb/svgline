@@ -14,9 +14,9 @@ const FlowProvider = ( { children } ) => {
     
     const [flow, _setFlow] = React.useState(templateFlow)
     const [refresh, setRefresh] = React.useState(new Date().getTime())
-    console.log(refresh)
+    
     const setFlow = (target: Flow) => {
-        console.log('Setting flow', target)
+        
         _setFlow(target)
         setRefresh(new Date().getTime())
     }

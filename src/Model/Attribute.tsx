@@ -117,14 +117,12 @@ export default class Attribute {
                             'list': <Select options={this.options} {...props} />,
                             'calculation': <Calculation {...props} />
         } 
-        const clonedInput = React.cloneElement(inputTypes[this.type], {
-            
-            onBlur: (e: any) => {
-                this.parent.set(this._id, e.target.value);
-                
+        const input = React.cloneElement(inputTypes[this.type], {
+            onChange: (value: any) => {
+                this.set(value);
             }
         });
-        return clonedInput;
+        return input;
     }
 
     public update() {
