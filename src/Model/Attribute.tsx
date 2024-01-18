@@ -129,5 +129,21 @@ export default class Attribute {
         this.parent.update();
     }
 
+    public calculate(expression: any) {
+        if(this.type === 'calculation') {
+            const newExpression = `${expression}
+            ${this.value}`
+            try {
+                const res = eval(newExpression);
+                return res
+            }
+            catch(e) {
+                console.error(e);
+                return undefined
+            }
+        }
+        return this.value;
+    }
+
 }
     

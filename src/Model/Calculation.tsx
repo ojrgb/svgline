@@ -7,12 +7,18 @@ import Entity from "./Entity";
     namePlural: 'Calculations',
     shortName: 'calc',
     formAttributes: [
-        'name',
         'formula'
     ],
     icon: BsGearFill,
 })
 export default class Calculation extends Entity {
+    name: Attribute = this.newAttribute({
+        _id: 'name',
+        name: 'name',
+        type: 'string',
+        mandatory: true,
+    });
+
     formula: Attribute = this.newAttribute({
         _id: 'formula',
         name: 'Formula',

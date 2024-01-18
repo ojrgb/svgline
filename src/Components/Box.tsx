@@ -88,7 +88,7 @@ const BoxContainer = styled.div<{
         `writing-mode: vertical-lr;
         transform: rotate(180deg);`)}
     `,
-    Content = styled.div<{
+    Content = styled.div.attrs({className:'content-container'})<{
         overflowX?: string;
         overflowY?: string;
         headerPosition?: string;

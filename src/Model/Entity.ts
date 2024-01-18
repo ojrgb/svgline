@@ -13,11 +13,11 @@ export default class Entity {
     setFlow: (flow: any) => void;    
     update: () => void = () => {
         if(this.setFlow) { this.setFlow(this.getRoot());}
-        if(this.parent) {
+        if(this.parent && this.parent.setFlow) {
             this.parent.setFlow(this.getRoot());
         }
         else {
-            console.error('No setFlow function found in the entity tree.', this)
+            this.parent.update()
         }
         // console.log(this)
     };
@@ -27,8 +27,15 @@ export default class Entity {
      */
     autowired: boolean;
 
-    
 
+
+    /**
+     * Gets the value indicating whether the entity is inherited.
+     * @returns {boolean} The value indicating whether the entity is inherited.
+     */
+    static getInherited: () => boolean = () => {
+        return false;
+    }
 
     // Declare newAttribute function so we can use it. All of this class' attributes will be created after this function.    
     
@@ -165,6 +172,7 @@ export default class Entity {
             target.shortName = config.shortName;
             target.formAttributes = config.formAttributes;
             target.icon = config.icon;
+            target.inherited = config.inherited;
         }    
     }
     
@@ -302,7 +310,7 @@ export default class Entity {
     @Wire
     public set(attribute: string, value: any): void {
         if(!this[attribute]) {
-            console.error(`attribute ${attribute} does not exist`);
+            console.error(`attribute ${attribute} `);
         }
         if(this[attribute] instanceof Attribute) {
             const attr: Attribute = this[attribute];
@@ -360,7 +368,9 @@ export default class Entity {
     }
 
     public clone(): Entity {
-        return Object.assign({},this);
+        console.log('This is me',this)
+        console.log('This is the clone',Object.assign(Object.create(Object.getPrototypeOf(this)), this))
+        return Object.assign(Object.create(Object.getPrototypeOf(this)), this)
     }
 
     public onChange = (caller: Entity): Entity => {
@@ -369,4 +379,31 @@ export default class Entity {
         }
         return this;
     }
+
+    public getAttributes(): Attribute[] {
+        let result: Attribute[] = [];
+        for(let key in this) {
+            if(this[key] instanceof Attribute) {
+                result.push(this[key] as Attribute);
+            }
+        }
+        return result;
+    }
+
+    public calculate(): {[key: string]: string | number | (string | number)[]}[] {
+        const attributes = this.getAttributes();
+        let res = [];
+        for(let attr of attributes) {
+            if(attr.type === 'calculation') {
+                res.push({[attr._id]: attr.calculate("")});
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Gets the value indicating whether the entity is inherited.
+     * @returns {boolean} The value indicating whether the entity is inherited.
+     */
+    
 }

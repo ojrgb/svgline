@@ -21,14 +21,20 @@ export default function EntityToolbar<T extends Entity>(props: {
     moveUp?: boolean,
     moveDown?: boolean
 
+
 }) {
     const {
         list: list,
         disabled
     } = props;
     const {contextState, contextDispatch} = React.useContext(contextStore)
-    const {selected} = contextState
-    const selectedSingle = selected.length===1 ? selected[0] : undefined
+    const {selected, currentSelection} = contextState
+    /** Inherit specifies whether the entity toolbar is for an inherited entity.
+     * For example, Element is inherited from Layer, so the toolbar for Element
+     * should have the inherit prop set to true.
+     */
+   
+    
     if(!list) return <div/>
     
     const typeofEntity = list.getType() as typeof Entity
@@ -38,8 +44,8 @@ export default function EntityToolbar<T extends Entity>(props: {
     // E.g. elements -> layers.[index].elements
     const onAdd = () => {
         const targetId = `new-${typeofEntity.name}`
-        if(selectedSingle && selectedSingle instanceof Group) {
-            selectedSingle.addItem({_id: targetId})
+        if(currentSelection instanceof Group) {
+            currentSelection.newItem({_id: targetId})
         }
         else {
             list.newItem({_id: targetId})

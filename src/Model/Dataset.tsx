@@ -22,6 +22,6 @@ export default class Dataset extends Entity {
     constructor(props: {
         _id?: string
     }, parent?: Entity) {
-        super({},parent);
+        super(props,parent);
     }
 }

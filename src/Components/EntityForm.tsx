@@ -18,7 +18,7 @@ export default function EntityForm(props: {
         const attribute: Attribute = entity[attributeId]
         if(attribute.conditions && attribute.conditions.length>0) {
             const conditions = attribute.conditions as ((arg: any) => boolean)[]
-            const condition = conditions.find((condition: (arg: any) => boolean) => {
+            const condition = conditions?.find?.((condition: (arg: any) => boolean) => {
                 return condition(entity)!==true
             })
             if(condition!==undefined) {

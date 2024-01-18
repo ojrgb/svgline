@@ -50,7 +50,7 @@ export default class List<T extends Entity> extends Entity {
      * @returns The duplicated item.
      */
     duplicateItem(item: T | Group<T> | Loop<T>, index?: number): Entity {
-        const newItem = {...item}
+        const newItem = item.clone()
         this.addItem(newItem as T, index);
 
         return newItem as Entity;

@@ -14,14 +14,12 @@ import List from "./List";
     icon: BsGearFill,
 })
 export default class Group<T extends Entity> extends List<T> {
-        
     name: Attribute = this.newAttribute({
         _id: 'name',
         name: 'Name',
         type: 'string',
         mandatory: false,
     });
-
     
     constructor(props: {
         _id?: string,
@@ -30,5 +28,9 @@ export default class Group<T extends Entity> extends List<T> {
         super({type: props.type},parent);
         
         if(props._id) this.set('_id',props._id)
+    }
+
+    getInherited = (): boolean => {
+        return this.type.getInherited()
     }
 }

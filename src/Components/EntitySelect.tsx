@@ -5,11 +5,8 @@ import EntityList from 'Model/EntityList'
 
 export default function EntitySelect(props: {
     list?: EntityList<Entity>;
-  
 }) {
     if(!props.list) return <div/>
-    const x = typeof props.list
-    const y = typeof props.list[0];
     return (
         <List 
             list={props.list}

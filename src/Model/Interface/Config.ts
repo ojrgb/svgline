@@ -7,5 +7,6 @@ export default interface Config {
         shortName?: string;
         formAttributes?: string[];
         icon?: IconType;
+        inherited?: boolean
     
 }

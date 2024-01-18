@@ -23,6 +23,6 @@ export default class Component extends Entity {
     constructor(props: {
         _id?: string
     }, parent?: Entity) {
-        super({},parent);
+        super(props,parent);
     }
 }

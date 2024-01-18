@@ -8,6 +8,8 @@ import { flowStore } from 'Context/flowStore'
 import Configuration from 'Model/Configuration'
 import { contextStore } from 'Context/contextStore'
 import Element from 'Model/Element'
+import Layer from 'Model/Layer'
+import EntityList from 'Model/EntityList'
 
 const rowHeights = [2,3,5]
 
@@ -21,7 +23,7 @@ const Classes = {
         align-content: baseline;
         position: relative;
     `,
-    UIComponents: styled.div`
+    UIComponents: styled.div.attrs({className: 'ui-components'})`
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
@@ -70,15 +72,25 @@ export default function ContextWorkspace(props: React.HTMLAttributes<HTMLDivElem
                         <Classes.UIComponents>
                         <EntityConsole 
                             list={flow.layers}
-                            w={2.5} 
-                            h={rowHeights[0]}
+                            w={10} 
+                            h={rowHeights[2]}
                         />
-                        {/* <EntityConsole 
-                            list={flow.layers.getEntityById(contextState.selected[0])?.elements}
+                        <EntityConsole 
+                            list={
+                                (
+                                    
+                                    !(contextState.selected[0] instanceof Layer)
+                                ) ? (
+                                    undefined
+                                ) : (
+                                    (contextState.selected[0] as Layer).elements
+                                )
+                            }
                             type={Element}
-                            w={2.5} 
-                            h={rowHeights[0]}  
-                        /> */}
+                            w={10} 
+                            h={rowHeights[2]}  
+                            missingMessage="Select a layer to edit its elements"
+                        />
                             {/* <LayersEditor w={10} h={3}/>
                             <ElementsEditor w={10} h={7}/> */}
                         </Classes.UIComponents>

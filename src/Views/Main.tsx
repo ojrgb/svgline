@@ -29,20 +29,7 @@ const Classes = {
 export default function Main(props: React.HTMLAttributes<HTMLDivElement> & React.PropsWithChildren<{}>) {
     const {contextDispatch} = React.useContext(contextStore)
     return (
-        <Classes.Root id="main-container" onClick={(e) => {
-            const { target } = e;
-            if (target instanceof HTMLElement) {
-                const classList = target.classList;
-                if(classList.contains('selectable-list-item')) {
-
-                }
-                else {
-                    contextDispatch({
-                        type: 'DESELECT_ALL'
-                    })
-                }
-            }
-        }}>
+        <Classes.Root id="main-container">
             <Navbar id="navbar"/>
             <Classes.NavbarDivider id="navbar-divider"/>
             <Classes.ContextEditorContainer id="context-editor-container">

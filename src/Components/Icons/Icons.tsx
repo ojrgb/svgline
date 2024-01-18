@@ -15,6 +15,10 @@ import {BsPlus as BsPlus1,
     BsGearFill as BsGearFill1,
     BsFlower1 as BsFlower11,
 } from 'react-icons/bs'
+import { 
+    PiArrowElbowDownRightDuotone as ArrowRight
+} from "react-icons/pi";
+
 
 const Base = () => {
     return <div/>
@@ -35,3 +39,4 @@ export const BsArrowCounterclockwise = BsArrowCounterclockwise1
 export const BsDatabaseFill = BsDatabaseFill1
 export const BsGearFill = BsGearFill1
 export const BsFlower1 = BsFlower11
+export const ChildArrow = ArrowRight

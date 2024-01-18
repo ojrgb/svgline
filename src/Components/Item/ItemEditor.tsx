@@ -33,9 +33,9 @@ export default function ItemEditor(props: {
     
     const {contextState,contextDispatch} = React.useContext(contextStore)
 
-    const {selected} = contextState
-    const selectionType: 'none' | 'single' | 'multiple' = selected.length===0 ? 'none' : selected.length===1 ? 'single' : 'multiple'
-    const entity: Entity = selectionType==='single' ? selected[0] : null
+    const {currentSelection} = contextState
+    const selectionType: 'none' | 'single' | 'multiple' = !!!currentSelection ? 'none' : Array.isArray(currentSelection) ? 'multiple' : 'single'
+    const entity: Entity = selectionType==='single' ? currentSelection : null
     return (
         <Box w={props.w} h={props.h} headerLocation="left-top" z={9}>
             <Box.Header>

@@ -8,6 +8,7 @@ import Entity from "./Entity";
     shortName: 'elem',
     formAttributes: ['name', 'type', 'stroke', 'strokeWidth', 'fill', 'opacity', 'x', 'y', 'width', 'height', 'radius', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'rx', 'ry', 'text'],
     icon: BsGearFill,
+    inherited: true
 })
 export default class Element extends Entity {
     name: Attribute = this.newAttribute({
@@ -202,5 +203,9 @@ export default class Element extends Entity {
         this.rx.value = props.rx;
         this.ry.value = props.ry;
         this.text.value = props.text;
+    }
+
+    static getInherited = () => {
+        return true;
     }
 }

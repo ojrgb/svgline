@@ -9,12 +9,16 @@ import { contextStore} from 'Context/contextStore'
 import _ from 'lodash'
 import Entity from 'Model/Entity'
 import EntityList from 'Model/EntityList'
+import ListModel from 'Model/List'
+import { ChildArrow } from './Icons/Icons'
+import context from 'context'
+import Element from 'Model/Element'
 
 const deepenDelta = 0.1,
     relaxDelta = 0.1,
     radiusModifier = 1,
-    indentStart = 1,
-    indentModifier = 1
+    indentStart = 2,
+    indentModifier = 5
 
 const Classes = {
     Root: styled.div`
@@ -33,7 +37,7 @@ const Classes = {
     `,
     Single: styled.div<{
         selected?: boolean;
-      
+        indent: string;
     }>`
         display: flex;
         width: 100%;
@@ -48,6 +52,13 @@ const Classes = {
                 background-color: ${relaxColor(theme.colors.primary,relaxDelta)};
             `
         )}
+        padding-left: ${theme.scale.space[indentStart]};
+        ${props => props.indent && (
+            `
+                padding-left: ${props.indent};
+            `
+        )    
+        }
     `,
     ShortName: styled.div.attrs({className:'short-name'})`
         font-family: ${theme.fonts.code.family};
@@ -59,7 +70,7 @@ const Classes = {
         padding-right: ${theme.scale.space[2]};
         border: ${theme.borders.primary.width} ${theme.borders.primary.style} ${theme.borders.primary.color};
         pointer-events: none;
-    `
+    `,
     
  
 }
@@ -68,10 +79,10 @@ const Classes = {
 function ListItem(props: {
     entity: Entity;
     onClick: () => void;
+    indent?: string;
+    level?: number;
 }) {
-    // const indentStartCalc = modifySize(theme.scale.space[indentStart],indentModifier)
-    // const levelIndent = modifySize(theme.scale.space[props.path?.length || 0],indentModifier)
-    // const paddingLeft = `calc(${indentStartCalc} + ${levelIndent})`
+    
     const {contextState} = React.useContext(contextStore)
     const entity = props.entity
     
@@ -79,11 +90,14 @@ function ListItem(props: {
     const selected = contextState.selected.includes(entity)
     console.log(entity)
     return (
-        <Classes.Single className={`selectable-list-item list-item-${entity._id.get()}`}
+        <Classes.Single indent={props.indent} className={`selectable-list-item list-item-${entity._id.get()}`}
         // style={{paddingLeft}}
             onClick={props.onClick}
             selected={selected}
         >
+                {
+                    props.level>0 && <span><ChildArrow/></span>
+                }
                 {/*We have to disable pointer events on the actual text so we 
                 can make sure that de-selecting works (see the Main component) */}
                 <span style={{pointerEvents:'none'}}>{entity.get('name') || entity.get('_id') || '(null)'}</span>{typeofEntity.shortName && <Classes.ShortName>{typeofEntity.shortName}</Classes.ShortName>}
@@ -100,19 +114,63 @@ export default function List(props: {
      
        } = props
        const typeofEntity = list && list.getType() as typeof Entity
-    const {contextDispatch} = React.useContext(contextStore)    
+       const inherited = typeofEntity.getInherited()
+    const {contextState, contextDispatch} = React.useContext(contextStore)   
+    
+    const RecursiveElement = (props: {
+        entity: Entity;
+        level: number;
+    }) => {
+        const {entity, level} = props
+        const indentStartCalc = theme.scale.space[indentStart]
+        const levelIndent = modifySize(theme.scale.space[level],indentModifier)
+        const paddingLeft = `calc(${indentStartCalc} + ${levelIndent})`
+        
+        return (
+            <React.Fragment>
+                <ListItem 
+                // indent={paddingLeft}
+                level={level}
+                entity={entity}
+                onClick={() => {
+                    console.log(`This entity: ${entity._id.get()} is inherited: ${inherited}`)
+                    contextDispatch({
+                        type: 'SET_SELECTED',
+                        currentSelection: entity,
+                        selected: inherited === true ? [contextState.selected[0], entity] : [entity]
+                    })    
+                }}/>
+                {
+                    entity instanceof ListModel && entity.entities.map((single, singlei) => 
+                        <RecursiveElement
+                            key={singlei}
+                            entity={single}   
+                            level={level+1}    
+                        />  
+                    )
+                }
+            </React.Fragment>
+        )
+    }
+
     return (
-        <Classes.Root className={`selectable-list-${typeofEntity.namePlural}`}>
+        <Classes.Root className={`selectable-list selectable-list-${typeofEntity.namePlural}`} onClick={(e) => {
+            const { target } = e;
+            if (target instanceof HTMLElement) {
+                const classList = target.classList;
+                if(classList.contains('selectable-list')) {
+                    contextDispatch({
+                        type: 'DESELECT_ALL'
+                    })
+                }
+                
+            }
+        }}>
             {list?.entities.map((single, singlei) => 
-                <ListItem
+                <RecursiveElement
                     key={singlei}
                     entity={single}
-                    onClick={() => {
-                        contextDispatch({
-                            type: 'SET_SELECTED',
-                            selected: [single]
-                        })
-                    }}
+                    level={0}
                 />  
             )}
         </Classes.Root>

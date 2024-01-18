@@ -6,6 +6,7 @@ import Entity from 'Model/Entity'
 
 const initialState = {
   selected: [],
+  currentSelection: undefined,
   modals: {
 
   }
@@ -20,7 +21,8 @@ const reducer = (_state: any, action: {
   _id?: string,
   entity?: string,
   data?: any,
-  selected?: Entity[]
+  selected?: Entity[],
+  currentSelection?: Entity
 }) => {
     trace(`Executing reducer actions: ${action.type}`)
     const state = Object.assign({},_state)
@@ -36,12 +38,14 @@ const reducer = (_state: any, action: {
     const actions = {
       'SET_SELECTED': () => {
         return Object.assign({},state,{
-          selected: action.selected
+          currentSelection: action.currentSelection,
+          selected: action.selected || [action.currentSelection]
         })
       },
       'DESELECT_ALL': () => {
         return Object.assign({},state,{
-          selected: []
+          selected: [],
+          currentSelection: undefined
         })
       },
       'OPEN_MODAL': () => {

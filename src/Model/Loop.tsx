@@ -9,7 +9,10 @@ import Group from "./Group";
     namePlural: 'Loops',
     shortName: 'loop',
     formAttributes: [
-        
+        '_id',
+        'loopStatement',
+        'iteratorId',
+        'iteratorIndex',      
     ],
     icon: BsGearFill,
 })
@@ -46,6 +49,6 @@ export default class Loop<T extends Entity> extends Group<T> {
         _id?: string,
         type: typeof Entity
     }, parent?: Entity) {
-        super({type: props.type},parent);
+        super(props,parent);
     }
 }
