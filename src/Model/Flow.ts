@@ -18,6 +18,7 @@ export default class Flow extends Entity {
     calculations: EntityList<Calculation>
     components: EntityList<Component>
     layers: EntityList<Layer>
+    calculatedTree: any = {}
     
     name: Attribute = this.newAttribute({
         _id: 'name',
@@ -69,27 +70,27 @@ export default class Flow extends Entity {
         super({
             _id: props?._id
         });
-        
+        this.path = undefined
         this._id.value = props?._id || 'New flow';
         this.setFlow = props.setFlow
         this.configurations = new EntityList<Configuration>({
-            _id: "Configurations Array",
+            _id: "configurations",
             type: Configuration,
         },this);
         this.datasets = new EntityList<Dataset>({
-            _id: "Datasets Array",
+            _id: "datasets",
             type: Dataset,
             },this);
         this.calculations= new EntityList<Calculation>({
-            _id: "Calculations Array",
+            _id: "calculations",
             type: Calculation,
             },this);
         this.components = new EntityList<Component>({
-            _id: "Components Array",
+            _id: "components",
             type: Component,
             },this);
         this.layers = new EntityList<Layer>({
-            _id: "Layers Array",
+            _id: "layers",
             type: Layer,
             },this);
         
@@ -101,6 +102,14 @@ export default class Flow extends Entity {
         props?.components && (this.components = props.components);
         props?.layers && (this.layers = props.layers)
        
+    }
+
+    calculate = (): { [key: string]: string | number | (string | number)[]; } => {
+        
+        this.calculatedTree = {};
+        // return this.calculateChildren(['configurations','datasets','calculations','components','layers'])
+        const res = this.calculateChildren(['configurations'])
+        return this.calculatedTree;
     }
     
 }

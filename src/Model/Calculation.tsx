@@ -7,6 +7,7 @@ import Entity from "./Entity";
     namePlural: 'Calculations',
     shortName: 'calc',
     formAttributes: [
+        '_id',
         'formula'
     ],
     icon: BsGearFill,

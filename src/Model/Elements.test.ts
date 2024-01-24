@@ -1,13 +1,7 @@
 
-import Calculation from "./Calculation";
-import Element from "./Element";
-import Flow from "./Flow";
-import Group from "./Group";
-import Layer from "./Layer";
-
-
-
 test("Calculation", () => {
     
-   
+   const a = {x: 1, y: 2}
+   const myFunction = new Function("return this.x")
+   console.log(myFunction.call(a))
 });

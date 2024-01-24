@@ -5,7 +5,9 @@ import ColorPicker from 'Components/ColorPicker';
 import Calculation from 'Components/Calculation';
 import Entity from './Entity';
 import {v4} from 'uuid';
-import { Wire } from './ModelDecorators';
+import { Wire, autoUpdatePath } from './ModelDecorators';
+import Flow from './Flow';
+import _ from 'lodash';
 
 export default class Attribute {
     internalId = v4();
@@ -22,6 +24,7 @@ export default class Attribute {
     parent: Entity
     onChange?: (value: any) => Entity
     value: any
+    path: string[] = []
 
     constructor(
             props: {
@@ -38,6 +41,7 @@ export default class Attribute {
             onChange?: (value: any) => Entity
     ) {
         this.parent = parent;
+        this.updatePath()
         this.onChange = onChange;
         this._id = props._id; // Assign the _id property from props
         this.name = props.name;
@@ -66,8 +70,13 @@ export default class Attribute {
     //     return this.value;
     // }
 
+    public updatePath = () => {
+        this.path = [...this.parent.path, this._id];
+    }
+
     
     @Wire
+    @autoUpdatePath
     public set(value: any): void {
         if(this.type === 'number' && isNaN(Number(value))) {
             console.error('Tried to assign a non-number value to a number attribute');
@@ -106,6 +115,17 @@ export default class Attribute {
         return true;
     }
 
+    /**
+     * Handles the change event for the attribute.
+     * @param value The new value of the attribute.
+     */
+    private onChangeHandler = (value: any) => {
+        this.set(value);
+        if(this.onChange) {
+            this.onChange(value);
+        }
+    }
+
     public getInput = (props?: any): JSX.Element => {
         const inputTypes = {
                             'identifier': <Text {...props} />,
@@ -118,9 +138,7 @@ export default class Attribute {
                             'calculation': <Calculation {...props} />
         } 
         const input = React.cloneElement(inputTypes[this.type], {
-            onChange: (value: any) => {
-                this.set(value);
-            }
+            onChange: this.onChangeHandler
         });
         return input;
     }
@@ -129,20 +147,26 @@ export default class Attribute {
         this.parent.update();
     }
 
-    public calculate(expression: any) {
+    public calculate() {
+        
+        let res: any;
+        const {calculatedTree} = (this.parent.getRoot() as Flow)
         if(this.type === 'calculation') {
-            const newExpression = `${expression}
-            ${this.value}`
+            const targetFunction = new Function("return " + this.value)
+            console.log('Running calculation', targetFunction)
             try {
-                const res = eval(newExpression);
-                return res
+                res = targetFunction.call(calculatedTree);
             }
             catch(e) {
                 console.error(e);
-                return undefined
+                throw new Error('Error in calculation');
             }
         }
-        return this.value;
+        else {
+            res = this.value;
+        }
+        (this.parent.getRoot() as Flow).calculatedTree = _.set((this.parent.getRoot() as Flow).calculatedTree,this.path, res);
+        console.log((this.parent.getRoot() as Flow).calculatedTree)
     }
 
 }

@@ -7,6 +7,8 @@ import Config from "./Interface/Config";
 import { config } from "mathjs";
 import { flowStore } from 'Context/flowStore';
 import { Wire } from './ModelDecorators';
+import { v4 as uuidv4 } from 'uuid';
+import { autoUpdatePath } from './ModelDecorators';
 
 
 export default class Entity {
@@ -26,6 +28,11 @@ export default class Entity {
      * Indicates whether the entity is autowired. If true, the flow state in the context will be updated when the entity is updated.
      */
     autowired: boolean;
+    
+    /**
+     * Represents the path of the entity.
+     */
+    path: string[] = [];
 
 
 
@@ -153,11 +160,15 @@ export default class Entity {
         if(props?._id) {
             this._id.value = props._id;
         }
+        else {
+            this._id.value = uuidv4();
+        }
 
         if(parent) {
             this.parent = parent;
         }
 
+        this.updatePath()
     }
     
     /**
@@ -175,6 +186,8 @@ export default class Entity {
             target.inherited = config.inherited;
         }    
     }
+
+    
     
     
 
@@ -193,8 +206,21 @@ export default class Entity {
      * @param parent The parent entity to set.
      */
     @Wire
+    @autoUpdatePath
     public setParent(parent: Entity): void {
         this.parent = parent;
+    }
+
+    public updatePath(): void {
+        console.log('Updating entity path! entitiy:')
+        console.log(this._id.value)
+        if(this.parent?.path) {
+            this.path = [...this.parent.path,this._id.value];
+        }
+        else {
+            this.path = [this._id.value];
+        }
+        console.log(this.path)
     }
 
 
@@ -308,6 +334,7 @@ export default class Entity {
      * @param value - The value to set.
      */
     @Wire
+    @autoUpdatePath
     public set(attribute: string, value: any): void {
         if(!this[attribute]) {
             console.error(`attribute ${attribute} `);
@@ -390,15 +417,22 @@ export default class Entity {
         return result;
     }
 
-    public calculate(): {[key: string]: string | number | (string | number)[]}[] {
-        const attributes = this.getAttributes();
-        let res = [];
-        for(let attr of attributes) {
-            if(attr.type === 'calculation') {
-                res.push({[attr._id]: attr.calculate("")});
-            }
+    public calculate(): void {
+        for(let attr of this.getAttributes()) {
+            attr.calculate()
         }
-        return res;
+    }
+
+    public calculateChildren = (ids: string[]): {[key: string]: string | number | (string | number)[]} => {
+        let res = {}
+        for(let child of ids) {
+            if(!this[child]) {
+                console.error(`Child ${child} does not exist`);
+                continue;
+            }
+            this[child].calculate();
+        }
+        return res
     }
 
     /**

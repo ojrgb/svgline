@@ -88,7 +88,6 @@ function ListItem(props: {
     
     const typeofEntity = entity.constructor as typeof Entity
     const selected = contextState.selected.includes(entity)
-    console.log(entity)
     return (
         <Classes.Single indent={props.indent} className={`selectable-list-item list-item-${entity._id.get()}`}
         // style={{paddingLeft}}
@@ -133,7 +132,6 @@ export default function List(props: {
                 level={level}
                 entity={entity}
                 onClick={() => {
-                    console.log(`This entity: ${entity._id.get()} is inherited: ${inherited}`)
                     contextDispatch({
                         type: 'SET_SELECTED',
                         currentSelection: entity,

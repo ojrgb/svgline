@@ -35,7 +35,7 @@ export default function ContextWorkspace(props: React.HTMLAttributes<HTMLDivElem
     const {flow, setFlow} = React.useContext(flowStore)
     const {contextState, contextDispatch} = React.useContext(contextStore)
     flow.setFlow = setFlow
-    
+    console.log(flow.calculate())
     return (
         <Classes.Root id="context-workspace">
             {

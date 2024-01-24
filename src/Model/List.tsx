@@ -162,7 +162,7 @@ export default class List<T extends Entity> extends Entity {
             }
         }
 
-        item.parent = this
+        item.setParent(this)
       
         if (index) {
             this.entities.splice(index, 0, item)
