@@ -5,7 +5,7 @@ import ColorPicker from 'Components/ColorPicker';
 import Calculation from 'Components/Calculation';
 import Entity from './Entity';
 import {v4} from 'uuid';
-import { Wire, autoUpdatePath } from './ModelDecorators';
+import { Wire, autoUpdatePath, updateCalculatedTree } from './ModelDecorators';
 import Flow from './Flow';
 import _ from 'lodash';
 
@@ -41,9 +41,9 @@ export default class Attribute {
             onChange?: (value: any) => Entity
     ) {
         this.parent = parent;
-        this.updatePath()
         this.onChange = onChange;
         this._id = props._id; // Assign the _id property from props
+        this.updatePath()
         this.name = props.name;
         this.type = props.type;
         this.mandatory = props.mandatory;
@@ -119,8 +119,10 @@ export default class Attribute {
      * Handles the change event for the attribute.
      * @param value The new value of the attribute.
      */
-    private onChangeHandler = (value: any) => {
-        this.set(value);
+    @autoUpdatePath
+    onChangeHandler (value: any) {
+        // We have to set the value in the parent to trigger the auto updating of the path property in the parent.
+        this.parent.set(this._id, value);
         if(this.onChange) {
             this.onChange(value);
         }
@@ -138,7 +140,7 @@ export default class Attribute {
                             'calculation': <Calculation {...props} />
         } 
         const input = React.cloneElement(inputTypes[this.type], {
-            onChange: this.onChangeHandler
+            onChange: (v: any) => {this.onChangeHandler(v)}
         });
         return input;
     }
@@ -147,26 +149,40 @@ export default class Attribute {
         this.parent.update();
     }
 
-    public calculate() {
-        
+    /**
+     * Computes the value of the attribute.
+     * @returns The computed value of the attribute.
+     */
+    public compute() {
         let res: any;
         const {calculatedTree} = (this.parent.getRoot() as Flow)
         if(this.type === 'calculation') {
-            const targetFunction = new Function("return " + this.value)
-            console.log('Running calculation', targetFunction)
             try {
+                const targetFunction = new Function(`const {configurations, calculations, datasets, components} = this;
+                return  ${this.value}`)
                 res = targetFunction.call(calculatedTree);
             }
             catch(e) {
-                console.error(e);
-                throw new Error('Error in calculation');
+
             }
         }
         else {
-            res = this.value;
+            if(isNaN(Number(this.value))) {
+                res = this.value;
+            }
+            else {
+                res = Number(this.value);
+            }
         }
-        (this.parent.getRoot() as Flow).calculatedTree = _.set((this.parent.getRoot() as Flow).calculatedTree,this.path, res);
-        console.log((this.parent.getRoot() as Flow).calculatedTree)
+        return res;
+    }
+
+    /**
+     * Calculates the attribute value and updates the calculated tree.
+     */
+    @updateCalculatedTree
+    public calculate() {
+        return this.compute();
     }
 
 }

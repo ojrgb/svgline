@@ -1,6 +1,7 @@
 import { BsGearFill } from "Components/Icons/Icons";
 import Attribute from "./Attribute";
 import Entity from "./Entity";
+import { updateCalculatedTree } from "./ModelDecorators";
 
 @Entity.Configure({
     nameSingle: 'Calculation',
@@ -13,12 +14,6 @@ import Entity from "./Entity";
     icon: BsGearFill,
 })
 export default class Calculation extends Entity {
-    name: Attribute = this.newAttribute({
-        _id: 'name',
-        name: 'name',
-        type: 'string',
-        mandatory: true,
-    });
 
     formula: Attribute = this.newAttribute({
         _id: 'formula',
@@ -34,5 +29,10 @@ export default class Calculation extends Entity {
     }) {
         super({_id: props._id},props.parent);
         
+    }
+
+    @updateCalculatedTree
+    calculate () {
+        return this.formula.compute()
     }
 }

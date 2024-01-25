@@ -359,7 +359,8 @@ export default class Entity {
         // If an attribute was specified, return that attribute
         if(attribute) {
             if(!this[attribute]) {
-                console.error(`attribute ${attribute} does not exist`);
+                // console.error(`attribute ${attribute} does not exist`);
+                return undefined
             }
             if(this[attribute] instanceof Attribute) {
                 const attr: Attribute = this[attribute];
@@ -418,13 +419,12 @@ export default class Entity {
     }
 
     public calculate(): void {
-        for(let attr of this.getAttributes()) {
+        for(let attr of this.getAttributes().filter((attr: Attribute) => attr._id !== '_id')){
             attr.calculate()
         }
     }
 
-    public calculateChildren = (ids: string[]): {[key: string]: string | number | (string | number)[]} => {
-        let res = {}
+    public calculateChildren = (ids: string[]): void => {
         for(let child of ids) {
             if(!this[child]) {
                 console.error(`Child ${child} does not exist`);
@@ -432,7 +432,6 @@ export default class Entity {
             }
             this[child].calculate();
         }
-        return res
     }
 
     /**

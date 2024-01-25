@@ -1,3 +1,6 @@
+import _ from "lodash";
+import Flow from "./Flow";
+
 /**
  * Decorator that adds a wire functionality to a method.
  * The decorated method will be called with its original arguments,
@@ -30,12 +33,20 @@ export const autoUpdatePath = (target: any, propertyKey: string, descriptor: Pro
     
     const originalMethod = descriptor.value;
     descriptor.value = function(...args: any[]) {     
-        console.log(`Updating path`)
-        console.log(this.path)
-        console.log(this.parent?.path)     
         const result = originalMethod.apply(this, args);
         this.updatePath();
         return result;
     };
     return descriptor;
 }
+
+export const updateCalculatedTree = (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {   
+    const originalMethod = descriptor.value;
+    descriptor.value = function(...args: any[]) {      
+        const res = originalMethod.apply(this, args);
+        (this.parent.getRoot() as Flow).calculatedTree = _.set((this.parent.getRoot() as Flow).calculatedTree,this.path, res);
+        return res;
+    };
+    return descriptor;
+}
+

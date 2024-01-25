@@ -108,7 +108,7 @@ export default class Flow extends Entity {
         
         this.calculatedTree = {};
         // return this.calculateChildren(['configurations','datasets','calculations','components','layers'])
-        const res = this.calculateChildren(['configurations'])
+        const res = this.calculateChildren(['configurations','datasets','calculations','components','layers'])
         return this.calculatedTree;
     }
     

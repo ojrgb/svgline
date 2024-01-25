@@ -1,6 +1,7 @@
 import { BsGearFill } from "Components/Icons/Icons";
 import Attribute from "./Attribute";
 import Entity from "./Entity";
+import { updateCalculatedTree } from "./ModelDecorators";
 
 @Entity.Configure({
     nameSingle: 'Configuration',
@@ -80,5 +81,10 @@ export default class Configuration extends Entity {
         this.defaultValue.value = props.defaultValue;
         this.sampleValue.value = props.sampleValue;
         
+    }
+
+    @updateCalculatedTree
+    public calculate(): void {
+        return this.sampleValue.compute() || this.defaultValue.compute()
     }
 }
