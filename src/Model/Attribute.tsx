@@ -135,7 +135,6 @@ export default class Attribute {
                             'number': <Text validate="number" {...props} />,
                             'boolean': <Select options={[{_id: 'true', name: 'true'}, {_id: 'false', name: 'false'}]} {...props} />,
                             'color': <ColorPicker {...props} />,
-                            // 'elements': undefined,
                             'list': <Select options={this.options} {...props} />,
                             'calculation': <Calculation {...props} />
         } 

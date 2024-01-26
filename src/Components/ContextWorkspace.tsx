@@ -35,7 +35,6 @@ export default function ContextWorkspace(props: React.HTMLAttributes<HTMLDivElem
     const {flow, setFlow} = React.useContext(flowStore)
     const {contextState, contextDispatch} = React.useContext(contextStore)
     flow.setFlow = setFlow
-    console.log(flow.calculate())
     return (
         <Classes.Root id="context-workspace">
             {
@@ -91,8 +90,6 @@ export default function ContextWorkspace(props: React.HTMLAttributes<HTMLDivElem
                             h={rowHeights[2]}  
                             missingMessage="Select a layer to edit its elements"
                         />
-                            {/* <LayersEditor w={10} h={3}/>
-                            <ElementsEditor w={10} h={7}/> */}
                         </Classes.UIComponents>
                         
                     </React.Fragment>

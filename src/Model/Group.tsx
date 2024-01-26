@@ -33,4 +33,6 @@ export default class Group<T extends Entity> extends List<T> {
     getInherited = (): boolean => {
         return this.type.getInherited()
     }
+
+    
 }

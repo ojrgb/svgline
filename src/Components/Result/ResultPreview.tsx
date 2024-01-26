@@ -3,77 +3,50 @@ import theme from 'theme'
 import styled from 'styled-components'
 
 import Renderer from 'Render/Renderer'
+import { flowStore } from 'Context/flowStore'
+import Element from 'Model/Element'
+import Layer from 'Model/Layer'
 
 
 
 export default function ResultPreview(props) {
  
-    const svgParams = {}
-    const renderedPackage = Renderer.renderPackage(undefined)
-    const layers = renderedPackage.layers
+    const {flow} = React.useContext(flowStore)
+    console.log(flow.calculate())
     
+    function renderElement(element: Element) {
+        const svgelements = {
+            'line': <line/>,
+            'circle': <circle/>,
+            'rect': <rect/>,
+            'text': <text/>,
+            'g': <g/>,
+        }
+            const svgelement = svgelements[element.get("type")]
+            console.log('svg element', svgelement)
+            if (svgelement)
+            {
+                return React.cloneElement(svgelement, element.getAttributes())
+           }
 
-    const createLayers = (layers) => {
-        return layers.map(layer => createLayer(layer))
-        
+                return undefined
+          
+    }
+    function renderLayer(layer: any) {
+        return layer.elements?.map?.((element: any) => {
+            return renderElement(element)
+        })
     }
 
-    const createLayer = (layer) => {
-       return (
-            <svg id={`layer-${layer._id}`} className="preview-layer" key={layer._id} style={{
-                backgroundColor: layer.backgroundColor,
-                width: '100%',
-                height: '100%',
-                opacity: layer.opacity ? layer.opacity/100 : 1  
-            }}>
-                <rect id={`layer-${layer._id}-bg`} x="0" width="100" height="100" 
-                fill={layer.backgroundColor || 'rgba(0,0,0,0)'}
-                style={{
-                
-                }}/>
-                {
-                    layer.elements?.filter(v => !!v.type).map((element,elementi) => {
-                        return createElement({element,elementi, layer})
-                    })
-                }
-            </svg>  
-       )
-    }
-
-    const createElement = (props: {
-        element: any,
-        elementi: number,
-        layer: any
-    
-    }) => {
-        const {element, elementi, layer} = props
-        // Render the element here. This just replaces all the x1={value: 4, type: 'calculation'} with x1=4
-       const renderedElement = Renderer.renderElement(element)
-       // Now let's remove all the empty attributes so we don't pass them along
-       const renderedElementWithNoEmptyAttributes: any = Object.keys(renderedElement).reduce((acc,curr) => {
-              if(renderedElement[curr] !== undefined) {
-                acc[curr] = renderedElement[curr]
-              }
-              return acc
-         },{})
-         const e = renderedElementWithNoEmptyAttributes // Just shorten the name.
-        return <e.type key={elementi} id={`layer-${layer._id}-element-${e._id}`} {...e}/>
-        return <div/>
-    }
-    
-    return (
- 
-            // <svg key={JSON.stringify(layers)}
-            //     style={{
-            //         height: '100%',
-            //         width: {'1-1': '100%'}[svgParams.ratio]
-            //     }}
-            //     viewBox={`0 0 ${{'1-1': '100', '4-3': 100*4/3}[svgParams.ratio]} ${{'1-1': '100', '4-3': '100'}[svgParams.ratio]}`}
-            // >
-            //  {createLayers(layers)}   
+    function renderLayers() {
+        console.log(flow.calculate())
+        return flow.calculate().layers?.map?.((layer: any) => {
             
-            // </svg>
-            <div/>
-       
-    )
+            return renderLayer(layer)
+        })
+    }
+
+    console.log(renderLayers())
+    return (<div></div>)
+
 }

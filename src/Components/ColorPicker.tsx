@@ -26,7 +26,7 @@ const Classes = {
             border: ${modifySize(theme.borders.primary.width,borderThicknessDelta)} inset ${relaxColor(theme.borders.primary.color,relaxBorderDelta)};
             outline: none;
         }
-        width:70%;
+        width:100%;
     `,
     SketchContainer: styled.div.attrs({className: 'color-picker-sketch-container'})`
         position: absolute;

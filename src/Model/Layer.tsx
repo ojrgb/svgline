@@ -3,6 +3,7 @@ import Attribute from "./Attribute";
 import Element from "./Element";
 import Entity from "./Entity";
 import EntityList from "./EntityList";
+import { updateCalculatedTree } from "./ModelDecorators";
 
 @Entity.Configure({
     nameSingle: 'Layer',
@@ -23,19 +24,24 @@ export default class Layer extends Entity {
         mandatory: false,
     });
     
-    elements: EntityList<Element> = new EntityList<Element>({
-        _id: 'elements',
-        type: Element,
-    },this);     
+    elements: EntityList<Element>;   
 
     constructor(props: {
-        _id: string, 
-        parent?: Entity, 
-        
-    }) {
+        _id: string
+    }, parent: Entity) {
         super({
             _id: props._id,
-        },props.parent);
-        
+        },parent);
+        this.elements = new EntityList<Element>({
+            _id: 'elements',
+            type: Element,
+        },this);  
+    }
+
+    // @updateCalculatedTree
+    public _calculate: () => any = () => {
+        // You still need to add the super calculate
+        this.elements.calculate()
+        super.calculate()
     }
 }

@@ -31,11 +31,7 @@ export default class EntityList<T extends Entity> extends List<T> {
     }
 
     
-    calculate: () => void = () => {
-        this.entities.map((entity: Entity) => {
-            entity.calculate()
-        })
-    }
+    
 
     /**
      * Represents a list of entities.

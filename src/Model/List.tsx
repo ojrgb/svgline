@@ -208,6 +208,10 @@ export default class List<T extends Entity> extends Entity {
         }
     }
 
+    public getEntities(): (T | Group<T> | Loop<T>)[] {
+        return this.entities
+    }
+
     /**
      * Retrieves an entity from the entity list based on its ID.
      * @param id - The ID of the entity to retrieve.
@@ -227,6 +231,12 @@ export default class List<T extends Entity> extends Entity {
 
     public clone(): List<T> {
         return Object.assign(Object.create(Object.getPrototypeOf(this)), this)
+    }
+
+    calculate: () => void = () => {
+        this.entities.map((entity: Entity) => {
+            entity._calculate ? entity._calculate() : entity.calculate()
+        })
     }
 
 }

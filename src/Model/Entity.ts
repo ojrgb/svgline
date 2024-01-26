@@ -212,15 +212,12 @@ export default class Entity {
     }
 
     public updatePath(): void {
-        console.log('Updating entity path! entitiy:')
-        console.log(this._id.value)
         if(this.parent?.path) {
             this.path = [...this.parent.path,this._id.value];
         }
         else {
             this.path = [this._id.value];
         }
-        console.log(this.path)
     }
 
 
@@ -396,8 +393,6 @@ export default class Entity {
     }
 
     public clone(): Entity {
-        console.log('This is me',this)
-        console.log('This is the clone',Object.assign(Object.create(Object.getPrototypeOf(this)), this))
         return Object.assign(Object.create(Object.getPrototypeOf(this)), this)
     }
 
@@ -420,9 +415,12 @@ export default class Entity {
 
     public calculate(): void {
         for(let attr of this.getAttributes().filter((attr: Attribute) => attr._id !== '_id')){
+            
             attr.calculate()
         }
     }
+
+    public _calculate : () => void | any = undefined
 
     public calculateChildren = (ids: string[]): void => {
         for(let child of ids) {

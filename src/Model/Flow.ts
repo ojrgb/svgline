@@ -104,7 +104,7 @@ export default class Flow extends Entity {
        
     }
 
-    calculate = (): { [key: string]: string | number | (string | number)[]; } => {
+    calculate = (): any => {
         
         this.calculatedTree = {};
         // return this.calculateChildren(['configurations','datasets','calculations','components','layers'])
