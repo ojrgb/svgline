@@ -8,6 +8,7 @@ import {v4} from 'uuid';
 import { Wire, autoUpdatePath, updateCalculatedTree } from './ModelDecorators';
 import Flow from './Flow';
 import _ from 'lodash';
+import Loop from './Loop';
 
 export default class Attribute {
     internalId = v4();
@@ -126,6 +127,9 @@ export default class Attribute {
         if(this.onChange) {
             this.onChange(value);
         }
+        if(this._id === '_id') {
+            this.parent.updateAttributePaths();
+        }
     }
 
     public getInput = (props?: any): JSX.Element => {
@@ -157,8 +161,16 @@ export default class Attribute {
         const {calculatedTree} = (this.parent.getRoot() as Flow)
         if(this.type === 'calculation') {
             try {
-                const targetFunction = new Function(`const {configurations, calculations, datasets, components} = this;
-                return  ${this.value}`)
+                
+                const iteratorId = this.parent?.parent?.get?.('iteratorId')
+                const iteratorIndex = this.parent?.parent?.get?.('iteratorIndex')
+                console.log('This is the parent', this.parent)
+                const functionStatement = `const {configurations, calculations, datasets, components} = this;
+                ${iteratorId ? `const {${iteratorId}} = this;` : ''}
+                ${iteratorIndex ? `const {${iteratorIndex}} = this;` : ''}
+                return  ${this.value}`
+                console.log('This is the function!', functionStatement)
+                const targetFunction = new Function(functionStatement)
                 res = targetFunction.call(calculatedTree);
             }
             catch(e) {
@@ -181,6 +193,7 @@ export default class Attribute {
      */
     @updateCalculatedTree
     public calculate() {
+        
         return this.compute();
     }
 

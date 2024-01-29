@@ -414,7 +414,9 @@ export default class Entity {
     }
 
     public calculate(): void {
-        for(let attr of this.getAttributes().filter((attr: Attribute) => attr._id !== '_id')){
+        for(let attr of this.getAttributes())
+        // .filter((attr: Attribute) => attr._id !== '_id'))
+        {
             
             attr.calculate()
         }
@@ -432,9 +434,10 @@ export default class Entity {
         }
     }
 
-    /**
-     * Gets the value indicating whether the entity is inherited.
-     * @returns {boolean} The value indicating whether the entity is inherited.
-     */
+    public updateAttributePaths = (): void => {
+        for(let attr of this.getAttributes()) {
+            attr.updatePath();
+        }
+    }
     
 }

@@ -12,7 +12,7 @@ import { updateCalculatedTree } from "./ModelDecorators";
     formAttributes: [
         '_id',
         'name',
-        
+        'fill'
     ],
     icon: BsGearFill,
 })
@@ -21,6 +21,13 @@ export default class Layer extends Entity {
         _id: 'name',
         name: 'Name',
         type: 'string',
+        mandatory: false,
+    });
+
+    fill: Attribute = this.newAttribute({
+        _id: 'fill',
+        name: 'Fill',
+        type: 'color',
         mandatory: false,
     });
     

@@ -6,7 +6,7 @@ import Entity from "./Entity";
     nameSingle: 'Element',
     namePlural: 'Elements',
     shortName: 'elem',
-    formAttributes: ['name', 'type', 'stroke', 'strokeWidth', 'fill', 'opacity', 'x', 'y', 'width', 'height', 'radius', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'rx', 'ry', 'text'],
+    formAttributes: ['_id','name', 'type', 'stroke', 'strokeWidth', 'fill', 'opacity', 'x', 'y', 'width', 'height', 'radius', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'rx', 'ry', 'text'],
     icon: BsGearFill,
     inherited: true
 })

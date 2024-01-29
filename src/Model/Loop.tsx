@@ -3,6 +3,8 @@ import Attribute from "./Attribute";
 import Entity from "./Entity";
 import EntityList from "./EntityList";
 import Group from "./Group";
+import Flow from "./Flow";
+import _ from "lodash";
 
 @Entity.Configure({
     nameSingle: 'Loop',
@@ -40,7 +42,33 @@ export default class Loop<T extends Entity> extends Group<T> {
     });
 
     
-
+    calculate = () => {
+        const loopStatement = this.get("loopStatement") as string
+        const iteratorId = this.get("iteratorId") as string
+        const iteratorIndex = this.get("iteratorIndex") as string
+        if(!loopStatement || !iteratorId || !iteratorIndex) {
+            return
+        }
+        try {
+            const loopFunction = new Function(this.get("loopStatement") as string)
+            const iterators = loopFunction.apply(this)
+            iterators?.map((currentIterator: any, currentIndex: number) => {
+                console.log('Iterating!');
+                (this.parent.getRoot() as Flow).calculatedTree = _.set((this.parent.getRoot() as Flow).calculatedTree,iteratorId, currentIterator);
+                (this.parent.getRoot() as Flow).calculatedTree = _.set((this.parent.getRoot() as Flow).calculatedTree,iteratorIndex, currentIndex);
+                console.log((this.parent.getRoot() as Flow).calculatedTree)
+                this.entities.map((child: Entity) => {
+                    child.calculate()
+                });
+                (this.parent.getRoot() as Flow).calculatedTree = _.omit((this.parent.getRoot() as Flow).calculatedTree,[iteratorId, iteratorIndex]);    
+            })
+            
+        }
+        catch(e) {
+            console.error(e)
+        }
+        
+    }
 
 
 
