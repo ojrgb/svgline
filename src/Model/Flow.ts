@@ -7,10 +7,11 @@ import Entity from "./Entity";
 import { BsFlower1 } from "Components/Icons/Icons";
 import Attribute from "./Attribute";
 import EntityList from "./EntityList";
+import _ from "lodash";
 
 export default class Flow extends Entity {
     
-    getRoot = (): Entity => {
+    getRoot = (): Flow => {
         return this;
     }
     configurations: EntityList<Configuration>
@@ -55,7 +56,6 @@ export default class Flow extends Entity {
         mandatory: true,
     });
     autowired: boolean = true;
-
     
     // Create a new flow. A flow contains all the configurations, datasets, calculations, components, layers and parameters required to produce a graphic.
     constructor(props: {
@@ -110,6 +110,24 @@ export default class Flow extends Entity {
         // return this.calculateChildren(['configurations','datasets','calculations','components','layers'])
         const res = this.calculateChildren(['configurations','datasets','calculations','components','layers'])
         return this.calculatedTree;
+    }
+
+    mergeCalculatedTree = (path, value): void => {
+        this.calculatedTree = _.set(this.calculatedTree,path, value);
+    }
+
+    removeFromCalculatedTree = (paths: string[]): void => {
+        paths.forEach(path => {
+            this.calculatedTree = _.omit(this.calculatedTree,path);
+        })
+    }
+
+    setIterator = (iteratorId: any, iteratorValue: any): void => {
+        this.mergeCalculatedTree(['iterator',iteratorId],iteratorValue)
+    }
+
+    removeIterator = (): void => {
+        this.removeFromCalculatedTree(['iterator'])
     }
     
 }

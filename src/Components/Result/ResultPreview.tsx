@@ -6,6 +6,7 @@ import Renderer from 'Render/Renderer'
 import { flowStore } from 'Context/flowStore'
 import Element from 'Model/Element'
 import Layer from 'Model/Layer'
+import _ from 'lodash'
 
 const Classes = {
     SVGRoot: styled.svg.attrs({className: 'svg-root'})`
@@ -20,6 +21,17 @@ export default function ResultPreview(props) {
     const {flow} = React.useContext(flowStore)
     
     function renderElement(element: any) {
+        if(element.objectType==='loop') {
+            const elements = []
+            for(let [elementId, elementValue] of Object.entries(_.omit(element,['objectType']))) {
+                elements.push(
+                        elementValue
+                )
+                
+                
+            }   
+            return renderElement(elements)
+        }        
         const svgelements = {
             'line': <line/>,
             'circle': <circle/>,
@@ -37,13 +49,34 @@ export default function ResultPreview(props) {
                 return undefined
           
     }
-    function renderLayer(layer: any) {
+
+    function renderElements(elements: any[]) {
         const renderedElements: ReactElement[] = []
-        for(let elementId in layer.elements) {
-            const element = layer.elements[elementId]
-            
+        for(let elementId in elements) {
+            const element = elements[elementId]
             renderedElements.push(renderElement(element))
         }
+        return renderedElements
+    }
+
+    // I feel like this guy is gonna need fixing at some point
+    function renderLayer(layer: any) {
+        if(layer.objectType==='loop') {
+            const e = Object.entries(_.omit(layer,['objectType']))
+            if(e.length===0) {
+                return undefined
+            }
+            const [entries]  = e
+            const [layerId, layerValues] = entries
+            const renderedLayers = layerValues?.map((layerValue, index) => {
+                return renderLayer(layerValue)
+            })
+
+            return renderedLayers
+            return undefined
+        }        
+        console.log('elements for layer',layer._id, layer.elements)
+        const renderedElements = renderElements(layer.elements)
         const renderedLayer = <g key={layer._id}>
             <rect x={0} y={0} width={100} height={100} fill={layer.fill}/>
             {renderedElements}
@@ -52,13 +85,8 @@ export default function ResultPreview(props) {
         return renderedLayer
     }
 
-    function renderLayers() {
-        
-        const calculatedTree = flow.calculate()
-        console.log(calculatedTree)
+    function renderLayers(layers: any[]) {
         let res: ReactElement[] = []
-        
-        const {layers} = calculatedTree
         for (let layerId in layers) {
             const layer = layers[layerId]
             if(layer!==undefined) {
@@ -67,8 +95,8 @@ export default function ResultPreview(props) {
         }
         return res
     }
-    
-    const renderedLayers = renderLayers()
+    console.log('layers:',flow.calculate().layers)
+    const renderedLayers = renderLayers(flow.calculate().layers)
     
     
     return (

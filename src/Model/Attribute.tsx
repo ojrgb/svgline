@@ -161,15 +161,14 @@ export default class Attribute {
         const {calculatedTree} = (this.parent.getRoot() as Flow)
         if(this.type === 'calculation') {
             try {
-                
-                const iteratorId = this.parent?.parent?.get?.('iteratorId')
-                const iteratorIndex = this.parent?.parent?.get?.('iteratorIndex')
-                console.log('This is the parent', this.parent)
+                // The below line is a hack to get the iterator variables in the scope of the function.
+                // TODO: Find a better way to do this.
+                // LOL, it wasn't me that wrote this comment, it was Copilot. Even Copilot knows this snippet is crap.
                 const functionStatement = `const {configurations, calculations, datasets, components} = this;
-                ${iteratorId ? `const {${iteratorId}} = this;` : ''}
-                ${iteratorIndex ? `const {${iteratorIndex}} = this;` : ''}
+                ${calculatedTree.iterator!==undefined && Object.keys(calculatedTree.iterator).map((iteratorId: string) => {
+                    return `const ${iteratorId} = this.iterator.${iteratorId};`
+                }).join('\n')}
                 return  ${this.value}`
-                console.log('This is the function!', functionStatement)
                 const targetFunction = new Function(functionStatement)
                 res = targetFunction.call(calculatedTree);
             }

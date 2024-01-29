@@ -31,8 +31,12 @@ export default class Calculation extends Entity {
         
     }
 
+    compute () {
+        return this.formula.compute()
+    }
+
     @updateCalculatedTree
     calculate () {
-        return this.formula.compute()
+        return this.compute()
     }
 }

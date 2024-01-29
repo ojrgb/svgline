@@ -45,10 +45,21 @@ export default class Layer extends Entity {
         },this);  
     }
 
-    // @updateCalculatedTree
-    public _calculate: () => any = () => {
-        // You still need to add the super calculate
-        this.elements.calculate()
-        super.calculate()
+    
+
+    public compute: () => any = () => {
+        const res = Object.assign(
+            {},
+            super.compute(),
+            {
+                elements: this.elements.compute()
+            }
+        )
+        return res
+        
+    }
+
+    public calculate: () => void = () => {
+        this.getRoot().mergeCalculatedTree(this.path,this.compute())
     }
 }

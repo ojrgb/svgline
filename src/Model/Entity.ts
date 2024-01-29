@@ -9,6 +9,7 @@ import { flowStore } from 'Context/flowStore';
 import { Wire } from './ModelDecorators';
 import { v4 as uuidv4 } from 'uuid';
 import { autoUpdatePath } from './ModelDecorators';
+import Flow from './Flow';
 
 
 export default class Entity {
@@ -121,13 +122,19 @@ export default class Entity {
     static formAttributes: string[] = [];
 
     /** Returns the topmost entity, which should be the Flow object. */
-    getRoot: () => Entity = () => {
+    getRoot: () => Flow = () => {
         if(this.parent) {
-            return this.parent.getRoot();
+            return this.parent.getRoot() as Flow;
         }
         else {
-            return this;
+            if(this instanceof Flow)
+                return this as Flow;
+            else return undefined;
         }
+    }
+
+    getCalculatedTree: () => any = () => {
+        return this.getRoot().calculatedTree;
     }
 
     // Add all the functions that will be used to control this Entity in the parent array
@@ -368,7 +375,7 @@ export default class Entity {
         // If no attribute was specified, return the whole object
         let result: any = {};
         for(let key in this) {
-            if(key==='parent') {
+            if(['parent','path'].includes(key)) {
                 continue;
             }
             let target: any = this[key]
@@ -377,7 +384,7 @@ export default class Entity {
                 continue;
             }
             if(Array.isArray(target)) {
-                result[key] = target.map((element: Entity) => element.get());
+                result[key] = target.map((element: any) => element.get?.() || element);
                 continue;
             }
             if(target instanceof Attribute) {
@@ -420,6 +427,14 @@ export default class Entity {
             
             attr.calculate()
         }
+    }
+
+    public compute(): any {
+        let res = {}
+        for(let attr of this.getAttributes()) {
+            res[attr._id] = attr.compute()
+        }
+        return res
     }
 
     public _calculate : () => void | any = undefined

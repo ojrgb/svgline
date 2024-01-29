@@ -9,7 +9,8 @@ const initialState = {
   currentSelection: undefined,
   modals: {
 
-  }
+  },
+  idCounter: {}
 }
 
 
@@ -17,12 +18,13 @@ const contextStore = React.createContext(undefined)
 const {Provider} = contextStore
 
 const reducer = (_state: any, action: {
-  type: 'OPEN_MODAL'|'CLOSE_MODAL'|'TOGGLE_MODAL'|'LOAD_OBJECTS'|'SET_SELECTED'|'DESELECT_ALL',
+  type: 'OPEN_MODAL'|'CLOSE_MODAL'|'TOGGLE_MODAL'|'LOAD_OBJECTS'|'SET_SELECTED'|'DESELECT_ALL'|'ADD_ID_COUNTER',
   _id?: string,
   entity?: string,
   data?: any,
   selected?: Entity[],
-  currentSelection?: Entity
+  currentSelection?: Entity,
+  counter?: number
 }) => {
     trace(`Executing reducer actions: ${action.type}`)
     const state = Object.assign({},_state)
@@ -30,7 +32,6 @@ const reducer = (_state: any, action: {
 
     if(action.type in ['OPEN_MODAL','CLOSE_MODAL','TOGGLE_MODAL']) {
       if(state.modals[action._id] === undefined) {
-       
         state.modals[action._id] = false
       }
     }
@@ -41,6 +42,9 @@ const reducer = (_state: any, action: {
           currentSelection: action.currentSelection,
           selected: action.selected || [action.currentSelection]
         })
+      },
+      'ADD_ID_COUNTER': () => {
+        return _.merge(state,{idCounter: {[action.entity]: action.counter}})
       },
       'DESELECT_ALL': () => {
         return Object.assign({},state,{

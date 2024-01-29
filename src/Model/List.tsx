@@ -235,7 +235,13 @@ export default class List<T extends Entity> extends Entity {
 
     calculate: () => void = () => {
         this.entities.map((entity: Entity) => {
-            entity._calculate ? entity._calculate() : entity.calculate()
+            entity.calculate()
+        })
+    }
+
+    compute: () => any = () => {
+        return this.entities.map((entity: Entity) => {
+            return entity.compute()
         })
     }
 

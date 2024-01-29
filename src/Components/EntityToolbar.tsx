@@ -43,13 +43,16 @@ export default function EntityToolbar<T extends Entity>(props: {
     // Or into another target
     // E.g. elements -> layers.[index].elements
     const onAdd = () => {
-        const targetId = `new-${typeofEntity.name}`
+        
+        console.log(contextState)
+        const targetId = `${typeofEntity.name}-${contextState.idCounter[list.type.shortName] || 1}`
         if(currentSelection instanceof Group) {
             currentSelection.newItem({_id: targetId})
         }
         else {
             list.newItem({_id: targetId})
         }
+        contextDispatch({type: 'ADD_ID_COUNTER',entity:list.type.shortName, counter: (contextState.idCounter[list.type.shortName] || 1)+1})
     }
 
     const onRemove = () => {
