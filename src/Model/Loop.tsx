@@ -42,7 +42,7 @@ export default class Loop<T extends Entity> extends Group<T> {
     });
 
     
-    calculate = () => {
+    compute = () => {
         // Perform calculation for the loop
         const loopStatement = this.get("loopStatement") as string
         const iteratorId = this.get("iteratorId") as string
@@ -85,14 +85,17 @@ export default class Loop<T extends Entity> extends Group<T> {
                 return {...acc, ...cur}
             },{})
 
-            // Merge calculated tree with the path
-            root.mergeCalculatedTree(this.path,Object.assign({},res,{objectType: 'loop'}))
+            // Return with the object type
+            return Object.assign({},res,{objectType: 'loop'})
         }
         catch(e) {
             console.error(e)
         }
     }
         
+    calculate = () => {
+        this.getRoot().mergeCalculatedTree(this.path,this.compute())
+    }
         
 
 

@@ -14,8 +14,8 @@ export default class EntityList<T extends Entity> extends List<T> {
      * 
      * @returns A new instance of the Group class.
      */
-    newGroup: () => Group<T> = () => {
-        const group = new Group<T>({_id: "New group", type: this.type}, this)
+    newGroup: (props: {_id: string}) => Group<T> = (props: {_id: string}) => {
+        const group = new Group<T>({_id: props._id, type: this.type}, this)
         this.addItem(group)
         return group
     }
@@ -24,8 +24,8 @@ export default class EntityList<T extends Entity> extends List<T> {
      * Creates a new loop.
      * @returns A new instance of Loop.
      */
-    newLoop: () => Loop<T> = () => {
-        const loop = new Loop<T>({_id: "New loop", type: this.type}, this)
+    newLoop: (props: {_id: string}) => Loop<T> = (props: {_id: string}) => {
+        const loop = new Loop<T>({_id: props._id, type: this.type}, this)
         this.addItem(loop)
         return loop
     }

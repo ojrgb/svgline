@@ -240,6 +240,7 @@ export default class List<T extends Entity> extends Entity {
     }
 
     compute: () => any = () => {
+        console.log('Computing list!')
         return this.entities.map((entity: Entity) => {
             return entity.compute()
         })

@@ -48,6 +48,7 @@ export default class Layer extends Entity {
     
 
     public compute: () => any = () => {
+        console.log('computing layer')
         const res = Object.assign(
             {},
             super.compute(),

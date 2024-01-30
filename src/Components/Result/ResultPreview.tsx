@@ -21,16 +21,22 @@ export default function ResultPreview(props) {
     const {flow} = React.useContext(flowStore)
     
     function renderElement(element: any) {
+        if(element===undefined) {
+            return undefined
+        }
+        console.log('element',element)
         if(element.objectType==='loop') {
-            const elements = []
-            for(let [elementId, elementValue] of Object.entries(_.omit(element,['objectType']))) {
-                elements.push(
-                        elementValue
-                )
+            const elementsObject = _.omit(element,['objectType'])
+            const res = Object.keys(elementsObject).map((key) => {
+                const elements = elementsObject[key]
                 
-                
-            }   
-            return renderElement(elements)
+                const renderedElements = renderElements(elements)
+                const groupedRes = <g key={element._id}>{renderedElements}</g>
+                return groupedRes
+            })
+            
+            return res
+
         }        
         const svgelements = {
             'line': <line/>,
@@ -51,10 +57,13 @@ export default function ResultPreview(props) {
     }
 
     function renderElements(elements: any[]) {
-        const renderedElements: ReactElement[] = []
-        for(let elementId in elements) {
-            const element = elements[elementId]
-            renderedElements.push(renderElement(element))
+       
+        const renderedElements: any[] = []
+        for (let element of elements) {
+            const renderedElement = renderElement(element)
+            if(renderedElement!==undefined) {
+                renderedElements.push(renderedElement)
+            }
         }
         return renderedElements
     }
@@ -75,8 +84,8 @@ export default function ResultPreview(props) {
             return renderedLayers
             return undefined
         }        
-        console.log('elements for layer',layer._id, layer.elements)
         const renderedElements = renderElements(layer.elements)
+       
         const renderedLayer = <g key={layer._id}>
             <rect x={0} y={0} width={100} height={100} fill={layer.fill}/>
             {renderedElements}
@@ -95,9 +104,8 @@ export default function ResultPreview(props) {
         }
         return res
     }
-    console.log('layers:',flow.calculate().layers)
     const renderedLayers = renderLayers(flow.calculate().layers)
-    
+    console.log(flow.calculate())
     
     return (
         <Classes.SVGRoot viewBox='0 0 100 100'>

@@ -44,7 +44,6 @@ export default function EntityToolbar<T extends Entity>(props: {
     // E.g. elements -> layers.[index].elements
     const onAdd = () => {
         
-        console.log(contextState)
         const targetId = `${typeofEntity.name}-${contextState.idCounter[list.type.shortName] || 1}`
         if(currentSelection instanceof Group) {
             currentSelection.newItem({_id: targetId})
@@ -72,11 +71,15 @@ export default function EntityToolbar<T extends Entity>(props: {
     }
 
     const onAddGroup = () => {
-        list.newGroup()
+        const targetId = `${typeofEntity.name}-Group-${contextState.idCounter.group || 1}`
+        list.newGroup({_id: targetId})
+        contextDispatch({type: 'ADD_ID_COUNTER',entity:'group', counter: (contextState.idCounter.group || 1)+1})
     }
 
     const onAddLoop = () => {
-        list.newLoop()
+        const targetId = `${typeofEntity.name}-Loop-${contextState.idCounter.loop || 1}`
+        list.newLoop({_id: targetId})
+        contextDispatch({type: 'ADD_ID_COUNTER',entity:'loop', counter: (contextState.idCounter.loop || 1)+1})
     }
 
 
