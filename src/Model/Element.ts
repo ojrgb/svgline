@@ -6,7 +6,7 @@ import Entity from "./Entity";
     nameSingle: 'Element',
     namePlural: 'Elements',
     shortName: 'elem',
-    formAttributes: ['_id','name', 'type', 'stroke', 'strokeWidth', 'fill', 'opacity', 'x', 'y', 'width', 'height', 'radius', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'rx', 'ry', 'text'],
+    formAttributes: ['_id','name', 'type', 'stroke', 'strokeWidth', 'fill', 'opacity', 'x', 'y', 'width', 'height', 'r', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'rx', 'ry', 'text'],
     icon: BsGearFill,
     inherited: true
 })
@@ -88,8 +88,8 @@ export default class Element extends Entity {
         mandatory: true,
         conditions: props => (['polygon','rect','circle'].indexOf(props.type)>-1)
     });
-    radius: Attribute = this.newAttribute({
-        _id: 'radius',
+    r: Attribute = this.newAttribute({
+        _id: 'r',
         name: 'Radius',
         type: 'calculation',
         mandatory: true,
@@ -170,7 +170,7 @@ export default class Element extends Entity {
         y?: string,
         width?: string,
         height?: string,
-        radius?: string,
+        r?: string,
         x1?: string,
         y1?: string,
         x2?: string,
@@ -191,7 +191,7 @@ export default class Element extends Entity {
         this.y.value = props.y;
         this.width.value = props.width;
         this.height.value = props.height;
-        this.radius.value = props.radius;
+        this.r.value = props.r;
         this.x1.value = props.x1;
         this.y1.value = props.y1;
         this.x2.value = props.x2;
