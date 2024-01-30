@@ -166,6 +166,10 @@ export default class Attribute {
                 // LOL, it wasn't me that wrote this comment, it was Copilot. Even Copilot knows this snippet is crap.
                 const functionStatement = `const {configurations, calculations, datasets, components} = this;
                 ${calculatedTree.iterator!==undefined && Object.keys(calculatedTree.iterator).map((iteratorId: string) => {
+                    // This part destructures the iterator object and assigns the values to variables with the same name as the keys.
+                    // For example, if the iterator object is {iteratorId: 1, iteratorIndex: 0}, this part will generate the following code:
+                    // const iteratorId = this.iterator.iteratorId;
+                    // const iteratorIndex = this.iterator.iteratorIndex;
                     return `const ${iteratorId} = this.iterator.${iteratorId};`
                 }).join('\n')}
                 return  ${this.value}`

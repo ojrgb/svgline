@@ -7,6 +7,7 @@ import { flowStore } from 'Context/flowStore'
 import Element from 'Model/Element'
 import Layer from 'Model/Layer'
 import _ from 'lodash'
+import { v4 } from 'uuid'
 
 const Classes = {
     SVGRoot: styled.svg.attrs({className: 'svg-root'})`
@@ -49,7 +50,7 @@ export default function ResultPreview(props) {
             
             if (svgelement)
             {
-                return React.cloneElement(svgelement, Object.assign({},element, {key: element._id}))
+                return React.cloneElement(svgelement, Object.assign({},element, {key: v4()}))
            }
 
                 return undefined

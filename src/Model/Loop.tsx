@@ -15,6 +15,7 @@ import _ from "lodash";
         'loopStatement',
         'iteratorId',
         'iteratorIndex',      
+        'arrayId',
     ],
     icon: BsGearFill,
 })
@@ -41,15 +42,23 @@ export default class Loop<T extends Entity> extends Group<T> {
         mandatory: true,
     });
 
+    arrayId: Attribute = this.newAttribute({
+        _id: 'arrayId',
+        name: 'Array Id',
+        type: 'string',
+        mandatory: true,
+    });
+
     
     compute = () => {
         // Perform calculation for the loop
         const loopStatement = this.get("loopStatement") as string
         const iteratorId = this.get("iteratorId") as string
         const iteratorIndex = this.get("iteratorIndex") as string
+        const arrayId = this.get("arrayId") as string
 
         // Check if loop statement and iterator values are present
-        if(!loopStatement || !iteratorId || !iteratorIndex) {
+        if(!loopStatement || !iteratorId || !iteratorIndex || !arrayId) {
             return
         }
 
@@ -76,6 +85,7 @@ export default class Loop<T extends Entity> extends Group<T> {
                 const arrayResult = iterators?.map((currentIterator: any, currentIndex: number) => {
                     root.setIterator(iteratorId, currentIterator)
                     root.setIterator(iteratorIndex, currentIndex)
+                    root.setIterator(arrayId, iterators)
                     const r = entity.compute()
                     root.removeIterator()
                     return r
