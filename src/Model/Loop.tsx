@@ -108,13 +108,31 @@ export default class Loop<T extends Entity> extends Group<T> {
     }
         
 
-
+    // get = (attributeId: string): any => {
+    //     if(attributeId) {
+    //         let attr = this[attributeId]
+    //         if(attr instanceof Attribute) {
+    //             return attr.get()
+    //         }
+    //         else {
+    //             return attr
+    //         }
+    //     }
+    //     else {
+    //         return {
+    //             entities: this.entities.map((e: Entity) => e.get()),
+    //             id: this._id,
+    //             type: this.type,
+    //         }
+    //     }
+    // }
 
 
 
     constructor(props: {
         _id?: string,
-        type: typeof Entity
+        type: typeof Entity,
+        entities: T[]
     }, parent?: Entity) {
         super(props,parent);
     }

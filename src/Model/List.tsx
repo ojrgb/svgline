@@ -24,11 +24,15 @@ export default class List<T extends Entity> extends Entity {
      * @param props - The properties for the List component.
      * @param parent - The parent entity of the List.
      */
-    constructor(props: {_id?: string, type: typeof Entity}, parent?: Entity) {
+    constructor(props: {
+        _id?: string, 
+        type: typeof Entity,
+        entities?: (T | Group<T> | Loop<T>)[]
+    }, parent?: Entity) {
         super(props, parent)
         this.type = props.type
         this.setFlow = parent.setFlow
-
+        this.entities = props.entities || []
     }
 
     /**
@@ -193,19 +197,8 @@ export default class List<T extends Entity> extends Entity {
      * 
      * @returns {any[]} The array of entities.
      */
-    public get(attributeId?: string): any[] | string {
-        if(attributeId) {
-            let attr = this[attributeId]
-            if(attr instanceof Attribute) {
-                return attr.get()
-            }
-            else {
-                return attr
-            }
-        }
-        else {
-            return this.entities.map(e => e.get())
-        }
+    public get(attributeId?: string): any[] | any {
+        return super.get(attributeId) 
     }
 
     public getEntities(): (T | Group<T> | Loop<T>)[] {

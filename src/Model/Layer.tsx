@@ -39,6 +39,7 @@ export default class Layer extends Entity {
         super({
             _id: props._id,
         },parent);
+        this.autoAssignProps(props);
         this.elements = new EntityList<Element>({
             _id: 'elements',
             type: Element,

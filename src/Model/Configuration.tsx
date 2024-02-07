@@ -76,10 +76,7 @@ export default class Configuration extends Entity {
         super({
             _id: props._id,
         }, parent);
-        this.name.value = props.name;
-        this.type.value = props.type;
-        this.defaultValue.value = props.defaultValue;
-        this.sampleValue.value = props.sampleValue;
+        this.autoAssignProps(props);
         
     }
 

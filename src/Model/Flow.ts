@@ -73,23 +73,23 @@ export default class Flow extends Entity {
         this.path = undefined
         this._id.value = props?._id || 'New flow';
         this.setFlow = props.setFlow
-        this.configurations = new EntityList<Configuration>({
+        this.configurations = props.configurations || new EntityList<Configuration>({
             _id: "configurations",
             type: Configuration,
         },this);
-        this.datasets = new EntityList<Dataset>({
+        this.datasets = props.datasets || new EntityList<Dataset>({
             _id: "datasets",
             type: Dataset,
             },this);
-        this.calculations= new EntityList<Calculation>({
+        this.calculations = props.calculations || new EntityList<Calculation>({
             _id: "calculations",
             type: Calculation,
             },this);
-        this.components = new EntityList<Component>({
+        this.components = props.components || new EntityList<Component>({
             _id: "components",
             type: Component,
             },this);
-        this.layers = new EntityList<Layer>({
+        this.layers = props.layers || new EntityList<Layer>({
             _id: "layers",
             type: Layer,
             },this);

@@ -24,11 +24,10 @@ export default class Calculation extends Entity {
 
     constructor(props: {
         _id: string, 
-        parent?: Entity, 
-        
-    }) {
-        super({_id: props._id},props.parent);
-        
+      formula: string
+    },parent: Entity) {
+        super(props,parent);
+        this.autoAssignProps(props);
     }
 
     compute () {

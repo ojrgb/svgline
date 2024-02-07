@@ -7,19 +7,20 @@ import SavePackageModal from './Modals/SavePackageModal';
 
 const ModalFactory = () => {
   const modals = [
-    {_id: 'loadPackage', title: 'Load Package', description: 'Select a package to load', component: <LoadPackageModal/>},
-    {_id: 'savePackage', title: 'Save Package', description: 'Save this package', component: <SavePackageModal/>}
+    {_id: 'loadFlow', title: 'Load Package', description: 'Select a package to load', component: <LoadPackageModal/>},
+    {_id: 'saveFlow', title: 'Save Package', description: 'Save this package', component: <SavePackageModal/>}
   ]
   const {contextState,contextDispatch} = React.useContext(contextStore)
-
+  console.log('contextState',contextState)
   return (
-    <div>
+    <div id="modal-factory">
       {
         modals.map(modal => {
           return (
             React.cloneElement(modal.component, {
               key: modal._id,
               _id: modal._id,
+              id: modal._id,
               title: modal.title,
               description: modal.description,
               open: contextState.modals[modal._id] || false,

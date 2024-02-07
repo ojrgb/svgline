@@ -78,6 +78,7 @@ const Classes = {
 }
 
 export default function Modal (props: {
+  id: string;
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
@@ -87,12 +88,13 @@ export default function Modal (props: {
   cancelText?: string;
   children: React.ReactNode;
 }) {
+  console.log(`Modal ${props.id} open: ${props.open}`)
   return (
     <div>
       <Rodal visible={props.open} onClose={props.onClose} customStyles={{background: deepenColor(theme.colors.primary,deepenDelta)}}
         height={theme.modal.height} width={theme.modal.width}
         >
-        <Classes.Root className="modal">
+        <Classes.Root className={`modal ${props.id}`}>
           <Classes.Title className="modal-title">{props.title}</Classes.Title>
           <Classes.Body className="modal-body">{props.children}</Classes.Body>
           <Classes.Footer className="modal-footer">

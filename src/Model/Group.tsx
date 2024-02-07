@@ -19,13 +19,14 @@ export default class Group<T extends Entity> extends List<T> {
         name: 'Name',
         type: 'string',
         mandatory: false,
-    });
+    }); 
     
     constructor(props: {
         _id?: string,
-        type: typeof Entity
+        type: typeof Entity,
+        entities: T[]
     }, parent?: Entity) {
-        super({type: props.type},parent);
+        super(props,parent);
         
         if(props._id) this.set('_id',props._id)
     }

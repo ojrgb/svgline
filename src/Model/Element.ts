@@ -182,25 +182,7 @@ export default class Element extends Entity {
         text?: string
     }, parent: Entity) {
         super({_id: props._id},parent);
-        this.type.value = props.type;
-        this.stroke.value = props.stroke;
-        this.strokeWidth.value = props.strokeWidth;
-        this.fill.value = props.fill;
-        this.opacity.value = props.opacity;
-        this.x.value = props.x;
-        this.y.value = props.y;
-        this.width.value = props.width;
-        this.height.value = props.height;
-        this.r.value = props.r;
-        this.x1.value = props.x1;
-        this.y1.value = props.y1;
-        this.x2.value = props.x2;
-        this.y2.value = props.y2;
-        this.cx.value = props.cx;
-        this.cy.value = props.cy;
-        this.rx.value = props.rx;
-        this.ry.value = props.ry;
-        this.text.value = props.text;
+        this.autoAssignProps(props);
     }
 
     static getInherited = () => {

@@ -6,6 +6,14 @@ import List from "./List";
 import Loop from "./Loop";
 import { Wire } from "./ModelDecorators";
 
+
+@Entity.Configure({
+    nameSingle: 'List',
+    namePlural: 'Lists',
+    shortName: 'list',
+    formAttributes: []
+})
+
 export default class EntityList<T extends Entity> extends List<T> {
     
 
@@ -15,7 +23,7 @@ export default class EntityList<T extends Entity> extends List<T> {
      * @returns A new instance of the Group class.
      */
     newGroup: (props: {_id: string}) => Group<T> = (props: {_id: string}) => {
-        const group = new Group<T>({_id: props._id, type: this.type}, this)
+        const group = new Group<T>({_id: props._id, type: this.type, entities: []}, this)
         this.addItem(group)
         return group
     }
@@ -25,7 +33,7 @@ export default class EntityList<T extends Entity> extends List<T> {
      * @returns A new instance of Loop.
      */
     newLoop: (props: {_id: string}) => Loop<T> = (props: {_id: string}) => {
-        const loop = new Loop<T>({_id: props._id, type: this.type}, this)
+        const loop = new Loop<T>({_id: props._id, type: this.type, entities: []}, this)
         this.addItem(loop)
         return loop
     }

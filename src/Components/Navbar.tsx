@@ -87,6 +87,24 @@ export default function Navbar (props) {
     const {height} = props
     const {contextDispatch} = React.useContext(contextStore)
     
+    function exportSvg() {
+        var source = document.getElementById("resultPreview").outerHTML;
+        if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+            source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+        }
+        if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+            source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+        }
+        var svgBlob = new Blob([source], {type:"image/svg+xml;charset=utf-8"});
+        var svgUrl = URL.createObjectURL(svgBlob);
+        var downloadLink = document.createElement("a");
+        downloadLink.href = svgUrl;
+        downloadLink.download = "newesttree.svg";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    }
+
     return (
         <Classes.Root {...{height}} id="navbar">
             <NavbarButton text="file" {...{height}}>
@@ -95,6 +113,9 @@ export default function Navbar (props) {
                 />
                 <NavbarItem text="save" 
                     onClick={async () => {contextDispatch({type: 'OPEN_MODAL', _id: 'saveFlow'})}}
+                />
+                <NavbarItem text="export" 
+                    onClick={async () => {exportSvg()}}
                 />
             </NavbarButton>
         </Classes.Root>    

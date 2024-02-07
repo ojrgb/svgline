@@ -392,7 +392,7 @@ export default class Entity {
                 continue;
             }
         }
-        return result;
+        return Object.assign({},result,{objectType: this.constructor.name});
     }
 
     public keys(): string[] {
@@ -452,6 +452,14 @@ export default class Entity {
     public updateAttributePaths = (): void => {
         for(let attr of this.getAttributes()) {
             attr.updatePath();
+        }
+    }
+
+    public autoAssignProps = (props: any): void => {
+        for(let key in props) {
+            if(this[key] instanceof Attribute) {
+                this[key].value = props[key];
+            }
         }
     }
     

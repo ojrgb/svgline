@@ -10,7 +10,7 @@ import _ from 'lodash'
 import { v4 } from 'uuid'
 
 const Classes = {
-    SVGRoot: styled.svg.attrs({className: 'svg-root'})`
+    SVGRoot: styled.svg.attrs({className: 'svg-root',id: 'resultPreview'})`
         height: 100%;
         aspect-ratio: 1 / 1;
         margin: 0 auto;
@@ -21,12 +21,13 @@ export default function ResultPreview(props) {
  
     const {flow} = React.useContext(flowStore)
     
+
     function renderElement(element: any) {
         if(element===undefined) {
             return undefined
         }
         console.log('element',element)
-        if(element.objectType==='loop') {
+        if(element.objectType==='Loop') {
             const elementsObject = _.omit(element,['objectType'])
             const res = Object.keys(elementsObject).map((key) => {
                 const elements = elementsObject[key]
@@ -71,7 +72,7 @@ export default function ResultPreview(props) {
 
     // I feel like this guy is gonna need fixing at some point
     function renderLayer(layer: any) {
-        if(layer.objectType==='loop') {
+        if(layer.objectType==='Loop') {
             const e = Object.entries(_.omit(layer,['objectType']))
             if(e.length===0) {
                 return undefined
@@ -106,7 +107,7 @@ export default function ResultPreview(props) {
         return res
     }
     const renderedLayers = renderLayers(flow.calculate().layers)
-    console.log(flow.calculate())
+    console.log(flow.get())
     
     return (
         <Classes.SVGRoot viewBox='0 0 100 100'>

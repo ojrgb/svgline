@@ -23,5 +23,6 @@ export default class Dataset extends Entity {
         _id?: string
     }, parent?: Entity) {
         super(props,parent);
+        this.autoAssignProps(props);
     }
 }
