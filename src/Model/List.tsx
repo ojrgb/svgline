@@ -5,6 +5,7 @@ import Group from "./Group";
 import Config from "./Interface/Config";
 import Loop from "./Loop";
 import { Wire } from "./ModelDecorators";
+import Utilities from "./Utilities";
 
 export default class List<T extends Entity> extends Entity {
     /**
@@ -30,11 +31,10 @@ export default class List<T extends Entity> extends Entity {
         entities?: (T | Group<T> | Loop<T>)[]
     }, parent?: Entity) {
         super(props, parent)
+        this.EntityType = props.EntityType
         // this.type = props.type
         // this.setFlow = parent.setFlow
-        // this.entities = props.entities ? props.entities.map((entity: any) => {
-        //     return Entity.fromJson(entity) as T | Group<T> | Loop<T>;
-        // }) : []
+        this.entities = props.entities ? props.entities : []
     }
 
     /**

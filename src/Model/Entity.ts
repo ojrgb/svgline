@@ -19,6 +19,9 @@ import EntityList from './EntityList';
 export default class Entity {
     setFlow: (flow: any) => void;    
     update: () => void = () => {
+        if(this.autowired === false) {
+            return
+        }
         if(this.setFlow) { this.setFlow(this.getRoot());}
         if(this.parent && this.parent.setFlow) {
             this.parent.setFlow(this.getRoot());
@@ -31,7 +34,6 @@ export default class Entity {
                 console.error('No parent found!',this)
             }
         }
-        // console.log(this)
     };
     getType: () => any;
     /**
@@ -170,9 +172,8 @@ export default class Entity {
 
 
     /** Creates a new Entity. */
-    constructor(props?: {_id?: string}, parent?: Entity) {
-        // console.log(`Creating a new entity with props: ${JSON.stringify(props)} and parent: ${parent}`)
-        this.autowired = true
+    constructor(props?: {_id?: string, autowired?: boolean}, parent?: Entity) {
+        this.autowired = props.autowired === false ? false : (parent?.autowired || true)
         if(props?._id) {
             this._id.value = props._id;
         }
@@ -474,21 +475,7 @@ export default class Entity {
 
     
 
-    static fromJson<T extends Entity | Group<any> | Loop<any> | EntityList<any>> (props: {json: any, EntityType: typeof Entity | typeof Group<any> | typeof Loop<any> | typeof EntityList<any>}, parent?: Entity): T | Group<T> | Loop<T> | EntityList<T>{
-        const {json, EntityType} = props;
-        // Null check
-        if(!json) {
-            console.error('json is undefined',props);
-            return undefined;
-        }
-        if (!EntityType || typeof EntityType !== 'function') {
-            console.error(`Entity type ${json.objectType} does not exist or is not constructable`, EntityType);
-            return undefined;
-        }
-
-        // Return 
-        return new EntityType(Object.assign({},json,{EntityType}),parent) as T;
-    }
+    
 
     
 }

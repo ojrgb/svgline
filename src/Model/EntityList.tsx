@@ -10,6 +10,7 @@ import Dataset from "./Dataset";
 import Calculation from "./Calculation";
 import Component from "./Component";
 import Layer from "./Layer";
+import Utilities from "Model/Utilities";
 
 
 
@@ -39,6 +40,7 @@ export default class EntityList<T extends Entity> extends List<T> {
      * @returns A new instance of Loop.
      */
     newLoop: (props: {_id: string}) => Loop<T> = (props: {_id: string}) => {
+        
         const loop = new Loop<T>({_id: props._id, EntityType: this.EntityType, entities: []}, this)
         this.addItem(loop)
         return loop
@@ -57,32 +59,10 @@ export default class EntityList<T extends Entity> extends List<T> {
         const {EntityType} = props;
         this.EntityType = EntityType
         this.setFlow = parent.setFlow
-        this.entities = props.entities ? props.entities.map((entity: any) => {
-            if(entity.objectType==='Group') {
-                return Group.fromJson({json: entity, EntityType}, this) as T | Group<T> | Loop<T>;
-            }
-            if(entity.objectType==='Loop') {
-                return Loop.fromJson({json: entity, EntityType}, this) as T | Group<T> | Loop<T>;
-            }
-            return Entity.fromJson({json: entity, EntityType: props.EntityType}) as T | Group<T> | Loop<T>;
-        }) : []
+        
     }
 
-    static fromJson<T extends Entity | Group<any> | Loop<any> | EntityList<any>> (props: {json: any, EntityType: typeof Entity | typeof Group<any> | typeof Loop<any> | typeof EntityList<any>}, parent?: Entity): T {
-        const {json, EntityType} = props;
-        // Null check
-        if(!json) {
-            console.error('json is undefined',props);
-            return undefined;
-        }
-        if (!EntityType || typeof EntityType !== 'function') {
-            console.error(`Entity type ${json.objectType} does not exist or is not constructable`, EntityType);
-            return undefined;
-        }
-
-        // Return 
-        return new EntityList<T>(Object.assign({},json,{EntityType}),parent) as T;
-    }
+    
 
    
 }

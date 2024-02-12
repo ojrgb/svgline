@@ -8,6 +8,7 @@ import { BsFlower1 } from "Components/Icons/Icons";
 import Attribute from "./Attribute";
 import EntityList from "./EntityList";
 import _ from "lodash";
+import Utilities from "Model/Utilities";
 
 export default class Flow extends Entity {
     
@@ -55,12 +56,11 @@ export default class Flow extends Entity {
         ],
         mandatory: true,
     });
-    autowired: boolean = true;
     
     public instantiateList<T extends Entity>(json: any, EntityType: typeof Entity, parent?: Entity): EntityList<T> {
         let res = undefined;
         if (json !== undefined) {
-            res = EntityList.fromJson<EntityList<T>>({json, EntityType},parent);
+            res = Utilities.fromJson({json},parent);
         } else {
             res = new EntityList<T>({
                 _id: EntityType.namePlural,
@@ -79,10 +79,9 @@ export default class Flow extends Entity {
         components?: EntityList<Component>,
         layers?: EntityList<Layer>,
         setFlow?: (flow: Flow) => void,
+        autowired?: boolean,
     }) {
-        super({
-            _id: props?._id
-        });
+        super(props);
 
         
 
@@ -102,7 +101,6 @@ export default class Flow extends Entity {
         this.calculations = _instantiateList<Calculation>(props.calculations, Calculation);
         this.components = _instantiateList<Component>(props.components, Component);
         this.layers = _instantiateList<Layer>(props.layers, Layer);
-        
         
       
        

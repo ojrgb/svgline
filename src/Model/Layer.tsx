@@ -4,6 +4,7 @@ import Element from "./Element";
 import Entity from "./Entity";
 import EntityList from "./EntityList";
 import { updateCalculatedTree } from "./ModelDecorators";
+import Utilities from "Model/Utilities";
 
 @Entity.Configure({
     nameSingle: 'Layer',
@@ -33,29 +34,21 @@ export default class Layer extends Entity {
     
     elements: EntityList<Element>;   
 
-    public instantiateList<T extends Entity>(json: any, EntityType: typeof Entity, parent?: Entity): EntityList<T> {
-        
-        if (json !== undefined) {
-            
-            return EntityList.fromJson<EntityList<T>>({json, EntityType},parent);
-        } else {
-            return new EntityList<T>({
-                _id: EntityType.namePlural,
-                EntityType: EntityType,
-            },parent);
-        }
-    }
+    
 
     constructor(props: {
         _id: string,
-        elements: any[],
+        elements: EntityList<Element>,
     }, parent: Entity) {
         
         super({
             _id: props._id,
         },parent);
         this.autoAssignProps(props);
-        this.elements = this.instantiateList<Element>(props.elements, Element, this);
+        this.elements = props.elements || new EntityList<Element>({
+            _id: 'elements',
+            EntityType: Element,
+        },parent);
     }
 
     

@@ -26,6 +26,7 @@ export default class Attribute {
     onChange?: (value: any) => Entity
     value: any
     path: string[] = []
+    autowired: boolean = true;
 
     constructor(
             props: {
@@ -52,6 +53,7 @@ export default class Attribute {
         this.conditions = props.conditions;
         this.immediate = props.immediate;
         this.value = props.value; // Assign the value property from props
+        this.autowired = parent?.autowired || true
     }
 
     

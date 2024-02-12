@@ -12,6 +12,7 @@ import Layer from 'Model/Layer'
 import EntityList from 'Model/EntityList'
 import Entity from 'Model/Entity'
 import Flow from 'Model/Flow'
+import Utilities from '../Model/Utilities'
 
 const rowHeights = [2,3,5]
 
@@ -38,11 +39,10 @@ export default function ContextWorkspace(props: React.HTMLAttributes<HTMLDivElem
     const {contextState, contextDispatch} = React.useContext(contextStore)
     flow.setFlow = setFlow
 
-    useEffect(() => {
-        console.log(flow.get())
-        console.log('Trying to instantiate!')
-        console.log(Entity.fromJson<Flow>({json: Object.assign({},flow.get(),{setFlow}),EntityType: Flow}))
-    },[flow.get()])
+    
+        console.log('Raw flow:' ,flow.get())
+        console.log('Instantiated flow:' ,Utilities.fromJson({json: Object.assign({},flow.get(),{_id:'TEST', autowired: false})}))
+    
     
     
     return (

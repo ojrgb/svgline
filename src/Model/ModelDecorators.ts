@@ -15,7 +15,6 @@ export const Wire = (target: any, propertyKey: string, descriptor: PropertyDescr
     descriptor.value = function(...args: any[]) {
         
         const result = originalMethod.apply(this, args);
-        
         this.update();
         return result;
     };

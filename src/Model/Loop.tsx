@@ -137,20 +137,5 @@ export default class Loop<T extends Entity> extends Group<T> {
         super(props,parent);
     }
 
-    static fromJson<T extends Entity> (props: {json: any, EntityType: typeof Entity}, parent?: Entity): Loop<T> {
-        
-        const {json, EntityType} = props;
-        // Null check
-        if(!json) {
-            console.error('json is undefined',props);
-            return undefined;
-        }
-        if (!EntityType || typeof EntityType !== 'function') {
-            console.error(`Entity type ${json.objectType} does not exist or is not constructable`, EntityType);
-            return undefined;
-        }
-
-        // Return 
-        return new Loop<T>(Object.assign({},json,{EntityType}),parent);
-    }
+    
 }
