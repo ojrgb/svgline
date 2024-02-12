@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import theme from 'theme'
 import styled from 'styled-components'
 import ItemEditor from './Item/ItemEditor'
@@ -10,6 +10,8 @@ import { contextStore } from 'Context/contextStore'
 import Element from 'Model/Element'
 import Layer from 'Model/Layer'
 import EntityList from 'Model/EntityList'
+import Entity from 'Model/Entity'
+import Flow from 'Model/Flow'
 
 const rowHeights = [2,3,5]
 
@@ -35,6 +37,14 @@ export default function ContextWorkspace(props: React.HTMLAttributes<HTMLDivElem
     const {flow, setFlow} = React.useContext(flowStore)
     const {contextState, contextDispatch} = React.useContext(contextStore)
     flow.setFlow = setFlow
+
+    useEffect(() => {
+        console.log(flow.get())
+        console.log('Trying to instantiate!')
+        console.log(Entity.fromJson<Flow>({json: Object.assign({},flow.get(),{setFlow}),EntityType: Flow}))
+    },[flow.get()])
+    
+    
     return (
         <Classes.Root id="context-workspace">
             {

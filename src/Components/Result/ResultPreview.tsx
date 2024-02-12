@@ -8,6 +8,8 @@ import Element from 'Model/Element'
 import Layer from 'Model/Layer'
 import _ from 'lodash'
 import { v4 } from 'uuid'
+import Flow from 'Model/Flow'
+import Entity from 'Model/Entity'
 
 const Classes = {
     SVGRoot: styled.svg.attrs({className: 'svg-root',id: 'resultPreview'})`
@@ -107,7 +109,7 @@ export default function ResultPreview(props) {
         return res
     }
     const renderedLayers = renderLayers(flow.calculate().layers)
-    console.log(flow.get())
+    // Entity.fromJson<Flow>({json: flow.get(),EntityType: Flow})
     
     return (
         <Classes.SVGRoot viewBox='0 0 100 100'>

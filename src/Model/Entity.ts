@@ -10,6 +10,10 @@ import { Wire } from './ModelDecorators';
 import { v4 as uuidv4 } from 'uuid';
 import { autoUpdatePath } from './ModelDecorators';
 import Flow from './Flow';
+import Calculation from './Calculation';
+import Group from './Group';
+import Loop from './Loop';
+import EntityList from './EntityList';
 
 
 export default class Entity {
@@ -20,7 +24,12 @@ export default class Entity {
             this.parent.setFlow(this.getRoot());
         }
         else {
-            this.parent.update()
+            if(this.parent) {
+                this.parent.update()
+            }
+            else {
+                console.error('No parent found!',this)
+            }
         }
         // console.log(this)
     };
@@ -462,5 +471,24 @@ export default class Entity {
             }
         }
     }
+
+    
+
+    static fromJson<T extends Entity | Group<any> | Loop<any> | EntityList<any>> (props: {json: any, EntityType: typeof Entity | typeof Group<any> | typeof Loop<any> | typeof EntityList<any>}, parent?: Entity): T | Group<T> | Loop<T> | EntityList<T>{
+        const {json, EntityType} = props;
+        // Null check
+        if(!json) {
+            console.error('json is undefined',props);
+            return undefined;
+        }
+        if (!EntityType || typeof EntityType !== 'function') {
+            console.error(`Entity type ${json.objectType} does not exist or is not constructable`, EntityType);
+            return undefined;
+        }
+
+        // Return 
+        return new EntityType(Object.assign({},json,{EntityType}),parent) as T;
+    }
+
     
 }

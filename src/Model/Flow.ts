@@ -57,6 +57,19 @@ export default class Flow extends Entity {
     });
     autowired: boolean = true;
     
+    public instantiateList<T extends Entity>(json: any, EntityType: typeof Entity, parent?: Entity): EntityList<T> {
+        let res = undefined;
+        if (json !== undefined) {
+            res = EntityList.fromJson<EntityList<T>>({json, EntityType},parent);
+        } else {
+            res = new EntityList<T>({
+                _id: EntityType.namePlural,
+                EntityType,
+            },parent);
+        }
+        return res
+    }
+
     // Create a new flow. A flow contains all the configurations, datasets, calculations, components, layers and parameters required to produce a graphic.
     constructor(props: {
         _id?: string,
@@ -70,37 +83,28 @@ export default class Flow extends Entity {
         super({
             _id: props?._id
         });
-        this.path = undefined
+
+        
+
+        const _flow = this
+        function _instantiateList<T extends Entity>(json: any, EntityType: typeof Entity): EntityList<T> {
+            return _flow.instantiateList(json, EntityType, _flow)
+        }
+
+
+        
+
+        this.path = undefined;
         this._id.value = props?._id || 'New flow';
         this.setFlow = props.setFlow
-        this.configurations = props.configurations || new EntityList<Configuration>({
-            _id: "configurations",
-            type: Configuration,
-        },this);
-        this.datasets = props.datasets || new EntityList<Dataset>({
-            _id: "datasets",
-            type: Dataset,
-            },this);
-        this.calculations = props.calculations || new EntityList<Calculation>({
-            _id: "calculations",
-            type: Calculation,
-            },this);
-        this.components = props.components || new EntityList<Component>({
-            _id: "components",
-            type: Component,
-            },this);
-        this.layers = props.layers || new EntityList<Layer>({
-            _id: "layers",
-            type: Layer,
-            },this);
+        this.configurations = _instantiateList<Configuration>(props.configurations, Configuration);
+        this.datasets = _instantiateList<Dataset>(props.datasets, Dataset);
+        this.calculations = _instantiateList<Calculation>(props.calculations, Calculation);
+        this.components = _instantiateList<Component>(props.components, Component);
+        this.layers = _instantiateList<Layer>(props.layers, Layer);
         
         
-        
-        props?.configurations && (this.configurations = props.configurations);
-        props?.datasets && (this.datasets = props.datasets);
-        props?.calculations && (this.calculations = props.calculations);
-        props?.components && (this.components = props.components);
-        props?.layers && (this.layers = props.layers)
+      
        
     }
 

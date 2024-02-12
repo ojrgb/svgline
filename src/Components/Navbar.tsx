@@ -1,7 +1,7 @@
 import React from 'react'
 import theme from 'theme'
 import styled from 'styled-components'
-import { deepenColor } from 'utils'
+import { deepenColor,relaxColor } from 'utils'
 import { contextStore } from 'Context/contextStore'
 
 const deepenDelta = 0.1,
@@ -26,10 +26,6 @@ const Classes = {
         cursor: default;
         flex-direction: column;
         height: ${theme.navbar.height}px;
-        &:hover {
-            background-color: ${deepenColor(theme.colors.primary,deepenDeltaHover)};
-            
-        }
         z-index: 9999;
     `,
     NavbarButton: styled.div`
@@ -41,6 +37,11 @@ const Classes = {
         align-items: center;
         background-color: ${deepenColor(theme.colors.primary,deepenDelta)};
         border-bottom: ${theme.borders.primary.width} ${theme.borders.primary.style} ${deepenColor(theme.borders.primary.color,deepenDelta)};
+        min-width: 100px;
+        &:hover {
+            background-color: ${relaxColor(theme.colors.primary,deepenDeltaHover)};
+            
+        }
     `,
     NavbarListContainer: styled.div<{
         active?: boolean;
@@ -48,6 +49,7 @@ const Classes = {
     }>`
         display: ${props => props.active ? 'flex' : 'none'};
         border: ${theme.borders.primary.width} ${theme.borders.primary.style} ${deepenColor(theme.borders.primary.color,deepenDelta)};
+        flex-direction: column;
     `,
     NavbarTextContainer: styled.div`
         
@@ -59,6 +61,21 @@ const NavbarButton = (props: {
     children: React.ReactNode;
 }) => {
     const [active,setActive] = React.useState(false)
+
+    React.useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const navbarButtonContainer = document.querySelector('.navbar-button-container');
+            if (navbarButtonContainer && !navbarButtonContainer.contains(event.target as Node)) {
+                setActive(false);
+            }
+        };
+
+        window.addEventListener('click', handleClickOutside);
+
+        return () => {
+            window.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
 
     return (
         <Classes.NavbarButtonContainer className="navbar-button-container" onClick={() => {setActive(!active)}}>
@@ -77,7 +94,7 @@ const NavbarItem = (props: {
     onClick: () => void;
 }) => {
     return (
-        <Classes.NavbarButton className="navbar-item-button" onClick={props.onClick}>
+        <Classes.NavbarButton className="navbar-item-button navbar-item-button-single" onClick={props.onClick}>
             <Classes.NavbarTextContainer className="navbar-item-text-container">{props.text}</Classes.NavbarTextContainer>
         </Classes.NavbarButton>
     )

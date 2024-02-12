@@ -88,7 +88,6 @@ export default function Modal (props: {
   cancelText?: string;
   children: React.ReactNode;
 }) {
-  console.log(`Modal ${props.id} open: ${props.open}`)
   return (
     <div>
       <Rodal visible={props.open} onClose={props.onClose} customStyles={{background: deepenColor(theme.colors.primary,deepenDelta)}}

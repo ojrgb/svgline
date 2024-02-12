@@ -11,7 +11,6 @@ const ModalFactory = () => {
     {_id: 'saveFlow', title: 'Save Package', description: 'Save this package', component: <SavePackageModal/>}
   ]
   const {contextState,contextDispatch} = React.useContext(contextStore)
-  console.log('contextState',contextState)
   return (
     <div id="modal-factory">
       {

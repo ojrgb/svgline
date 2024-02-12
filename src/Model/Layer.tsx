@@ -33,23 +33,34 @@ export default class Layer extends Entity {
     
     elements: EntityList<Element>;   
 
+    public instantiateList<T extends Entity>(json: any, EntityType: typeof Entity, parent?: Entity): EntityList<T> {
+        
+        if (json !== undefined) {
+            
+            return EntityList.fromJson<EntityList<T>>({json, EntityType},parent);
+        } else {
+            return new EntityList<T>({
+                _id: EntityType.namePlural,
+                EntityType: EntityType,
+            },parent);
+        }
+    }
+
     constructor(props: {
-        _id: string
+        _id: string,
+        elements: any[],
     }, parent: Entity) {
+        
         super({
             _id: props._id,
         },parent);
         this.autoAssignProps(props);
-        this.elements = new EntityList<Element>({
-            _id: 'elements',
-            type: Element,
-        },this);  
+        this.elements = this.instantiateList<Element>(props.elements, Element, this);
     }
 
     
 
     public compute: () => any = () => {
-        console.log('computing layer')
         const res = Object.assign(
             {},
             super.compute(),

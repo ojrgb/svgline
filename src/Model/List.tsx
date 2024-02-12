@@ -16,7 +16,7 @@ export default class List<T extends Entity> extends Entity {
      * Represents the type of the entity.
      * @template T - The type of the entity.
      */
-    type: typeof Entity;
+    EntityType: typeof Entity;
 
     
     /**
@@ -26,13 +26,15 @@ export default class List<T extends Entity> extends Entity {
      */
     constructor(props: {
         _id?: string, 
-        type: typeof Entity,
+        EntityType: typeof Entity,
         entities?: (T | Group<T> | Loop<T>)[]
     }, parent?: Entity) {
         super(props, parent)
-        this.type = props.type
-        this.setFlow = parent.setFlow
-        this.entities = props.entities || []
+        // this.type = props.type
+        // this.setFlow = parent.setFlow
+        // this.entities = props.entities ? props.entities.map((entity: any) => {
+        //     return Entity.fromJson(entity) as T | Group<T> | Loop<T>;
+        // }) : []
     }
 
     /**
@@ -185,7 +187,7 @@ export default class List<T extends Entity> extends Entity {
      * @returns The newly created item.
      */
     newItem(props?: {_id: string}, index?: number): Entity {
-        const target = new (this.type as any)(props, this) as T
+        const target = new (this.EntityType as any)(props, this) as T
         this.addItem(target, index)
         return target
     }
@@ -219,7 +221,7 @@ export default class List<T extends Entity> extends Entity {
      * @returns {Function} The constructor function of the type.
      */
     getType = (): Function => {
-        return this.type;
+        return this.EntityType;
     }
 
     public clone(): List<T> {
@@ -233,7 +235,6 @@ export default class List<T extends Entity> extends Entity {
     }
 
     compute: () => any = () => {
-        console.log('Computing list!')
         return this.entities.map((entity: Entity) => {
             return entity.compute()
         })
