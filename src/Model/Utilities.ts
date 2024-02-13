@@ -39,8 +39,8 @@ export default class Utilities {
         if(json.elements){
             let elementEntities = json.elements.entities
             if(!elementEntities) {
-                console.error('json.elements.entities is undefined',json.elements);
-                return undefined;
+                // console.error('json.elements.entities is undefined',json.elements);
+                elementEntities = []
             }
 
             let entities = elementEntities.map((element: any) => {
@@ -53,7 +53,7 @@ export default class Utilities {
         const Constructor = constructors[json.objectType]
         json.EntityType = Constructor
         if (!Constructor) {
-            console.error(`Entity type ${json.objectType} does not exist or is not constructable`);
+            console.error(`Entity type ${json.objectType} does not exist or is not constructable`, json);
             return undefined;
         }
 

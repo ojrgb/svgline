@@ -114,8 +114,7 @@ export default function SelectableList(props: {
     const {
         list,
         entity,
-        target,
-        paths
+        target
        } = props
         
        
@@ -125,8 +124,6 @@ export default function SelectableList(props: {
                 <RecursiveElement 
                      element={undefined}
                     key={objecti}
-                 
-               
                     {...{object, entity, target}}
                 />  
             )}

@@ -1,6 +1,6 @@
-const root = 'http://localhost:3001/api/v1/'
-const post = async (props) => {
-return await fetch(props.url, {
+const root = 'http://localhost:3000/api/v1/'
+const post = async (props: {collection: String, json: any}) => {
+return await fetch(root + props.collection, {
   method: "POST",
   body: JSON.stringify({json: props.json}),
   headers: {
@@ -10,12 +10,12 @@ return await fetch(props.url, {
 })};
 
 const save = async (props: {json: any}) => {
-    const res = await post({url: 'http://localhost:3001/api/v1/flows', json: props.json})
+    const res = await post({collection: 'flows', json: props.json})
     return res.text()
 }
 
-const get = async (props) => {
-    const res = await fetch(root + props.entity)
+const get = async (props: {collection: String, _id?: String}) => {
+    const res = await fetch(root + props.collection + (props._id ? '/' + props._id : ''))
     return await res.json()
 }
 

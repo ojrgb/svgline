@@ -28,16 +28,16 @@ export default function EntityList(props: {
     }
     
     
-    React.useEffect(() => {
-        const loadObjects = async () => {if (load) {
-            dispatch({
-                type: 'LOAD_OBJECTS',
-                entity,
-                data: await dataService.get({entity})
-            })
-        }}
-        loadObjects()
-    },[])
+    // React.useEffect(() => {
+    //     const loadObjects = async () => {if (load) {
+    //         dispatch({
+    //             type: 'LOAD_OBJECTS',
+    //             entity,
+    //             data: await dataService.get({entity})
+    //         })
+    //     }}
+    //     loadObjects()
+    // },[])
     return (
         <SelectableList 
         {...{entity,target,paths,list}} 

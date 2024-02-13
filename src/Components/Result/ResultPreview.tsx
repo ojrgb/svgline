@@ -22,7 +22,6 @@ const Classes = {
 export default function ResultPreview(props) {
  
     const {flow} = React.useContext(flowStore)
-    
 
     function renderElement(element: any) {
         if(element===undefined) {

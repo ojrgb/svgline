@@ -1,20 +1,24 @@
 import React from 'react';
 import Modal from '../Modal';
 import { contextStore } from 'Context/contextStore'
+import LoadList from 'Components/LoadList';
+import { loadStore } from 'Context/loadStore';
 
 
 function LoadPackageModal(props) {
-  const {contextState,contextDispatch, getSingle} = React.useContext(contextStore)
-  
+  const {loadState,loadFlow, setLoadTarget} = React.useContext(loadStore)
+  React.useEffect(() => {
+    setLoadTarget(undefined)
+  },[])
+  console.log(loadState)
   const onConfirm = () => {
-    const targetPackage = getSingle('packages',contextState.selectedPackages.paths)
     
-    
+    loadFlow()
     props.onClose()
   }
   return (
     <Modal {...props} onConfirm={onConfirm}>
-        {/* <EntityList entity='packages' module='context' load df={Date.now()}/> */}
+        <LoadList/>
     </Modal>    
   );
 }
