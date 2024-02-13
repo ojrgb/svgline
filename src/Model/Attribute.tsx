@@ -74,7 +74,7 @@ export default class Attribute {
     // }
 
     public updatePath = () => {
-        this.path = [...this.parent.path, this._id];
+        this.path = this.parent?.path ? [...this.parent.path, this._id] : [this._id];
     }
 
     
@@ -135,6 +135,7 @@ export default class Attribute {
     }
 
     public getInput = (props?: any): JSX.Element => {
+        console.log(this)
         const inputTypes = {
                             'identifier': <Text {...props} />,
                             'string': <Text {...props} />,

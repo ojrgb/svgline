@@ -9,21 +9,24 @@ export default function SavePackageModal(props) {
   const {flow} = React.useContext(flowStore)
   
   const onConfirm = async () => {
-   await dataService.save({item: flow})
+    await dataService.save({json: flow.get()})
     props.onClose()
   }
+  const input = React.cloneElement(flow._id.getInput(),{value: flow._id.get() || ""})
   return (
     <Modal {...props} onConfirm={onConfirm}>
         <Form
           onBlur={(res) => {
-            // Set the object here.
+            console.log(res)
           }}
           >
             <Form.Field w={10} attribute="_id">
                 <Form.Caption>Package ID</Form.Caption>
                 <Form.Input 
                             type="string"
-                />
+                >
+                    {input}
+                </Form.Input>
             </Form.Field>
         </Form>
     </Modal>    

@@ -46,7 +46,7 @@ export default class Layer extends Entity {
         },parent);
         this.autoAssignProps(props);
         this.elements = props.elements || new EntityList<Element>({
-            _id: 'elements',
+            _id: 'Elements',
             EntityType: Element,
         },parent);
     }

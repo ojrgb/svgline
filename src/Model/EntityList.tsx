@@ -59,7 +59,7 @@ export default class EntityList<T extends Entity> extends List<T> {
         const {EntityType} = props;
         this.EntityType = EntityType
         this.setFlow = parent.setFlow
-        
+        this.entities = props.entities || []
     }
 
     

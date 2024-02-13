@@ -37,9 +37,17 @@ export default class Utilities {
             })
         }
         if(json.elements){
-            json.elements = json.elements.map((element: any) => {
+            let elementEntities = json.elements.entities
+            if(!elementEntities) {
+                console.error('json.elements.entities is undefined',json.elements);
+                return undefined;
+            }
+
+            let entities = elementEntities.map((element: any) => {
                 return Utilities.fromJson({json: element},parent)
             })
+
+            json.elements = new EntityList({_id: 'Elements', EntityType: Element, entities},parent)
         }
         
         const Constructor = constructors[json.objectType]

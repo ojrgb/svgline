@@ -61,7 +61,10 @@ export default function ResultPreview(props) {
     }
 
     function renderElements(elements: any[]) {
-       
+        if(!elements) {
+            return
+        }
+       console.log(elements)
         const renderedElements: any[] = []
         for (let element of elements) {
             const renderedElement = renderElement(element)
@@ -100,15 +103,18 @@ export default function ResultPreview(props) {
 
     function renderLayers(layers: any[]) {
         let res: ReactElement[] = []
+        
         for (let layerId in layers) {
             const layer = layers[layerId]
+            
             if(layer!==undefined) {
                 res.push(renderLayer(layer))
             }
         }
         return res
     }
-    const renderedLayers = renderLayers(flow.calculate().layers)
+    const renderedLayers = renderLayers(flow.calculate().Layers)
+    console.log('renderedLayers',flow.calculate())
     // Entity.fromJson<Flow>({json: flow.get(),EntityType: Flow})
     
     return (

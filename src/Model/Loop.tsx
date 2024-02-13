@@ -96,7 +96,7 @@ export default class Loop<T extends Entity> extends Group<T> {
             },{})
 
             // Return with the object type
-            return Object.assign({},res,{objectType: 'loop'})
+            return Object.assign({},res,{objectType: 'Loop'})
         }
         catch(e) {
             console.error(e)
