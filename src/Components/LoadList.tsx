@@ -28,7 +28,6 @@ export default function LoadList(props: {
     React.useEffect(() => {  
         fetchData();
     }, []);
-    console.log(data)
     return (
         <Classes.Root>
             {

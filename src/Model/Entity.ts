@@ -22,7 +22,10 @@ export default class Entity {
         if(this.autowired === false) {
             return
         }
-        if(this.setFlow) { this.setFlow(this.getRoot());}
+        if(this.setFlow) {
+             this.setFlow(this.getRoot());
+             return
+            }
         if(this.parent && this.parent.setFlow) {
             this.parent.setFlow(this.getRoot());
         }

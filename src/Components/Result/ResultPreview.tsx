@@ -27,7 +27,6 @@ export default function ResultPreview(props) {
         if(element===undefined) {
             return undefined
         }
-        console.log('element',element)
         if(element.objectType==='Loop') {
             const elementsObject = _.omit(element,['objectType'])
             const res = Object.keys(elementsObject).map((key) => {
@@ -63,7 +62,6 @@ export default function ResultPreview(props) {
         if(!elements) {
             return
         }
-       console.log(elements)
         const renderedElements: any[] = []
         for (let element of elements) {
             const renderedElement = renderElement(element)
@@ -113,7 +111,6 @@ export default function ResultPreview(props) {
         return res
     }
     const renderedLayers = renderLayers(flow.calculate().Layers)
-    console.log('renderedLayers',flow.calculate())
     // Entity.fromJson<Flow>({json: flow.get(),EntityType: Flow})
     
     return (

@@ -51,8 +51,8 @@ const LoadStateProvider = ( { children } ) => {
             return
         }
         const _flow = await dataService.get({collection: 'flows',_id:state.loadTarget[0]._id})
-        // setFlow(flow)
         console.log(_flow)
+        // setFlow(flow)
         const flow = Utilities.fromJson({json: _flow}) as Flow
         flow.setFlow = setFlow
         setFlow(flow)

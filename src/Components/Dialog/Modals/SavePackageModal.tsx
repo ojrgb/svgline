@@ -9,6 +9,7 @@ export default function SavePackageModal(props) {
   const {flow} = React.useContext(flowStore)
   
   const onConfirm = async () => {
+    console.log('Saving!',flow.get())
     await dataService.save({json: flow.get()})
     props.onClose()
   }

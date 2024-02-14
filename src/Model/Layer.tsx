@@ -68,4 +68,6 @@ export default class Layer extends Entity {
     public calculate: () => void = () => {
         this.getRoot().mergeCalculatedTree(this.path,this.compute())
     }
+
+    
 }

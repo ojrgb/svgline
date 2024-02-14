@@ -135,7 +135,6 @@ export default class Attribute {
     }
 
     public getInput = (props?: any): JSX.Element => {
-        console.log(this)
         const inputTypes = {
                             'identifier': <Text {...props} />,
                             'string': <Text {...props} />,

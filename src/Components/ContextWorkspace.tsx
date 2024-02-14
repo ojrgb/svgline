@@ -37,12 +37,7 @@ const Classes = {
 export default function ContextWorkspace(props: React.HTMLAttributes<HTMLDivElement> & React.PropsWithChildren<{}>) {
     const {flow, setFlow} = React.useContext(flowStore)
     const {contextState, contextDispatch} = React.useContext(contextStore)
-    flow.setFlow = setFlow
-
-    
-        console.log('Raw flow:' ,flow.get())
-        console.log('Instantiated flow:' ,Utilities.fromJson({json: Object.assign({},flow.get(),{_id:'TEST', autowired: false})}))
-    
+    flow.setFlow = setFlow  
     
     
     return (

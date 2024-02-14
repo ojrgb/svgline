@@ -9,6 +9,8 @@ import Element from "Model/Element";
 import Dataset from "Model/Dataset";
 import Component from "Model/Component";
 import Calculation from "Model/Calculation";
+import List from "./List";
+import _ from "lodash";
 
 export default class Utilities {
     static fromJson(props: {json: any}, parent?: Entity): Entity{
@@ -31,24 +33,7 @@ export default class Utilities {
             Loop,
             EntityList
         }
-        if(json.entities) {
-            json.entities = json.entities.map((entity: any) => {
-                return Utilities.fromJson({json: entity},parent)
-            })
-        }
-        if(json.elements){
-            let elementEntities = json.elements.entities
-            if(!elementEntities) {
-                // console.error('json.elements.entities is undefined',json.elements);
-                elementEntities = []
-            }
-
-            let entities = elementEntities.map((element: any) => {
-                return Utilities.fromJson({json: element},parent)
-            })
-
-            json.elements = new EntityList({_id: 'Elements', EntityType: Element, entities},parent)
-        }
+        
         
         const Constructor = constructors[json.objectType]
         json.EntityType = Constructor
@@ -57,16 +42,43 @@ export default class Utilities {
             return undefined;
         }
 
-        if(['Group','Loop','EntityList'].includes(json.objectType)) {
-            if(['Group','Loop'].includes(json.objectType)) {
-                return new Constructor(json,parent)
+        // Copy the JSON and omit entities and elements. We'll add those later
+        let _json = _.omit(json,['entities','elements']) as typeof json
+
+        if(['Group','Loop','EntityList'].includes(_json.objectType)) {
+            if(['Group','Loop'].includes(_json.objectType)) {
+                res = new Constructor(_json,parent)
             }
             else {
-                return new EntityList(json,parent)
+                res = new EntityList(_json,parent)
             }
         }
+        else {
+            res = new Constructor(_json,parent);
+        }
         // Return 
-        res = new Constructor(json,parent);
+        
+
+        if(res instanceof List && json.entities) {
+            res.entities = json.entities.map((entity: any) => {
+                return Utilities.fromJson({json: entity},res)
+            })
+        }
+        if(res instanceof Layer && json.elements){
+            
+            let elementEntities = json.elements.entities
+            if(!elementEntities) {
+                console.error('json.elements.entities is undefined',json);
+                elementEntities = []
+            }
+
+            let entities = elementEntities.map((element: any) => {
+                return Utilities.fromJson({json: element},parent)
+            })
+
+            res.elements = new EntityList({_id: 'Elements', EntityType: Element, entities},res)
+        }
+
         return res;
     }
 

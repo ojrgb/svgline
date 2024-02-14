@@ -10,7 +10,6 @@ function LoadPackageModal(props) {
   React.useEffect(() => {
     setLoadTarget(undefined)
   },[])
-  console.log(loadState)
   const onConfirm = () => {
     
     loadFlow()
