@@ -9,6 +9,7 @@ import EntityList from 'Model/EntityList'
 import Entity from 'Model/Entity'
 import Flow from 'Model/Flow'
 import Group from 'Model/Group'
+import Loop from 'Model/Loop'
 
 export default function EntityToolbar<T extends Entity>(props: {
     list: EntityList<T>,
@@ -34,6 +35,7 @@ export default function EntityToolbar<T extends Entity>(props: {
      * should have the inherit prop set to true.
      */
    
+    console.log(currentSelection)
     
     if(!list) return <div/>
     
@@ -72,13 +74,25 @@ export default function EntityToolbar<T extends Entity>(props: {
 
     const onAddGroup = () => {
         const targetId = `${typeofEntity.name}-Group-${contextState.idCounter.group || 1}`
-        list.newGroup({_id: targetId})
+        if(currentSelection instanceof Group || currentSelection instanceof Loop) {
+            const targetGroup = new Group({_id: targetId, EntityType: list.EntityType, entities: []},currentSelection)
+            currentSelection.addItem(targetGroup)
+        }
+        else {
+            list.newGroup({_id: targetId})
+        }
         contextDispatch({type: 'ADD_ID_COUNTER',entity:'group', counter: (contextState.idCounter.group || 1)+1})
     }
 
     const onAddLoop = () => {
         const targetId = `${typeofEntity.name}-Loop-${contextState.idCounter.loop || 1}`
-        list.newLoop({_id: targetId})
+        if(currentSelection instanceof Group || currentSelection instanceof Loop) {
+            const targetLoop = new Loop({_id: targetId, EntityType: list.EntityType, entities: []},currentSelection)
+            currentSelection.addItem(targetLoop)
+        }
+        else {
+            list.newLoop({_id: targetId})
+        }
         contextDispatch({type: 'ADD_ID_COUNTER',entity:'loop', counter: (contextState.idCounter.loop || 1)+1})
     }
 

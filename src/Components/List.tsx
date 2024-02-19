@@ -18,7 +18,7 @@ const deepenDelta = 0.1,
     relaxDelta = 0.1,
     radiusModifier = 1,
     indentStart = 2,
-    indentModifier = 5
+    indentModifier = 0
 
 const Classes = {
     Root: styled.div`
@@ -37,7 +37,7 @@ const Classes = {
     `,
     Single: styled.div<{
         selected?: boolean;
-        indent: string;
+        indent: number;
     }>`
         display: flex;
         width: 100%;
@@ -55,7 +55,7 @@ const Classes = {
         padding-left: ${theme.scale.space[indentStart]};
         ${props => props.indent && (
             `
-                padding-left: ${props.indent};
+                padding-left: ${theme.scale.indent(props.indent)}px;
             `
         )    
         }
@@ -89,8 +89,9 @@ function ListItem(props: {
     const typeofEntity = entity.constructor as typeof Entity
     const selected = contextState.selected.includes(entity)
     return (
-        <Classes.Single indent={props.indent} className={`selectable-list-item list-item-${entity._id.get()}`}
+        <Classes.Single className={`selectable-list-item list-item-${entity._id.get()}`}
         // style={{paddingLeft}}
+        indent={props.level || 0}
             onClick={props.onClick}
             selected={selected}
         >

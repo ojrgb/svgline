@@ -4,6 +4,7 @@ import Entity from "./Entity";
 import EntityList from "./EntityList";
 import List from "./List";
 import Utilities from "./Utilities";
+import Loop from "./Loop";
 
 @Entity.Configure({
     nameSingle: 'Group',
@@ -36,7 +37,7 @@ export default class Group<T extends Entity> extends List<T> {
         return this.EntityType.getInherited()
     }
 
-    
+   
 
     
 }

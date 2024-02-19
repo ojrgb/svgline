@@ -73,6 +73,7 @@ export default {
     },
     scale: {
         space: [0,2,4,6,8,10,12,14,16,18,20].map((v,i) => {return `${v*spaceModifier}px`}),
+        indent: (i: number) => {return (i)*20+(i-1)*20},
         width: commonSizes,
         minWidth: ["0px","100px","200px","300px","400px","500px"],
         maxWidth: ["0px","100px","200px","300px","400px","500px"],

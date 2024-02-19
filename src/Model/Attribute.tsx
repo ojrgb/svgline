@@ -166,7 +166,7 @@ export default class Attribute {
                 // The below line is a hack to get the iterator variables in the scope of the function.
                 // TODO: Find a better way to do this.
                 // LOL, it wasn't me that wrote this comment, it was Copilot. Even Copilot knows this snippet is crap.
-                const functionStatement = `const {configurations, calculations, datasets, components} = this;
+                const functionStatement = `const {Configurations, Calculations, Datasets, Components} = this;
                 ${calculatedTree.iterator!==undefined && Object.keys(calculatedTree.iterator).map((iteratorId: string) => {
                     // This part destructures the iterator object and assigns the values to variables with the same name as the keys.
                     // For example, if the iterator object is {iteratorId: 1, iteratorIndex: 0}, this part will generate the following code:

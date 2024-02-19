@@ -47,12 +47,14 @@ export default function ResultPreview(props) {
             'text': <text/>,
             'g': <g/>,
         }
-            const svgelement = svgelements[element.type]
-            
-            if (svgelement)
-            {
-                return React.cloneElement(svgelement, Object.assign({},element, {key: v4()}))
-           }
+            const TargetElement = svgelements[element.type] 
+                        
+            if (element.type === "text") {
+                return React.cloneElement(TargetElement, Object.assign({}, element, { key: v4(), children: element.text }))
+            }
+            if (TargetElement) {
+                return React.cloneElement(TargetElement, Object.assign({}, element, { key: v4() }))
+            }
 
                 return undefined
           

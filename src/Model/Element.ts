@@ -6,7 +6,8 @@ import Entity from "./Entity";
     nameSingle: 'Element',
     namePlural: 'Elements',
     shortName: 'elem',
-    formAttributes: ['_id','name', 'type', 'stroke', 'strokeWidth', 'fill', 'opacity', 'x', 'y', 'width', 'height', 'r', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'rx', 'ry', 'text'],
+    formAttributes: ['_id','name', 'type',,'text', 'stroke', 'x', 'y', 'strokeWidth', 'fill', 'opacity',  'width', 'height', 'r', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'rx', 'ry','dx',
+    'dy','rotate','fontFamily','fontSize','letterSpacing','wordSpacing','textDecoration','textLength','transform'],
     icon: BsGearFill,
     inherited: true
 })
@@ -37,21 +38,21 @@ export default class Element extends Entity {
         name: 'Stroke',
         type: 'color',
         mandatory: true,
-        conditions: props => (['polygon','rect','line','circle'].indexOf(props.type)>-1)
+        conditions: props => (['polygon','rect','line','circle','text'].indexOf(props.type)>-1)
     });
     strokeWidth: Attribute = this.newAttribute({
         _id: 'strokeWidth',
         name: 'Stroke Width',
         type: 'calculation',
         mandatory: true,
-        conditions: props => (['polygon','rect','line','circle'].indexOf(props.type)>-1)
+        conditions: props => (['polygon','rect','line','circle','text'].indexOf(props.type)>-1)
     });
     fill: Attribute = this.newAttribute({
         _id: 'fill',
         name: 'Fill',
         type: 'color',
         mandatory: true,
-        conditions: props => (['polygon','rect','circle'].indexOf(props.type)>-1)
+        conditions: props => (['polygon','rect','circle','text'].indexOf(props.type)>-1)
     });
     opacity: Attribute = this.newAttribute({
         _id: 'opacity',
@@ -65,14 +66,14 @@ export default class Element extends Entity {
         name: 'X',
         type: 'calculation',
         mandatory: true,
-        conditions: props => (['polygon','rect','circle'].indexOf(props.type)>-1)
+        conditions: props => (['polygon','rect','circle','text'].indexOf(props.type)>-1)
     });
     y: Attribute = this.newAttribute({
         _id: 'y',
         name: 'Y',
         type: 'calculation',
         mandatory: true,
-        conditions: props => (['polygon','rect','circle'].indexOf(props.type)>-1)
+        conditions: props => (['polygon','rect','circle','text'].indexOf(props.type)>-1)
     });
     width: Attribute = this.newAttribute({
         _id: 'width',
@@ -151,6 +152,30 @@ export default class Element extends Entity {
         mandatory: true,
         conditions: props => (['rect'].indexOf(props.type)>-1)
     });
+    
+    // Text Attributes below
+
+    dx: Attribute = this.newAttribute({
+        _id: 'dx',
+        name: 'Delta X',
+        type: 'calculation',
+        mandatory: true,
+        conditions: props => (['text'].indexOf(props.type)>-1)
+    });
+    dy: Attribute = this.newAttribute({
+        _id: 'cy',
+        name: 'Delta Y',
+        type: 'calculation',
+        mandatory: true,
+        conditions: props => (['text'].indexOf(props.type)>-1)
+    });
+    rotate: Attribute = this.newAttribute({
+        _id: 'rotate',
+        name: 'Rotate',
+        type: 'calculation',
+        mandatory: false,
+        conditions: props => (['text'].indexOf(props.type)>-1)
+    });
     text: Attribute = this.newAttribute({
         _id: 'text',
         name: 'Text',
@@ -158,6 +183,51 @@ export default class Element extends Entity {
         mandatory: true,
         conditions: props => (['text'].indexOf(props.type)>-1)
     });
+    fontFamily: Attribute = this.newAttribute({ _id: 'fontFamily', name: 'Font Family', type: 'list', options: [ { _id: 'Arial', name: 'Arial' }, { _id: 'Times New Roman', name: 'Times New Roman' }, { _id: 'Verdana', name: 'Verdana' }, { _id: 'Courier New', name: 'Courier New' }, { _id: 'Helvetica', name: 'Helvetica' } ], mandatory: true, conditions: props => (['text'].indexOf(props.type) > -1) });
+    fontSize: Attribute = this.newAttribute({ _id: 'fontSize', name: 'Font Size', type: 'calculation', mandatory: true, conditions: props => (['text'].indexOf(props.type) > -1) });
+    letterSpacing: Attribute = this.newAttribute({
+        _id: 'letterSpacing',
+        name: 'Letter Spacing',
+        type: 'calculation',
+        mandatory: true,
+        conditions: props => (['text'].indexOf(props.type)>-1)
+    });
+    wordSpacing: Attribute = this.newAttribute({
+        _id: 'wordSpacing',
+        name: 'Word Spacing',
+        type: 'calculation',
+        mandatory: true,
+        conditions: props => (['text'].indexOf(props.type)>-1)
+    });
+    textDecoration: Attribute = this.newAttribute({
+        _id: 'textDecoration',
+        name: 'Text Decoration',
+        type: 'list',
+        options: [
+            { _id: 'none', name: 'None' },
+            { _id: 'underline', name: 'Underline' },
+            { _id: 'overline', name: 'Overline' },
+            { _id: 'line-through', name: 'Line Through' },
+            { _id: 'blink', name: 'Blink' }
+        ],
+        mandatory: true,
+        conditions: props => (['text'].indexOf(props.type)>-1)
+    });
+    transform: Attribute = this.newAttribute({
+        _id: 'transform',
+        name: 'Transform',
+        type: 'calculation',
+        mandatory: false,
+    });
+    textLength: Attribute = this.newAttribute({
+        _id: 'textLength',
+        name: 'Text Length',
+        type: 'calculation',
+        mandatory: true,
+        conditions: props => (['text'].indexOf(props.type)>-1)
+    });
+
+    // Constructor
 
     constructor(props: {
         _id: string, 

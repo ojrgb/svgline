@@ -66,7 +66,7 @@ export default class Loop<T extends Entity> extends Group<T> {
             const calculatedTree = this.getCalculatedTree()
 
             // Create function statement for loop calculation
-            const functionStatement = `const {configurations, calculations, datasets, components} = this;
+            const functionStatement = `const {Configurations, Calculations, Datasets, Components} = this;
                 ${calculatedTree.iterator!==undefined && Object.keys(calculatedTree.iterator).map((iteratorId: string) => {
                     return `const ${iteratorId} = this.iterator.${iteratorId};`
                 }).join('\n')}
@@ -74,7 +74,6 @@ export default class Loop<T extends Entity> extends Group<T> {
 
             // Create loop function
             const loopFunction = new Function(functionStatement)
-
             // Apply loop function to calculated tree
             const iterators = loopFunction.apply(calculatedTree)
 
@@ -127,7 +126,9 @@ export default class Loop<T extends Entity> extends Group<T> {
     //     }
     // }
 
+    
 
+   
 
     constructor(props: {
         _id?: string,
