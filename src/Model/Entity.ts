@@ -437,7 +437,6 @@ export default class Entity {
         for(let attr of this.getAttributes())
         // .filter((attr: Attribute) => attr._id !== '_id'))
         {
-            
             attr.calculate()
         }
     }

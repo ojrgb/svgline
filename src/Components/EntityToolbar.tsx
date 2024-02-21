@@ -29,13 +29,13 @@ export default function EntityToolbar<T extends Entity>(props: {
         disabled
     } = props;
     const {contextState, contextDispatch} = React.useContext(contextStore)
-    const {selected, currentSelection} = contextState
+    const {selected} = contextState
+    const currentSelection = (contextState.currentSelection as Entity)
     /** Inherit specifies whether the entity toolbar is for an inherited entity.
      * For example, Element is inherited from Layer, so the toolbar for Element
      * should have the inherit prop set to true.
      */
    
-    console.log(currentSelection)
     
     if(!list) return <div/>
     
@@ -57,19 +57,21 @@ export default function EntityToolbar<T extends Entity>(props: {
     }
 
     const onRemove = () => {
-        list.removeItem(contextState.selected[0])
+        currentSelection.removeItemInParent();
+        
     }
 
     const onDuplicate = () => {
-        list.duplicateItem(contextState.selected[0])
+        currentSelection.duplicateItemInParent()
     }
 
     const onMoveUp = () => {
-        list.moveItem(contextState.selected[0],'up')
+        currentSelection.moveItemInParent('up')
+        
     }
 
     const onMoveDown = () => {
-        list.moveItem(contextState.selected[0],'down')
+        currentSelection.moveItemInParent('down')
     }
 
     const onAddGroup = () => {

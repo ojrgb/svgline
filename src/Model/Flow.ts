@@ -131,5 +131,36 @@ export default class Flow extends Entity {
     removeIterator = (): void => {
         this.removeFromCalculatedTree(['iterator'])
     }
+
+    getForAutocomplete = (): any => {
+        const recurse = (obj: any) => {
+            return Object.keys(obj).map(key => {
+                let val = this[key]
+                if(!val) { return}
+                if(val.get) { val = val.get() || val}
+                let res: any
+                if(val._id) {
+                    res = {[val._id]: {
+                        _id: val._id,
+                        name: val.name,
+                        objectType: val.objectType
+                    }}
+                    if(val.entities) {
+                        res.entities = val.entities.map(entity => {
+                            console.log(entity)
+                            return recurse(entity)
+                        })
+                    }
+                    // if(val.elements) {
+                    //     val.elements.map(element => {
+                    //         res[element?._id] = recurse(element)
+                    //     })
+                    // }
+                }
+                return res
+            }).filter(Boolean)
+        }
+        return recurse(this)
+    }
     
 }

@@ -27,6 +27,7 @@ export default class Attribute {
     value: any
     path: string[] = []
     autowired: boolean = true;
+    objectType: string = 'Attribute'
 
     constructor(
             props: {

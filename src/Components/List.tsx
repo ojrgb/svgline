@@ -96,7 +96,7 @@ function ListItem(props: {
             selected={selected}
         >
                 {
-                    props.level>0 && <span><ChildArrow/></span>
+                    props.level>0 && <span style={{marginRight:'4px'}}><ChildArrow/></span>
                 }
                 {/*We have to disable pointer events on the actual text so we 
                 can make sure that de-selecting works (see the Main component) */}

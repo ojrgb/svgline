@@ -1,8 +1,7 @@
 import React from 'react'
-import CodeMirror, { EditorState } from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
 import styled from 'styled-components'
 import theme from 'theme';
+import CalculationInput from './CalculationInput';
 
 const Classes = {
     Root: styled.div.attrs({className: 'calculation-root'})`
@@ -18,11 +17,6 @@ const Classes = {
     Preview: styled.div.attrs({className: 'calculation-preview'})`
       
     `,
-    CodeMirror: styled(CodeMirror)`
-        .CodeMirror {
-         
-        }
-    `
 }
 
 export default function Calculation(props: {
@@ -44,14 +38,7 @@ export default function Calculation(props: {
     return (
         <Classes.Root>
             <Classes.Editor>
-                <CodeMirror 
-                    value={value} 
-                    theme="dark" 
-                    extensions={[javascript({ jsx: true })]} 
-                    onChange={onChange} 
-                    onBlur={props.onBlur}
-                      
-                />
+                <CalculationInput value={value} onChange={onChange} onBlur={props.onBlur}/>
             </Classes.Editor>
             <Classes.Preview>
 
