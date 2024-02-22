@@ -9,6 +9,7 @@ import Attribute from "./Attribute";
 import EntityList from "./EntityList";
 import _ from "lodash";
 import Utilities from "Model/Utilities";
+import { re } from "mathjs";
 
 export default class Flow extends Entity {
     
@@ -106,6 +107,10 @@ export default class Flow extends Entity {
        
     }
 
+    /**
+     * Calculates the tree based on the specified children.
+     * @returns The calculated tree.
+     */
     calculate = (): any => {
         
         this.calculatedTree = {};
@@ -114,53 +119,71 @@ export default class Flow extends Entity {
         return this.calculatedTree;
     }
 
+    /**
+     * Merges the calculated tree with the given path and value.
+     * @param path - The path to merge the value into.
+     * @param value - The value to merge into the calculated tree.
+     */
     mergeCalculatedTree = (path, value): void => {
         this.calculatedTree = _.set(this.calculatedTree,path, value);
     }
 
+    /**
+     * Removes the specified paths from the calculated tree.
+     * @param paths - An array of paths to be removed.
+     */
     removeFromCalculatedTree = (paths: string[]): void => {
         paths.forEach(path => {
             this.calculatedTree = _.omit(this.calculatedTree,path);
         })
     }
 
+    /**
+     * Sets the iterator value for the specified iterator ID.
+     * 
+     * @param iteratorId - The ID of the iterator.
+     * @param iteratorValue - The value to set for the iterator.
+     */
     setIterator = (iteratorId: any, iteratorValue: any): void => {
         this.mergeCalculatedTree(['iterator',iteratorId],iteratorValue)
     }
 
+    /**
+     * Removes the iterator from the calculated tree.
+     */
     removeIterator = (): void => {
         this.removeFromCalculatedTree(['iterator'])
     }
 
+    /**
+     * Retrieves the data for autocomplete functionality.
+     * @returns {any} The autocomplete data.
+     */
     getForAutocomplete = (): any => {
-        const recurse = (obj: any) => {
-            return Object.keys(obj).map(key => {
-                let val = this[key]
-                if(!val) { return}
-                if(val.get) { val = val.get() || val}
-                let res: any
-                if(val._id) {
-                    res = {[val._id]: {
-                        _id: val._id,
-                        name: val.name,
-                        objectType: val.objectType
-                    }}
-                    if(val.entities) {
-                        res.entities = val.entities.map(entity => {
-                            console.log(entity)
-                            return recurse(entity)
-                        })
-                    }
-                    // if(val.elements) {
-                    //     val.elements.map(element => {
-                    //         res[element?._id] = recurse(element)
-                    //     })
-                    // }
-                }
-                return res
-            }).filter(Boolean)
+        const calculatedTree = this.calculate()
+        let formatEntity = (entity) => {
+            const _res = {
+                _proto: {
+                    _id: entity._id?.value,
+                    name: entity.name?.value,
+                    type: entity.constructor?.name,
+                    path: entity.path,
+                    entities: entity.entities?.map(formatEntity).reduce((acc,entity) => {return {...acc,...{[entity._proto._id]: entity}}},{}),
+                    elements: entity.elements?.entities?.map(formatEntity).reduce((acc,entity) => {return {...acc,...{[entity._proto._id]: entity}}},{}),
+                    value: ['EntityList','Group','Loop'].includes(entity.constructor?.name) ? undefined : _.get(calculatedTree,entity.path),
+                    description: entity.description?.value,
+                },
+            }
+            // Bring up the .entities and .elements to the parent level
+            const res = {..._res, ...((_res._proto.entities && Object.keys(_res._proto.entities)?.length>0) ? _res._proto.entities : {}),...((_res._proto.elements && Object.keys(_res._proto.elements)?.length>0) ? _res._proto.elements : {})}
+            return res
         }
-        return recurse(this)
+        let res = {};
+        ['configurations','datasets','calculations','components','layers'].forEach(entityType => {
+            const currentEntity = this[entityType]
+            res[currentEntity._id.value] = formatEntity(this[entityType])
+        })
+        return res;
     }
     
 }

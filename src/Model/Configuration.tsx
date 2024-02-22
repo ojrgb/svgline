@@ -10,6 +10,7 @@ import { updateCalculatedTree } from "./ModelDecorators";
     formAttributes: [
         '_id',
         'name',
+        'description',
         'type',
         'defaultValue',
         'sampleValue',

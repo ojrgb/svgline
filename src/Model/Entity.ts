@@ -108,6 +108,14 @@ export default class Entity {
         mandatory: true,
     
     });
+    description: Attribute = this.newAttribute({
+        _id: 'description',
+        name: 'Description',
+        type: 'string',
+        mandatory: false,
+    
+    });
+
 
     /**
      * The parent entity of this entity.

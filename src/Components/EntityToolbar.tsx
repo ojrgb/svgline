@@ -46,7 +46,7 @@ export default function EntityToolbar<T extends Entity>(props: {
     // E.g. elements -> layers.[index].elements
     const onAdd = () => {
         
-        const targetId = `${typeofEntity.name}-${contextState.idCounter[list.EntityType.shortName] || 1}`
+        const targetId = `${typeofEntity.name}_${contextState.idCounter[list.EntityType.shortName] || 1}`
         if(currentSelection instanceof Group) {
             currentSelection.newItem({_id: targetId})
         }

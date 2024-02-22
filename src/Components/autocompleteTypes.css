@@ -1,0 +1,23 @@
+.cm-completionIcon-Calculation::after {
+        content: "🔬";
+}
+
+.cm-completionIcon-Configuration::after {
+    content: "⚙️";
+}
+
+.cm-completionIcon-Dataset::after {
+    content: "📊";
+}
+
+.cm-completionIcon-Component::after {
+    content: "🧩";
+}
+
+.cm-completionIcon-Layer::after {
+    content: "🔲"
+}
+
+.cm-completionIcon-EntityList::after {
+    content: "📃";
+}

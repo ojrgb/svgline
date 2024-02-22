@@ -6,6 +6,8 @@ import {syntaxTree} from "@codemirror/language"
 import Flow from 'Model/Flow';
 import { flowStore } from 'Context/flowStore';
 import { Completion } from '@codemirror/autocomplete';
+import _ from 'lodash';
+import './autocompleteTypes.css'
 
 //   function myCompletions(context: CompletionContext) {
 //     let word = context.matchBefore(/\w*/)
@@ -25,27 +27,7 @@ function makeCompletions(props: {flow: Flow}) {
 
     // Instantiate flow and tree
       const {flow} = props
-        let tree = {} 
-    
-    // Get the flow and iterate over it
-      for(let key in flow.get()) {
-        const value = flow.get()[key]
-        const _id = value?._id
-        if(_id) {
-            tree[_id] = value
-        }
-        
-      }
 
-      // Convert into options
-      const options = Object.keys(tree).map(key => {
-        const value = tree[key]
-        return {label: key, type: value.objectType}
-})
-
-  
-
-   
       // Start the myCompletions function
      return function myCompletions(context: CompletionContext) {
 
@@ -78,32 +60,47 @@ function makeCompletions(props: {flow: Flow}) {
                 }
            }
            let from = newCurrent?.from || 0
-           let textBefore = context.state.sliceDoc(from, context.pos)
+           let textBefore = context.state.sliceDoc(from, context.pos-1)
            return textBefore
         }
 
+        const tree = flow.getForAutocomplete()
+
         let fullPath;
-        if(current.name == ".") {
-            fullPath = resolvePath(current)
-            console.log(fullPath)
-        }
-
-        console.log(flow.getForAutocomplete())
-
         let word = context.matchBefore(/\w*/)
-        
-        
-        // if (nodeBefore.name != "BlockComment" ||
-        //     context.state.sliceDoc(nodeBefore.from, nodeBefore.from + 3) != "/**")
-        //   return null
-        let textBefore = context.state.sliceDoc(nodeBefore.from, context.pos)
-        let tagBefore = /@\w*$/.exec(textBefore)
-        // if (!tagBefore && !context.explicit) return null
-        return {
-          from: word.from,
-          options
-        //   validFor: /^(@\w*)?$/
+        let options = []
+
+        const formatOption = (_id: string, object: any) => {
+            return {
+                label: _id,
+                type: object._proto.type,
+                info: `${object._proto.description ? ('💬: ' + object._proto.description + ' ') : ''}${object._proto.value ? `🧪: ${object._proto.value}` : ''}`,
+                detail: object._proto.name ? '| ' + object._proto.name : undefined
+            }
         }
+
+        if(current.name == ".") {
+            fullPath = resolvePath(current).split(".")
+            const currentPath = (_.get(tree,fullPath))
+            if(currentPath) {
+                options = Object.keys(_.omit(currentPath,"_proto")).map(key => {
+                    return formatOption(key, currentPath[key])
+                })
+            }
+        }
+        else {
+            options = Object.keys(_.omit(tree,"proto")).map(key => {
+                return formatOption(key, tree[key])
+            })
+        }
+
+        
+            
+        return {
+            from: word.from,
+            options
+          //   validFor: /^(@\w*)?$/
+          }
       }
     
 }
