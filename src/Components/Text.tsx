@@ -30,7 +30,7 @@ export default function Text(props: React.HTMLAttributes<HTMLInputElement> & Rea
   
 }>) {
     return (
-        <Classes.Root type="text" {...props} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+        <Classes.Root type="text" className="input-text" {...props} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             props.onChange && props.onChange(e.target.value)
         }}/>
     )

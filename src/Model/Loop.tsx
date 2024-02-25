@@ -5,6 +5,8 @@ import EntityList from "./EntityList";
 import Group from "./Group";
 import Flow from "./Flow";
 import _ from "lodash";
+import Utilities from "./Utilities";
+import { generateExpression } from "./calculationUtils";
 
 @Entity.Configure({
     nameSingle: 'Loop',
@@ -64,16 +66,8 @@ export default class Loop<T extends Entity> extends Group<T> {
 
         try {
             const calculatedTree = this.getCalculatedTree()
-
-            // Create function statement for loop calculation
-            const functionStatement = `const {Configurations, Calculations, Datasets, Components} = this;
-                ${calculatedTree.iterator!==undefined && Object.keys(calculatedTree.iterator).map((iteratorId: string) => {
-                    return `const ${iteratorId} = this.iterator.${iteratorId};`
-                }).join('\n')}
-                return ${this.get("loopStatement") as string}`
-
             // Create loop function
-            const loopFunction = new Function(functionStatement)
+            const loopFunction = generateExpression({calculatedTree, expression: this.get("loopStatement") as string})
             // Apply loop function to calculated tree
             const iterators = loopFunction.apply(calculatedTree)
 

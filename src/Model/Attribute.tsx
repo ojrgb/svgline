@@ -9,6 +9,8 @@ import { Wire, autoUpdatePath, updateCalculatedTree } from './ModelDecorators';
 import Flow from './Flow';
 import _ from 'lodash';
 import Loop from './Loop';
+import Utilities from './Utilities';
+import { generateExpression } from './calculationUtils';
 
 export default class Attribute {
     internalId = v4();
@@ -165,18 +167,7 @@ export default class Attribute {
         if(this.type === 'calculation') {
             try {
                 // The below line is a hack to get the iterator variables in the scope of the function.
-                // TODO: Find a better way to do this.
-                // LOL, it wasn't me that wrote this comment, it was Copilot. Even Copilot knows this snippet is crap.
-                const functionStatement = `const {Configurations, Calculations, Datasets, Components} = this;
-                ${calculatedTree.iterator!==undefined && Object.keys(calculatedTree.iterator).map((iteratorId: string) => {
-                    // This part destructures the iterator object and assigns the values to variables with the same name as the keys.
-                    // For example, if the iterator object is {iteratorId: 1, iteratorIndex: 0}, this part will generate the following code:
-                    // const iteratorId = this.iterator.iteratorId;
-                    // const iteratorIndex = this.iterator.iteratorIndex;
-                    return `const ${iteratorId} = this.iterator.${iteratorId};`
-                }).join('\n')}
-                return  ${this.value}`
-                const targetFunction = new Function(functionStatement)
+                const targetFunction = generateExpression({calculatedTree, expression: this.value});
                 res = targetFunction.call(calculatedTree);
             }
             catch(e) {

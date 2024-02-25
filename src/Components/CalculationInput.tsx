@@ -1,6 +1,8 @@
 import React from 'react'
-import CodeMirror, { EditorState } from '@uiw/react-codemirror';
+import CodeMirror, { Command, EditorState, Prec, basicSetup, keymap } from '@uiw/react-codemirror';
+import {defaultKeymap, indentWithTab} from "@codemirror/commands"
 import {CompletionContext} from "@codemirror/autocomplete"
+import { calculationFuncsCompletions } from 'Model/calculationUtils';
 import { javascript, javascriptLanguage } from '@codemirror/lang-javascript';
 import {syntaxTree} from "@codemirror/language"
 import Flow from 'Model/Flow';
@@ -105,7 +107,22 @@ function makeCompletions(props: {flow: Flow}) {
     
 }
 
+function makeFunctionCompletions() {
+    return function myCompletions(context: CompletionContext) {
+        let word = context.matchBefore(/\$*/)
+        
+        if (!!!word || (word?.from == word?.to && !context.explicit))
+          return null
+        else {
+            console.log('word',calculationFuncsCompletions)
 
+        }
+        return {
+          from: word.from,
+          options: calculationFuncsCompletions
+        }
+      }
+}
 
 
 
@@ -116,12 +133,37 @@ export default function CalculationInput(props: {
 }) {
     const {flow} = React.useContext(flowStore)
     const myCompletions = makeCompletions({flow})
+    const myFunctionCompletions = makeFunctionCompletions()
     const completions = javascriptLanguage.data.of({autocomplete: myCompletions})
+    const functionCompletions = javascriptLanguage.data.of({autocomplete: myFunctionCompletions})
+    const commands = Prec.highest(
+        keymap.of([
+          { 
+            key: "Tab", win: 'Tab', preventDefault: true , run: ({state,dispatch}) => {
+                const allSelections: HTMLElement[] = Array.from(document.querySelectorAll(".input-text,.cm-content"))
+                console.log('allSelections',allSelections)
+                allSelections.forEach((v,i) => {
+                    
+                    if(v===document.activeElement) {
+                        if(i < allSelections.length - 1) {
+                            const target = allSelections[i+1] as HTMLElement
+                            console.log('target',target)
+                        }
+                        else {
+
+                        }
+                    }
+                })
+                return true
+              }
+        },
+        ])
+      )
     return (
         <CodeMirror 
             value={props.value} 
             theme="dark" 
-            extensions={[completions,javascript({jsx: true})]} 
+            extensions={[commands, completions, functionCompletions, javascript({jsx: true})]} 
             onChange={props.onChange} 
             onBlur={props.onBlur}
             
