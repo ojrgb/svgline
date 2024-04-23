@@ -29,8 +29,7 @@ export default class Group<T extends Entity> extends List<T> {
         entities: T[]
     }, parent?: Entity) {
         super(props,parent);
-        
-        if(props._id) this.set('_id',props._id)
+        this.updatePath()
     }
 
     getInherited = (): boolean => {

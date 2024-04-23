@@ -41,11 +41,13 @@ export function generateExpression(props: {
                 // const iteratorIndex = this.iterator.iteratorIndex;
                 return `const ${iteratorId} = this.iterator.${iteratorId};`
             }).join('\n')}
+            
             ${
                 Object.keys(calculationFuncsMap).map(funcId => {
-                    return `const $${funcId} = calculationFuncsMap['${funcId}'];`
+                    return `const ${funcId} = ${calculationFuncsMap[funcId]};`
                 }).join('\n')
             }
             return  ${expression}`
+            console.log(functionStatement)
             return new Function(functionStatement)
 }

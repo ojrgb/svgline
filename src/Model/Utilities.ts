@@ -16,6 +16,7 @@ export default class Utilities {
     static fromJson(props: {json: any}, parent?: Entity): Entity{
         let {json} = props;
         let res: Entity | undefined = undefined;
+        console.log('Constructing!',json)
         // Null check
         if(!json) {
             console.error('json is undefined',props);

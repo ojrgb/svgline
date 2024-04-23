@@ -476,7 +476,7 @@ export default class Entity {
     }
 
     public autoAssignProps = (props: any): void => {
-        for(let key in props) {
+        for(let key in _.omit(props,['_id','entities'])) {
             if(this[key] instanceof Attribute) {
                 this[key].value = props[key];
             }

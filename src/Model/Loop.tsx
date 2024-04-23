@@ -127,9 +127,15 @@ export default class Loop<T extends Entity> extends Group<T> {
     constructor(props: {
         _id?: string,
         EntityType: typeof Entity,
-        entities: T[]
+        entities: T[],
+        iteratorId?: string,
+        iteratorIndex?: string,
+        arrayId?: string,
+        loopStatement?: string
+
     }, parent?: Entity) {
         super(props,parent);
+        this.autoAssignProps(props);
     }
 
     
