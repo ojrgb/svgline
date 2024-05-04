@@ -412,6 +412,10 @@ export default class Entity {
                 result[key] = target.get();
                 continue;
             }
+            if(['entityType'].includes(key)) {
+                result[key] = target;
+                continue;
+            }
         }
         return Object.assign({},result,{objectType: this.constructor.name});
     }

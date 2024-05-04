@@ -47,11 +47,19 @@ export default class Utilities {
         let _json = _.omit(json,['entities','elements']) as typeof json
 
         if(['Group','Loop','EntityList'].includes(_json.objectType)) {
+            if(_json.entityType === undefined) {
+                console.error('listType is undefined',_json);
+                return undefined;
+            }
+            else {
+                _json.EntityType = constructors[_json.entityType]
+            }
             if(['Group','Loop'].includes(_json.objectType)) {
                 res = new Constructor(_json,parent)
             }
             else {
-                res = new EntityList(_json,parent)
+                res = new EntityList<typeof Constructor>(_json,parent)
+                console.log(_json.EntityType)
             }
         }
         else {

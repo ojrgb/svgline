@@ -48,6 +48,5 @@ export function generateExpression(props: {
                 }).join('\n')
             }
             return  ${expression}`
-            console.log(functionStatement)
             return new Function(functionStatement)
 }

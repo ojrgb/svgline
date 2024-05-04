@@ -18,6 +18,7 @@ export default class List<T extends Entity> extends Entity {
      * @template T - The type of the entity.
      */
     EntityType: typeof Entity;
+    entityType: string;
 
     
     /**
@@ -32,6 +33,7 @@ export default class List<T extends Entity> extends Entity {
     }, parent?: Entity) {
         super(props, parent)
         this.EntityType = props.EntityType
+        this.entityType = props.EntityType.name
         // this.type = props.type
         // this.setFlow = parent.setFlow
         this.entities = props.entities ? props.entities : []

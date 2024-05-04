@@ -50,6 +50,7 @@ export default function EntityConsole(props: {
 
 }) {
     const typeofEntity = props.list ? props.list.getType() as typeof Entity : props.type
+    
     return (
         <Box id={`${typeofEntity.namePlural}-editor`} w={props.w} h={props.h}>
             <Box.Header>
