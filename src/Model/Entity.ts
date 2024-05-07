@@ -67,7 +67,7 @@ export default class Entity {
      * @returns The newly created attribute.
      */
     public newAttribute = (props: {
-                _id: string,name: string, type: 'identifier' | 'string' | 'list' | 'number' | 'color' | 'boolean'  | 'calculation', 
+                _id: string,name: string, type: 'identifier' | 'string' | 'list' | 'number' | 'color' | 'boolean'  | 'calculation' | 'asset', 
                 mandatory: boolean, options?: {
                     _id: string,
                     name: string,

@@ -17,7 +17,12 @@ function LoadPackageModal(props) {
   }
   return (
     <Modal {...props} onConfirm={onConfirm}>
-        <LoadList/>
+        <LoadList collection='flows' columns= {[
+            {
+                _id: '_id',
+                name: 'Flow Identifier',
+            },
+        ]}/>
     </Modal>    
   );
 }

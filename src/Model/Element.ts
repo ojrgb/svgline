@@ -6,7 +6,7 @@ import Entity from "./Entity";
     nameSingle: 'Element',
     namePlural: 'Elements',
     shortName: 'elem',
-    formAttributes: ['_id','name', 'type',,'text', 'stroke', 'x', 'y', 'strokeWidth', 'fill', 'opacity',  'width', 'height', 'r', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'rx', 'ry','dx',
+    formAttributes: ['_id','name', 'type','source','text', 'stroke', 'x', 'y', 'strokeWidth', 'fill', 'opacity',  'width', 'height', 'r', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'rx', 'ry','dx',
     'dy','rotate','fontFamily','fontSize','letterSpacing','wordSpacing','textDecoration','textLength','transform'],
     icon: BsGearFill,
     inherited: true
@@ -28,10 +28,18 @@ export default class Element extends Entity {
                 { _id: 'rect', name: 'Rectangle' },
                 { _id: 'line', name: 'Line' },
                 { _id: 'circle', name: 'Circle' },
-                { _id: 'text', name: 'Text' }
+                { _id: 'text', name: 'Text' },
+                { _id: 'image', name: 'Image' },
 
         ],
         mandatory: true,
+    });
+    source: Attribute = this.newAttribute({
+        _id: 'source',
+        name: 'Source',
+        type: 'asset',
+        mandatory: true,
+        conditions: props => (['image'].indexOf(props.type)>-1)
     });
     stroke: Attribute = this.newAttribute({
         _id: 'stroke',

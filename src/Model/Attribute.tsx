@@ -11,12 +11,13 @@ import _ from 'lodash';
 import Loop from './Loop';
 import Utilities from './Utilities';
 import { generateExpression } from './calculationUtils';
+import AssetSelect from 'Components/AssetSelect';
 
 export default class Attribute {
     internalId = v4();
     _id: string;
     name: string;
-    type: 'identifier' | 'string' | 'list' | 'number' | 'color' | 'boolean' | 'calculation'; 
+    type: 'identifier' | 'string' | 'list' | 'number' | 'color' | 'boolean' | 'calculation' | 'asset'; 
     mandatory: boolean;
     options?: {
         _id: string,
@@ -33,7 +34,7 @@ export default class Attribute {
 
     constructor(
             props: {
-                _id: string,name: string, type: 'identifier' | 'string' | 'list' | 'number' | 'color' | 'boolean' | 'calculation', 
+                _id: string,name: string, type: 'identifier' | 'string' | 'list' | 'number' | 'color' | 'boolean' | 'calculation' | 'asset', 
                 mandatory: boolean, options?: {
                     _id: string,
                     name: string,
@@ -145,8 +146,13 @@ export default class Attribute {
                             'boolean': <Select options={[{_id: 'true', name: 'true'}, {_id: 'false', name: 'false'}]} {...props} />,
                             'color': <ColorPicker {...props} />,
                             'list': <Select options={this.options} {...props} />,
-                            'calculation': <Calculation {...props} />
+                            'calculation': <Calculation {...props} />,
+                            'asset': <AssetSelect {...props} />
         } 
+        if(!inputTypes[this.type]) {
+            console.error(`No input type found for attribute type: ${this.type}`);
+            return <></>;
+        }
         const input = React.cloneElement(inputTypes[this.type], {
             onChange: (v: any) => {this.onChangeHandler(v)}
         });

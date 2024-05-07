@@ -7,6 +7,7 @@ import Entity from "./Entity";
     namePlural: 'Components',
     shortName: 'comp',
     formAttributes: [
+        '_id',
         'name',
     ],
     icon: BsGearFill,

@@ -14,11 +14,26 @@ const save = async (props: {json: any}) => {
     return res.text()
 }
 
+const saveAsset = async (props: {file: File}) => {
+  const formData = new FormData();
+  formData.append('file', props.file);
+
+  const res = await fetch(root + 'assets', {
+    method: "POST",
+    body: formData,
+    headers: {
+      "Access-Control-Allow-Origin": "http://localhost:3000",
+    }
+  });
+
+  return res
+}
+
 const get = async (props: {collection: String, _id?: String}) => {
     const res = await fetch(root + props.collection + (props._id ? '/' + props._id : ''))
     return await res.json()
 }
 
-const dataService = {save, get}
+const dataService = {save, get, saveAsset}
 
 export default dataService
