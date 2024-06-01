@@ -44,119 +44,119 @@ export default class Element extends Entity {
     stroke: Attribute = this.newAttribute({
         _id: 'stroke',
         name: 'Stroke',
-        type: 'color',
+        type: ['color','calculation'],
         mandatory: true,
         conditions: props => (['polygon','rect','line','circle','text'].indexOf(props.type)>-1)
     });
     strokeWidth: Attribute = this.newAttribute({
         _id: 'strokeWidth',
         name: 'Stroke Width',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['polygon','rect','line','circle','text'].indexOf(props.type)>-1)
     });
     fill: Attribute = this.newAttribute({
         _id: 'fill',
         name: 'Fill',
-        type: 'color',
+        type: ['color','calculation'],
         mandatory: true,
         conditions: props => (['polygon','rect','circle','text'].indexOf(props.type)>-1)
     });
     opacity: Attribute = this.newAttribute({
         _id: 'opacity',
         name: 'Opacity',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
 
     });
     x: Attribute = this.newAttribute({
         _id: 'x',
         name: 'X',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['polygon','rect','circle','text'].indexOf(props.type)>-1)
     });
     y: Attribute = this.newAttribute({
         _id: 'y',
         name: 'Y',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['polygon','rect','circle','text'].indexOf(props.type)>-1)
     });
     width: Attribute = this.newAttribute({
         _id: 'width',
         name: 'Width',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['polygon','rect','circle'].indexOf(props.type)>-1)
     });
     height: Attribute = this.newAttribute({
         _id: 'height',
         name: 'Height',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['polygon','rect','circle'].indexOf(props.type)>-1)
     });
     r: Attribute = this.newAttribute({
         _id: 'r',
         name: 'Radius',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['circle'].indexOf(props.type)>-1)
     });
     x1: Attribute = this.newAttribute({
         _id: 'x1',
         name: 'x1',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['line'].indexOf(props.type)>-1)
     });
     y1: Attribute = this.newAttribute({
         _id: 'y1',
         name: 'y1',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['line'].indexOf(props.type)>-1)
     });
     x2: Attribute = this.newAttribute({
         _id: 'x2',
         name: 'x2',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['line'].indexOf(props.type)>-1)
     });
     y2: Attribute = this.newAttribute({
         _id: 'y2',
         name: 'y2',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['line'].indexOf(props.type)>-1)
     });
     cx: Attribute = this.newAttribute({
         _id: 'cx',
         name: 'Circle X',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['circle'].indexOf(props.type)>-1)
     });
     cy: Attribute = this.newAttribute({
         _id: 'cy',
         name: 'Circle Y',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['circle'].indexOf(props.type)>-1)
     });
     rx: Attribute = this.newAttribute({
         _id: 'rx',
         name: 'Round X',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['rect'].indexOf(props.type)>-1)
     });
     ry: Attribute = this.newAttribute({
         _id: 'ry',
         name: 'Round Y',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['rect'].indexOf(props.type)>-1)
     });
@@ -166,44 +166,44 @@ export default class Element extends Entity {
     dx: Attribute = this.newAttribute({
         _id: 'dx',
         name: 'Delta X',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['text'].indexOf(props.type)>-1)
     });
     dy: Attribute = this.newAttribute({
         _id: 'cy',
         name: 'Delta Y',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['text'].indexOf(props.type)>-1)
     });
     rotate: Attribute = this.newAttribute({
         _id: 'rotate',
         name: 'Rotate',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: false,
         conditions: props => (['text'].indexOf(props.type)>-1)
     });
     text: Attribute = this.newAttribute({
         _id: 'text',
         name: 'Text',
-        type: 'calculation',
+        type: ['string','calculation'],
         mandatory: true,
         conditions: props => (['text'].indexOf(props.type)>-1)
     });
     fontFamily: Attribute = this.newAttribute({ _id: 'fontFamily', name: 'Font Family', type: 'list', options: [ { _id: 'Arial', name: 'Arial' }, { _id: 'Times New Roman', name: 'Times New Roman' }, { _id: 'Verdana', name: 'Verdana' }, { _id: 'Courier New', name: 'Courier New' }, { _id: 'Helvetica', name: 'Helvetica' } ], mandatory: true, conditions: props => (['text'].indexOf(props.type) > -1) });
-    fontSize: Attribute = this.newAttribute({ _id: 'fontSize', name: 'Font Size', type: 'calculation', mandatory: true, conditions: props => (['text'].indexOf(props.type) > -1) });
+    fontSize: Attribute = this.newAttribute({ _id: 'fontSize', name: 'Font Size', type: ['string','calculation'], mandatory: true, conditions: props => (['text'].indexOf(props.type) > -1) });
     letterSpacing: Attribute = this.newAttribute({
         _id: 'letterSpacing',
         name: 'Letter Spacing',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['text'].indexOf(props.type)>-1)
     });
     wordSpacing: Attribute = this.newAttribute({
         _id: 'wordSpacing',
         name: 'Word Spacing',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['text'].indexOf(props.type)>-1)
     });
@@ -224,13 +224,13 @@ export default class Element extends Entity {
     transform: Attribute = this.newAttribute({
         _id: 'transform',
         name: 'Transform',
-        type: 'calculation',
+        type: ['string','calculation'],
         mandatory: false,
     });
     textLength: Attribute = this.newAttribute({
         _id: 'textLength',
         name: 'Text Length',
-        type: 'calculation',
+        type: ['number','calculation'],
         mandatory: true,
         conditions: props => (['text'].indexOf(props.type)>-1)
     });

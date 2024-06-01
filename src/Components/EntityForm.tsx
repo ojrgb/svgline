@@ -3,8 +3,30 @@ import Entity from 'Model/Entity'
 import Form from './Form'
 import Attribute from 'Model/Attribute'
 import Text from './Text'
+import styled from 'styled-components'
+import theme from 'theme'
+import {relaxColor} from 'utils'
+import { AttributeType } from 'Model/Interface/AttributeType'
 
 
+
+const lightenDelta = 0.2,
+  lightenDeltaHover = 0.3,
+  lightenDeltaActive = 0.8
+
+const Classes = {
+  AttributeTypeButton: styled.div.attrs({className: 'type-button'})<{active: boolean}>`
+    color: ${relaxColor(theme.colors.primary,lightenDelta)};
+    cursor: pointer;
+    :hover {
+      color: ${relaxColor(theme.colors.primary,lightenDeltaHover)};
+    }
+    ${props => props.active && `
+      color: ${relaxColor(theme.colors.primary,lightenDeltaActive)};
+    `}
+    }
+  `,
+}
 export default function EntityForm(props: {
     entity: Entity
 }) {
@@ -38,11 +60,34 @@ export default function EntityForm(props: {
         
         // Clone the input, adding the value and the key
         const input = React.cloneElement(attribute.getInput(),{value: attribute.get() || "", key: attributeId})
+        const attributeTypes = Array.isArray(attribute.type) ? attribute.type : [attribute.type]
+        
         return (
           <Form.Field w={2} key={attributeId}>
-            <Form.Caption>
-              {attribute.name}
-            </Form.Caption>
+            <Form.CaptionContainer>
+              <Form.Caption>
+                {attribute.name}
+              </Form.Caption>
+              <Form.AttributeTypeSelect>
+                {
+                  attributeTypes.map((type: AttributeType, typei: number) => {
+                    return (
+                      <Form.AttributeTypeSingle>
+                        {typei>0 && " /"}
+                        <Classes.AttributeTypeButton active = {attribute.currentType === type} onClick={
+                          () => {
+                            attribute.setCurrentType(type)
+                          }
+                        
+                        }>
+                          {type}
+                        </Classes.AttributeTypeButton>
+                      </Form.AttributeTypeSingle>
+                    )
+                  })
+                }
+              </Form.AttributeTypeSelect>
+            </Form.CaptionContainer>
             <Form.Input>
               {input}
             </Form.Input>

@@ -14,6 +14,7 @@ import Calculation from './Calculation';
 import Group from './Group';
 import Loop from './Loop';
 import EntityList from './EntityList';
+import { AttributeTypes, AttributeType } from './Interface/AttributeType';
 
 
 export default class Entity {
@@ -67,7 +68,7 @@ export default class Entity {
      * @returns The newly created attribute.
      */
     public newAttribute = (props: {
-                _id: string,name: string, type: 'identifier' | 'string' | 'list' | 'number' | 'color' | 'boolean'  | 'calculation' | 'asset', 
+                _id: string,name: string, type: AttributeTypes, currentType?: AttributeType, 
                 mandatory: boolean, options?: {
                     _id: string,
                     name: string,
@@ -395,6 +396,12 @@ export default class Entity {
         }
         // If no attribute was specified, return the whole object
         let result: any = {};
+        // Gotta add this meta in so we can store the current type of the attribute
+        let _meta: {
+            attributes: any
+        } = {
+            attributes: {}
+        }
         for(let key in this) {
             if(['parent','path'].includes(key)) {
                 continue;
@@ -410,6 +417,9 @@ export default class Entity {
             }
             if(target instanceof Attribute) {
                 result[key] = target.get();
+                _meta.attributes[key] = {
+                    currentType: target.currentType,
+                }
                 continue;
             }
             if(['entityType'].includes(key)) {
@@ -417,7 +427,8 @@ export default class Entity {
                 continue;
             }
         }
-        return Object.assign({},result,{objectType: this.constructor.name});
+        
+        return Object.assign({},result,{_meta},{objectType: this.constructor.name});
     }
 
     public keys(): string[] {
@@ -480,12 +491,18 @@ export default class Entity {
     }
 
     public autoAssignProps = (props: any): void => {
-        for(let key in _.omit(props,['_id','entities'])) {
+        for(let key in _.omit(props,['_id','_meta','entities'])) {
             if(this[key] instanceof Attribute) {
                 this[key].value = props[key];
             }
         }
+        for(let key in props._meta?.attributes) {
+            if(this[key] instanceof Attribute) {
+                this[key].setCurrentType(props._meta.attributes[key].currentType);
+            }
+        }
     }
+
 
     
 

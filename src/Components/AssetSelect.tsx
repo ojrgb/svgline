@@ -10,10 +10,13 @@ const relaxDelta = 0.1,
     relaxBorderDelta = 0.1,
     deepenBorderDelta = 0.1
 
-const Classes = {
+let Classes = {
     Root: styled.div.attrs({className:"asset-select"})`
         display: flex;
         width: 100%;
+        :hover >*:not(input) {
+            display: block;
+        }
     `,
     Text: styled.input`
         ${applyQuickStyles}
@@ -41,16 +44,38 @@ const Classes = {
     `,
     FileInput: styled.input`
         display: none;
+        height: 0;
+        width: 0;
+    `,
+     ImagePreviewContainer: styled.div`
+        width: 100%;
+        position: absolute;
+        display: none;
+            width: 100%;
+            position: absolute;
+            display: none;
+      
+    
+    `,
+    ImagePreview: styled.img`
+        
+        height: 100px;
+        width: auto;
     `
+
 }
 
+
+    
+     
+
 export default function AssetSelect(props: React.HTMLAttributes<HTMLInputElement> & React.PropsWithChildren<{
-    onChange?: (v: string) => void,
-    value?: string,
+    onChange?: (v: any) => void,
+    value?: any,
 }>) {
     const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-    const [fileUrl, setFileUrl] = React.useState<string | null>(null);
+    
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -60,7 +85,8 @@ export default function AssetSelect(props: React.HTMLAttributes<HTMLInputElement
                 const response = await dataService.saveAsset({file});
                 if (response.ok) {
                     const data = await response.json();
-                    setFileUrl(data.url);
+                    console.log(data)
+                    props.onChange && props.onChange({imageId: data.url})
                 } else {
                     console.error('File upload failed');
                 }
@@ -70,15 +96,20 @@ export default function AssetSelect(props: React.HTMLAttributes<HTMLInputElement
         }
     };
 
+    console.log(props)
     return (
         <Classes.Root>
-            <Classes.Text disabled={true} {...props} />
+            <Classes.Text disabled={true} {...props} value={props.value?.imageId || ""} />
             <Classes.Button onClick={(e) => {
                 e.preventDefault();
                 fileInputRef.current?.click();
             }}>Upload</Classes.Button>
             <Classes.FileInput ref={fileInputRef} type="file" onChange={handleFileChange} />
-            {fileUrl && <p>File URL: {fileUrl}</p>}
+            {
+                props.value?.imageId && <Classes.ImagePreviewContainer>
+                    <Classes.ImagePreview src={props.value?.imageId} />
+                </Classes.ImagePreviewContainer>
+            }
         </Classes.Root>
     );
 }

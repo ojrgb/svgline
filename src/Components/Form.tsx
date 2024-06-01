@@ -9,6 +9,7 @@ import Calculation from './Calculation'
 import ColorPicker from './ColorPicker'
 
 const captionSizeModifier = 0.9
+const attributeSelectSizeModifier = 0.7
 
 const Classes = {
     Root: styled.form.attrs({className: 'form-root'})`
@@ -26,11 +27,27 @@ const Classes = {
         flex-direction: column;
         margin-bottom: ${theme.scale.space[2]};
     `,
+    CaptionContainer: styled.div.attrs({className: 'caption-container'})`
+        display: flex;
+        justify-content: space-between;
+        width: 70%;
+        user-select: none;
+    `,
     Caption: styled.div.attrs({className: 'form-caption'})`
         font-family: ${theme.fonts.code.family};
         user-select: none;
         font-size: ${modifySize(theme.fonts.code.size,captionSizeModifier)};
         text-align: left;
+    `,
+    AttributeTypeSelect: styled.div.attrs({className: 'type-select'})`
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: ${modifySize(theme.fonts.code.size,attributeSelectSizeModifier)};
+    `,
+    AttributeTypeSingle: styled.div.attrs({className: 'type-single'})`
+        display: flex;
+        align-items: center;
     `,
     InputFieldContainer: styled.div.attrs({className: 'input-field'})`
         display: flex;
@@ -81,6 +98,9 @@ export default Object.assign(
         Text,
         Field,
         Caption: Classes.Caption,
-        Input
+        Input,
+        CaptionContainer: Classes.CaptionContainer,
+        AttributeTypeSelect: Classes.AttributeTypeSelect,
+        AttributeTypeSingle: Classes.AttributeTypeSingle,
     }
     )

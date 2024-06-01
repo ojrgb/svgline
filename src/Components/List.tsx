@@ -13,6 +13,7 @@ import ListModel from 'Model/List'
 import { ChildArrow } from './Icons/Icons'
 import context from 'context'
 import Element from 'Model/Element'
+import Draggable from './Draggable'
 
 const deepenDelta = 0.1,
     relaxDelta = 0.1,
@@ -89,19 +90,21 @@ function ListItem(props: {
     const typeofEntity = entity.constructor as typeof Entity
     const selected = contextState.selected.includes(entity)
     return (
-        <Classes.Single className={`selectable-list-item list-item-${entity._id.get()}`}
-        // style={{paddingLeft}}
-        indent={props.level || 0}
-            onClick={props.onClick}
-            selected={selected}
-        >
-                {
-                    props.level>0 && <span style={{marginRight:'4px'}}><ChildArrow/></span>
-                }
-                {/*We have to disable pointer events on the actual text so we 
-                can make sure that de-selecting works (see the Main component) */}
-                <span style={{pointerEvents:'none'}}>{entity.get('name') || entity.get('_id') || '(null)'}</span>{typeofEntity.shortName && <Classes.ShortName>{typeofEntity.shortName}</Classes.ShortName>}
-        </Classes.Single>
+        <Draggable>
+            <Classes.Single className={`selectable-list-item list-item-${entity._id.get()}`}
+            // style={{paddingLeft}}
+            indent={props.level || 0}
+                onClick={props.onClick}
+                selected={selected}
+            >
+                    {
+                        props.level>0 && <span style={{marginRight:'4px'}}><ChildArrow/></span>
+                    }
+                    {/*We have to disable pointer events on the actual text so we 
+                    can make sure that de-selecting works (see the Main component) */}
+                    <span style={{pointerEvents:'none'}}>{entity.get('name') || entity.get('_id') || '(null)'}</span>{typeofEntity.shortName && <Classes.ShortName>{typeofEntity.shortName}</Classes.ShortName>}
+            </Classes.Single>
+        </Draggable>
     )
 }
 

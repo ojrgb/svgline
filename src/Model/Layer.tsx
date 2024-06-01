@@ -28,7 +28,7 @@ export default class Layer extends Entity {
     fill: Attribute = this.newAttribute({
         _id: 'fill',
         name: 'Fill',
-        type: 'color',
+        type: ['color','calculation'],
         mandatory: false,
     });
     

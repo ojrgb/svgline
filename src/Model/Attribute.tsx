@@ -12,12 +12,15 @@ import Loop from './Loop';
 import Utilities from './Utilities';
 import { generateExpression } from './calculationUtils';
 import AssetSelect from 'Components/AssetSelect';
+import { AttributeType, AttributeTypes } from './Interface/AttributeType';
+
 
 export default class Attribute {
     internalId = v4();
     _id: string;
     name: string;
-    type: 'identifier' | 'string' | 'list' | 'number' | 'color' | 'boolean' | 'calculation' | 'asset'; 
+    type: AttributeTypes; 
+    currentType: AttributeType;
     mandatory: boolean;
     options?: {
         _id: string,
@@ -30,11 +33,14 @@ export default class Attribute {
     value: any
     path: string[] = []
     autowired: boolean = true;
-    objectType: string = 'Attribute'
+    objectType: string = 'Attribute';
+    
 
     constructor(
             props: {
-                _id: string,name: string, type: 'identifier' | 'string' | 'list' | 'number' | 'color' | 'boolean' | 'calculation' | 'asset', 
+                _id: string,name: string, 
+                type: AttributeTypes, 
+                currentType?: AttributeType,
                 mandatory: boolean, options?: {
                     _id: string,
                     name: string,
@@ -52,6 +58,7 @@ export default class Attribute {
         this.updatePath()
         this.name = props.name;
         this.type = props.type;
+        this.currentType = props.currentType || (Array.isArray(props.type) ? props.type[0] : props.type);
         this.mandatory = props.mandatory;
         this.options = props.options;
         this.conditions = props.conditions;
@@ -85,11 +92,11 @@ export default class Attribute {
     @Wire
     @autoUpdatePath
     public set(value: any): void {
-        if(this.type === 'number' && isNaN(Number(value))) {
+        if(this.currentType === 'number' && isNaN(Number(value))) {
             console.error('Tried to assign a non-number value to a number attribute');
             return
         }
-        if(this.type === 'boolean' && typeof value !== 'boolean') {
+        if(this.currentType === 'boolean' && typeof value !== 'boolean') {
             console.error('Tried to assign a non-boolean value to a boolean attribute');
             return
         }
@@ -97,16 +104,22 @@ export default class Attribute {
         //     console.error('Tried to assign a non-array value to a elements attribute');
         //     return
         // }
-        if(this.type === 'list' && !this.options.some(option => option._id === value)) {
+        if(this.currentType === 'list' && !this.options.some(option => option._id === value)) {
             console.error(`Tried to assign a non-list value to a list attribute. Value: ${value} list: ${JSON.stringify(this.options)}`);
             return
         }
-        if(this.type === 'color' && !value.match(/^#[0-9A-F]{6}$/i)) {
+        if(this.currentType === 'color' && !value.match(/^#[0-9A-F]{6}$/i)) {
             console.error('Tried to assign a non-color value to a color attribute');
             return
         }
 
         this.value = value;
+    }
+
+    @Wire
+    @autoUpdatePath
+    public setCurrentType(value: AttributeType): void {
+        this.currentType = value;
     }
 
     public isValid = (props: any): boolean => {
@@ -149,11 +162,11 @@ export default class Attribute {
                             'calculation': <Calculation {...props} />,
                             'asset': <AssetSelect {...props} />
         } 
-        if(!inputTypes[this.type]) {
-            console.error(`No input type found for attribute type: ${this.type}`);
+        if(!inputTypes[this.currentType]) {
+            console.error(`No input type found for attribute type: ${this.currentType}`);
             return <></>;
         }
-        const input = React.cloneElement(inputTypes[this.type], {
+        const input = React.cloneElement(inputTypes[this.currentType], {
             onChange: (v: any) => {this.onChangeHandler(v)}
         });
         return input;
@@ -170,7 +183,7 @@ export default class Attribute {
     public compute() {
         let res: any;
         const {calculatedTree} = (this.parent.getRoot() as Flow)
-        if(this.type === 'calculation') {
+        if(this.currentType === 'calculation') {
             try {
                 // The below line is a hack to get the iterator variables in the scope of the function.
                 const targetFunction = generateExpression({calculatedTree, expression: this.value});
